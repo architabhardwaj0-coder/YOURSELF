@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Makes the website work properly on mobile, tablet and laptop -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>YOURSELF</title>
+
+    <!-- Our CSS file will be connected here later -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         TOP HEADER
+         Website name + Account
+    ====================================================== -->
+
+    <header class="top-header">
+
+        <!-- Website Logo / Name -->
+        <div class="logo">
+            YOURSELF
+        </div>
+
+        <!-- Account button -->
+        <button class="account-button" id="accountButton">
+            <span class="account-icon">○</span>
+            <span>Account</span>
+        </button>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN WEBSITE CONTENT
+    ====================================================== -->
+
+    <main>
+
+
+        <!-- =================================================
+             PAGE 1 : HOME
+        ================================================== -->
+
+        <section id="homePage" class="page">
+
+            <div class="home-content">
+
+                <h1>Welcome to YOURSELF</h1>
+
+                <p>
+                    Learn. Revise. Test Yourself.
+                </p>
+
+                <p>
+                    Revise your questions and test yourself
+                    without needing anyone to ask you questions.
+                </p>
+
+                <button id="startRevisionButton">
+                    Start Revision
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PAGE 2 : SUBJECTS
+        ================================================== -->
+
+        <section id="subjectsPage" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <h2>Subjects</h2>
+
+                    <p>
+                        Create your subjects and add your questions.
+                    </p>
+                </div>
+
+                <!-- Add Subject button -->
+                <button id="addSubjectButton">
+                    + Add Subject
+                </button>
+
+            </div>
+
+
+            <!--
+                Subjects created by the user
+                will appear inside this container.
+            -->
+
+            <div id="subjectList">
+
+                <!-- Example subject card -->
+
+                <div class="subject-card">
+
+                    <h3>English</h3>
+
+                    <p>
+                        0 Questions
+                    </p>
+
+                    <button class="open-subject-button">
+                        Open Subject
+                    </button>
+
+                    <button class="delete-subject-button">
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Message when there are no subjects -->
+
+            <div id="noSubjectsMessage">
+
+                <p>
+                    No subjects yet.
+                </p>
+
+                <p>
+                    Click "Add Subject" to create your first subject.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PAGE 3 : REVISION MODE
+        ================================================== -->
+
+        <section id="revisionPage" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>Revision Mode</h2>
+
+                    <p>
+                        Let YOURSELF ask you questions.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 SELECT SUBJECT
+            ============================================== -->
+
+            <div class="revision-controls">
+
+                <label for="revisionSubject">
+                    Select Subject
+                </label>
+
+                <select id="revisionSubject">
+
+                    <option value="">
+                        Select a Subject
+                    </option>
+
+                    <!-- Subjects created by user
+                         will appear here -->
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 RANDOM QUESTION
+            ============================================== -->
+
+            <div class="random-question-section">
+
+                <button id="randomQuestionButton">
+                    Random Question
+                </button>
+
+                <button id="spinButton">
+                    Spin
+                </button>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 PLAYER / SPIN SECTION
+            ============================================== -->
+
+            <div class="spin-section">
+
+                <h3>Spin / Players</h3>
+
+                <p>
+                    Add the names of people who are going
+                    to revise together.
+                </p>
+
+
+                <label for="playerName">
+                    Add your name
+                </label>
+
+                <input
+                    type="text"
+                    id="playerName"
+                    placeholder="Enter your name"
+                >
+
+                <button id="addPlayerButton">
+                    Add Name
+                </button>
+
+
+                <!-- Names will appear here -->
+
+                <div id="playerList">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 QUESTION CARD
+            ============================================== -->
+
+            <div class="question-card">
+
+                <!-- Current player's name -->
+
+                <p id="currentPlayer">
+                    Player: —
+                </p>
+
+
+                <!-- Question -->
+
+                <h3 id="questionText">
+                    Select a subject and click
+                    "Random Question".
+                </h3>
+
+
+                <!-- Show Answer -->
+
+                <button id="showAnswerButton">
+                    Show Answer
+                </button>
+
+
+                <!-- Answer -->
+
+                <div id="answerBox">
+
+                    <p id="answerText">
+                        Answer will appear here.
+                    </p>
+
+                </div>
+
+
+                <!-- Correct / Wrong -->
+
+                <div class="answer-buttons">
+
+                    <button id="correctButton">
+                        ✓ Correct
+                    </button>
+
+                    <button id="wrongButton">
+                        ✕ Wrong
+                    </button>
+
+                </div>
+
+
+                <!-- Question progress -->
+
+                <p id="questionProgress">
+                    No question loaded.
+                </p>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 SCORE
+            ============================================== -->
+
+            <div class="score-section">
+
+                <h3>Score</h3>
+
+                <div id="scoreBoard">
+
+                    <p>
+                        No score yet.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         BOTTOM NAVIGATION
+         Only 3 main pages
+    ====================================================== -->
+
+    <nav class="bottom-navigation">
+
+        <!-- Home -->
+
+        <button
+            class="navigation-button active"
+            data-page="homePage"
+            id="homeNavigationButton">
+
+            <span class="navigation-icon">
+                ⌂
+            </span>
+
+            <span>
+                Home
+            </span>
+
+        </button>
+
+
+        <!-- Subjects -->
+
+        <button
+            class="navigation-button"
+            data-page="subjectsPage"
+            id="subjectsNavigationButton">
+
+            <span class="navigation-icon">
+                ▣
+            </span>
+
+            <span>
+                Subjects
+            </span>
+
+        </button>
+
+
+        <!-- Revision -->
+
+        <button
+            class="navigation-button"
+            data-page="revisionPage"
+            id="revisionNavigationButton">
+
+            <span class="navigation-icon">
+                ↻
+            </span>
+
+            <span>
+                Revision
+            </span>
+
+        </button>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         ACCOUNT WINDOW
+    ====================================================== -->
+
+    <div
+        id="accountModal"
+        class="modal"
+        hidden>
+
+        <div class="modal-content">
+
+            <button
+                id="closeAccountButton"
+                class="close-button">
+                ×
+            </button>
+
+
+            <h2>Account</h2>
+
+            <p>
+                Sign in to your YOURSELF account.
+            </p>
+
+
+            <!-- Name -->
+
+            <label for="accountName">
+                Name
+            </label>
+
+            <input
+                type="text"
+                id="accountName"
+                placeholder="Enter your name"
+            >
+
+
+            <!-- Password -->
+
+            <label for="accountPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="accountPassword"
+                placeholder="Enter your password"
+            >
+
+
+            <!-- Sign In -->
+
+            <button id="signInButton">
+                Sign In
+            </button>
+
+
+            <!-- Sign Up -->
+
+            <button id="signUpButton">
+                Sign Up
+            </button>
+
+
+            <!-- Log Out -->
+
+            <button id="logoutButton">
+                Log Out
+            </button>
+
+
+            <p id="accountStatus">
+                Not signed in.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ADD SUBJECT WINDOW
+    ====================================================== -->
+
+    <div
+        id="addSubjectModal"
+        class="modal"
+        hidden>
+
+        <div class="modal-content">
+
+            <button
+                id="closeSubjectButton"
+                class="close-button">
+                ×
+            </button>
+
+
+            <h2>Add Subject</h2>
+
+
+            <p>
+                Create a subject for your revision.
+            </p>
+
+
+            <label for="subjectName">
+                Subject Name
+            </label>
+
+            <input
+                type="text"
+                id="subjectName"
+                placeholder="For example: English"
+            >
+
+
+            <button id="saveSubjectButton">
+                Save Subject
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUBJECT DETAILS / QUESTIONS WINDOW
+    ====================================================== -->
+
+    <div
+        id="subjectDetailsModal"
+        class="modal"
+        hidden>
+
+        <div class="modal-content subject-details">
+
+            <button
+                id="closeSubjectDetailsButton"
+                class="close-button">
+                ×
+            </button>
+
+
+            <!-- Selected subject name -->
+
+            <h2 id="selectedSubjectName">
+                English
+            </h2>
+
+
+            <p>
+                Add questions to this subject.
+            </p>
+
+
+
+            <!-- =============================================
+                 ADD QUESTIONS
+            ============================================== -->
+
+            <div class="question-input-section">
+
+                <h3>Add Questions</h3>
+
+
+                <label for="questionInput">
+                    Question
+                </label>
+
+                <textarea
+                    id="questionInput"
+                    placeholder="Write your question here..."
+                ></textarea>
+
+
+                <label for="answerInput">
+                    Answer
+                </label>
+
+                <textarea
+                    id="answerInput"
+                    placeholder="Write the answer here..."
+                ></textarea>
+
+
+                <button id="addQuestionButton">
+                    Add Question
+                </button>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 UPLOAD PDF
+            ============================================== -->
+
+            <div class="pdf-section">
+
+                <h3>Upload Your PDF of Questions</h3>
+
+                <p>
+                    You can upload a PDF containing your
+                    questions for this subject.
+                </p>
+
+
+                <label for="pdfInput">
+                    Choose PDF
+                </label>
+
+                <input
+                    type="file"
+                    id="pdfInput"
+                    accept=".pdf"
+                >
+
+
+                <button id="uploadPdfButton">
+                    Upload PDF
+                </button>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 SAVED QUESTIONS
+            ============================================== -->
+
+            <div class="saved-questions-section">
+
+                <h3>Saved Questions</h3>
+
+                <div id="savedQuestions">
+
+                    <p>
+                        No questions added yet.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         We will add functionality here later.
+    ====================================================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
