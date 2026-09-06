@@ -1,63 +1,78 @@
-// State Management
+// Global State
 let appData = {
   topics: [],
   mistakes: [],
   members: [],
   punishments: [],
   score: 0,
-  revMode: 'you', // 'you' or 'group'
+  revMode: 'you',
   mistakeMode: false,
-  selectedTopic: 'all',
-  currentQIndex: 0
+  activeTopicId: null
 };
 
-// Authentication Tabs & Flow
-function switchAuthTab(type) {
-  document.getElementById('tab-signup').classList.toggle('active', type === 'signup');
-  document.getElementById('tab-signin').classList.toggle('active', type === 'signin');
-  document.getElementById('form-signup').classList.toggle('hidden', type !== 'signup');
-  document.getElementById('form-signin').classList.toggle('hidden', type !== 'signin');
+// AUTHENTICATION & LOGIN
+function switchAuthTab(tab) {
+  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+  document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+  document.getElementById('form-signup').classList.toggle('page-hidden', tab !== 'signup');
+  document.getElementById('form-signin').classList.toggle('page-hidden', tab !== 'signin');
 }
 
-function handleAuth(event) {
-  event.preventDefault();
-  document.getElementById('page-home').classList.remove('active');
-  document.getElementById('app-container').classList.remove('hidden');
+function handleAuthSubmit(e) {
+  e.preventDefault();
+  document.getElementById('page-1').classList.remove('active-page');
+  document.getElementById('app-wrapper').classList.remove('page-hidden');
+  openPage('page-2'); // Open Dashboard
 }
 
-function logout() {
-  document.getElementById('app-container').classList.add('hidden');
-  document.getElementById('page-home').classList.add('active');
+function handleLogout() {
+  document.getElementById('app-wrapper').classList.add('page-hidden');
+  document.getElementById('page-1').classList.add('active-page');
 }
 
 function toggleMenu() {
-  document.getElementById('dropdown-menu').classList.toggle('hidden');
+  document.getElementById('dropdown-menu').classList.toggle('page-hidden');
 }
 
-// Navigation
-function switchPage(pageName) {
-  document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  
-  document.getElementById(`page-${pageName}`).classList.add('active');
-  if (pageName === 'revision') loadRevisionQuestions();
-  if (pageName === 'mistakes') renderMistakesList();
+// REAL PAGE SWITCHING ROUTER
+function openPage(pageId, navBtn) {
+  // Hide all screens
+  document.querySelectorAll('.page-screen').forEach(screen => {
+    screen.classList.remove('active-page');
+  });
+
+  // Show selected screen
+  document.getElementById(pageId).classList.add('active-page');
+
+  // Highlight bottom nav button
+  if (navBtn) {
+    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+    navBtn.classList.add('active');
+  }
+
+  // Load page specific data
+  if (pageId === 'page-4') initRevision();
+  if (pageId === 'page-5') renderMistakes();
 }
 
-// TOPICS MANAGEMENT (PAGE 3)
-function addTopic() {
-  const name = document.getElementById('topic-input').value.trim();
-  if (!name) return;
-  const newTopic = { id: Date.now(), name: name, questions: [] };
+// PAGE 3: TOPICS LOGIC
+function saveNewTopic() {
+  const input = document.getElementById('topic-title-input');
+  const title = input.value.trim();
+  if (!title) return;
+
+  const newTopic = { id: Date.now(), name: title, questions: [] };
   appData.topics.push(newTopic);
-  document.getElementById('topic-input').value = '';
+  input.value = '';
+
   renderTopicsGrid();
-  updateTopicDropdowns();
+  updateDropdowns();
 }
 
 function renderTopicsGrid() {
   const grid = document.getElementById('topics-grid');
   grid.innerHTML = '';
+
   appData.topics.forEach(t => {
     const card = document.createElement('div');
     card.className = 'topic-card';
@@ -67,44 +82,43 @@ function renderTopicsGrid() {
   });
 }
 
-let activeTopicId = null;
 function openTopicModal(id) {
-  activeTopicId = id;
+  appData.activeTopicId = id;
   const topic = appData.topics.find(t => t.id === id);
   document.getElementById('modal-topic-title').innerText = topic.name;
-  document.getElementById('topic-modal').classList.remove('hidden');
+  document.getElementById('topic-modal').classList.remove('page-hidden');
 }
 
 function closeTopicModal() {
-  document.getElementById('topic-modal').classList.add('hidden');
+  document.getElementById('topic-modal').classList.add('page-hidden');
 }
 
-function showQuestionForm() {
-  document.getElementById('add-q-form').classList.remove('hidden');
+function toggleQuestionForm() {
+  document.getElementById('q-add-box').classList.toggle('page-hidden');
 }
 
-function saveQuestionToTopic() {
+function addQuestionToTopic() {
   const text = document.getElementById('q-text').value;
   const ans = document.getElementById('q-ans').value;
-  const type = document.getElementById('q-type').value;
+  const topic = appData.topics.find(t => t.id === appData.activeTopicId);
 
-  const topic = appData.topics.find(t => t.id === activeTopicId);
-  topic.questions.push({ id: Date.now(), text, ans, type });
-  alert("Question added successfully!");
+  topic.questions.push({ id: Date.now(), text, ans });
+  alert("Question saved!");
   closeTopicModal();
 }
 
-// REVISION PAGE LOGIC (PAGE 4)
-function setRevisionMode(mode) {
+// PAGE 4: REVISION & GROUP LOGIC
+function setMode(mode) {
   appData.revMode = mode;
-  document.getElementById('btn-mode-you').classList.toggle('active', mode === 'you');
-  document.getElementById('btn-mode-group').classList.toggle('active', mode === 'group');
-  document.getElementById('group-controls').classList.toggle('hidden', mode === 'you');
+  document.getElementById('btn-you-mode').classList.toggle('active', mode === 'you');
+  document.getElementById('btn-group-mode').classList.toggle('active', mode === 'group');
+  document.getElementById('group-tools').classList.toggle('page-hidden', mode === 'you');
 }
 
-function updateTopicDropdowns() {
-  const select = document.getElementById('revision-topic-select');
+function updateDropdowns() {
+  const select = document.getElementById('revision-topic-dropdown');
   const mSelect = document.getElementById('mistake-topic-select');
+
   select.innerHTML = '<option value="all">All Topics</option>';
   mSelect.innerHTML = '<option value="all">All Topics</option>';
 
@@ -116,71 +130,59 @@ function updateTopicDropdowns() {
 
 function toggleMistakeMode() {
   appData.mistakeMode = !appData.mistakeMode;
-  document.getElementById('btn-mistake-toggle').innerText = `Mistake Mode: ${appData.mistakeMode ? 'ON' : 'OFF'}`;
-  loadRevisionQuestions();
+  const btn = document.getElementById('btn-mistake-mode');
+  btn.innerText = `Mistake Mode: ${appData.mistakeMode ? 'ON' : 'OFF'}`;
+  initRevision();
 }
 
-function loadRevisionQuestions() {
+function initRevision() {
   let questions = [];
-  const selected = document.getElementById('revision-topic-select').value;
-  
+  const selected = document.getElementById('revision-topic-dropdown').value;
+
   if (selected === 'all') {
     appData.topics.forEach(t => questions.push(...t.questions));
   } else {
-    const t = appData.topics.find(top => top.id == selected);
-    if (t) questions = t.questions;
-  }
-
-  if (appData.mistakeMode) {
-    const mistakeIds = appData.mistakes.map(m => m.questionId);
-    questions = questions.filter(q => mistakeIds.includes(q.id));
+    const topic = appData.topics.find(t => t.id == selected);
+    if (topic) questions = topic.questions;
   }
 
   if (questions.length > 0) {
-    const q = questions[0];
-    document.getElementById('q-display-text').innerText = q.text;
-    document.getElementById('hidden-answer').innerText = q.ans;
+    document.getElementById('q-text-display').innerText = questions[0].text;
+    document.getElementById('q-ans-display').innerText = questions[0].ans;
   } else {
-    document.getElementById('q-display-text').innerText = "No questions found.";
+    document.getElementById('q-text-display').innerText = "No questions available.";
   }
 }
 
-function showAnswer() {
-  document.getElementById('hidden-answer').classList.remove('hidden');
+function revealAnswer() {
+  document.getElementById('q-ans-display').classList.remove('page-hidden');
 }
 
-function gradeAnswer(isCorrect) {
-  if (isCorrect) {
-    appData.score += 10;
-  } else {
-    appData.score -= 20;
-    // Add to mistakes
-    appData.mistakes.push({
-      topicId: document.getElementById('revision-topic-select').value,
-      questionId: Date.now(),
-      mode: appData.revMode
-    });
-  }
+function gradeUser(pts) {
+  appData.score += pts;
   document.getElementById('score-display').innerText = `Score: ${appData.score}`;
-}
-
-// SPINNER & PUNISHMENT (GROUP MODE)
-function addGroupMember() {
-  const name = document.getElementById('member-name').value;
-  if (name) {
-    appData.members.push(name);
-    document.getElementById('members-list').innerText = appData.members.join(', ');
+  if (pts < 0) {
+    appData.mistakes.push({ id: Date.now() });
   }
 }
 
-function spinWheel() {
-  if (appData.members.length === 0) return alert("Add members first!");
-  const randomIndex = Math.floor(Math.random() * appData.members.length);
-  document.getElementById('spin-result').innerText = `Turn: ${appData.members[randomIndex]}`;
+// Group Tools
+function addMember() {
+  const val = document.getElementById('member-input').value.trim();
+  if (val) {
+    appData.members.push(val);
+    document.getElementById('members-chip-list').innerText = appData.members.join(', ');
+    document.getElementById('member-input').value = '';
+  }
 }
 
-// MISTAKES PAGE LOGIC (PAGE 5)
-function renderMistakesList() {
-  const container = document.getElementById('mistakes-container');
-  container.innerHTML = `<p>Total Mistakes Saved: ${appData.mistakes.length}</p>`;
+function spinDynamicWheel() {
+  if (appData.members.length === 0) return alert('Add members first!');
+  const idx = Math.floor(Math.random() * appData.members.length);
+  document.getElementById('spin-output').innerText = `Turn: ${appData.members[idx]}`;
+}
+
+// PAGE 5: MISTAKES LOGIC
+function renderMistakes() {
+  document.getElementById('mistakes-list').innerText = `Total Mistakes Recorded: ${appData.mistakes.length}`;
 }

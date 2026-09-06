@@ -3,200 +3,215 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YOURSELF</title>
+  <title>Yourself</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="page-home" class="page active">
+  <!-- PAGE 1: HOME / AUTH (Pure White Background) -->
+  <div id="page-1" class="page-screen active-page">
     <div class="auth-container">
       <h1 class="brand-title">Yourself</h1>
-      <p class="tagline">Test yourself without needing anyone to ask you question</p>
+      <p class="brand-tagline">Test yourself without needing anyone to ask you question</p>
 
-      <div class="auth-box">
+      <div class="auth-card">
         <div class="auth-tabs">
-          <button id="tab-signup" class="active" onclick="switchAuthTab('signup')">Sign Up</button>
-          <button id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
+          <button id="tab-signup" class="tab-btn active" onclick="switchAuthTab('signup')">Sign Up</button>
+          <button id="tab-signin" class="tab-btn" onclick="switchAuthTab('signin')">Sign In</button>
         </div>
 
-        <form id="form-signup" onsubmit="handleAuth(event)">
-          <input type="text" placeholder="Username" required />
-          <input type="email" placeholder="Email (email.com)" required />
-          <input type="password" placeholder="Password" required />
-          <button type="submit" class="btn-primary">Sign Up</button>
+        <form id="form-signup" onsubmit="handleAuthSubmit(event)">
+          <input type="text" placeholder="Username" required>
+          <input type="email" placeholder="Email" required>
+          <input type="password" placeholder="Password" required>
+          <button type="submit" class="btn-blue">Sign Up</button>
         </form>
 
-        <form id="form-signin" class="hidden" onsubmit="handleAuth(event)">
-          <input type="email" placeholder="Email (email.com)" required />
-          <input type="password" placeholder="Password" required />
-          <button type="submit" class="btn-primary">Sign In</button>
+        <form id="form-signin" class="page-hidden" onsubmit="handleAuthSubmit(event)">
+          <input type="email" placeholder="Email" required>
+          <input type="password" placeholder="Password" required>
+          <button type="submit" class="btn-blue">Sign In</button>
         </form>
       </div>
     </div>
   </div>
 
-  <div id="app-container" class="hidden">
-    <header class="app-header">
-      <div class="header-left">
+  <!-- APP MAIN CONTAINER (Appears after Sign In/Up) -->
+  <div id="app-wrapper" class="page-hidden">
+
+    <!-- Header Bar -->
+    <header class="top-header">
+      <div class="header-brand">
         <span class="logo-icon">🎯</span>
         <span class="logo-text">Yourself</span>
       </div>
-      <div class="header-right">
-        <span class="user-icon">👤</span>
-        <button class="menu-btn" onclick="toggleMenu()">☰</button>
-      </div>
-      <div id="dropdown-menu" class="dropdown-menu hidden">
-        <a href="#">Help</a>
-        <a href="#">Settings</a>
-        <a href="#" onclick="logout()">Logout</a>
+      <div class="header-controls">
+        <span class="account-icon">👤</span>
+        <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
+        
+        <div id="dropdown-menu" class="dropdown-content page-hidden">
+          <a href="#" onclick="alert('Help section')">Help</a>
+          <a href="#" onclick="alert('Settings section')">Settings</a>
+          <a href="#" onclick="handleLogout()">Logout</a>
+        </div>
       </div>
     </header>
 
-    <main class="content-area">
-      <section id="page-dashboard" class="app-page active">
-        <h2>Welcome to Yourself Dashboard</h2>
-        <p>Niche diye gaye options se apne Topics add karein ya Revision shuru karein!</p>
-      </section>
+    <!-- PAGE 2: HOME DASHBOARD -->
+    <section id="page-2" class="page-screen blue-theme-page">
+      <div class="dashboard-center">
+        <h2>Welcome to Yourself</h2>
+        <p>Aap niche menu bar se Topics add kar sakti hain ya Revision shuru kar sakti hain.</p>
+      </div>
+    </section>
 
-      <section id="page-topics" class="app-page">
-        <h2 class="section-heading">Add Your Topics</h2>
-        
-        <div class="topic-input-group">
-          <input type="text" id="topic-input" placeholder="Enter topic name (e.g. Environment)...">
-          <button class="btn-action" onclick="addTopic()">Done</button>
-        </div>
+    <!-- PAGE 3: TOPICS PAGE -->
+    <section id="page-3" class="page-screen blue-theme-page">
+      <h2 class="page-heading">Add Your Topics</h2>
 
-        <div id="topics-grid" class="topics-grid"></div>
+      <div class="topic-input-bar">
+        <input type="text" id="topic-title-input" placeholder="Topic ka naam likhein...">
+        <button class="btn-done" onclick="saveNewTopic()">Done</button>
+      </div>
 
-        <div id="topic-modal" class="modal hidden">
-          <div class="modal-content">
-            <span class="close-btn" onclick="closeTopicModal()">&times;</span>
-            <h3 id="modal-topic-title">Topic Details</h3>
-            
-            <div class="modal-actions">
-              <button onclick="showQuestionForm()">Add Questions</button>
-              <button onclick="triggerPdfUpload()">Upload PDF</button>
-              <button onclick="triggerImageUpload()">Add Image/Photo</button>
-              <input type="file" id="pdf-file-input" accept=".pdf" style="display:none;" onchange="handleFileUpload('PDF')">
-              <input type="file" id="img-file-input" accept="image/*" style="display:none;" onchange="handleFileUpload('Image')">
-            </div>
+      <!-- Topics Grid Container -->
+      <div id="topics-grid" class="topics-grid"></div>
 
-            <div id="add-q-form" class="hidden">
-              <input type="text" id="q-text" placeholder="Enter question text...">
-              <select id="q-type" onchange="toggleQTypeInputs()">
-                <option value="text">Text Answer</option>
-                <option value="mcq">MCQ Options</option>
-              </select>
-              <div id="mcq-inputs" class="hidden">
-                <input type="text" id="opt1" placeholder="Option 1">
-                <input type="text" id="opt2" placeholder="Option 2">
-                <input type="text" id="opt3" placeholder="Option 3">
-                <input type="text" id="opt4" placeholder="Option 4">
-                <input type="text" id="correct-opt" placeholder="Correct Option Number (1-4)">
-              </div>
-              <input type="text" id="q-ans" placeholder="Correct Answer text...">
-              <button onclick="saveQuestionToTopic()">Save Question</button>
-            </div>
-            
-            <div id="topic-q-list"></div>
+      <!-- Topic View Modal (Pop-up on Clicking Topic Card) -->
+      <div id="topic-modal" class="modal-overlay page-hidden">
+        <div class="modal-body">
+          <span class="close-modal" onclick="closeTopicModal()">&times;</span>
+          <h3 id="modal-topic-title">Topic Title</h3>
+
+          <div class="modal-options-row">
+            <button onclick="toggleQuestionForm()">Add Questions</button>
+            <button onclick="document.getElementById('pdf-input').click()">Upload PDF</button>
+            <button onclick="document.getElementById('img-input').click()">Add Images</button>
+            <input type="file" id="pdf-input" accept=".pdf" class="page-hidden" onchange="alert('PDF Uploaded!')">
+            <input type="file" id="img-input" accept="image/*" class="page-hidden" onchange="alert('Image Uploaded!')">
           </div>
-        </div>
-      </section>
 
-      <section id="page-revision" class="app-page">
-        <div class="revision-header">
-          <div class="mode-toggle">
-            <button id="btn-mode-you" class="active" onclick="setRevisionMode('you')">You</button>
-            <button id="btn-mode-group" onclick="setRevisionMode('group')">Group</button>
-          </div>
-          
-          <div class="topic-select-wrap">
-            <label>Select Topic:</label>
-            <select id="revision-topic-select" onchange="loadRevisionQuestions()">
-              <option value="all">All Topics</option>
+          <!-- Hidden Form inside Modal -->
+          <div id="q-add-box" class="add-q-box page-hidden">
+            <input type="text" id="q-text" placeholder="Enter Question">
+            <select id="q-format" onchange="toggleMCQInputs()">
+              <option value="text">Text Base Question</option>
+              <option value="mcq">MCQ Question</option>
             </select>
+            <div id="mcq-box" class="page-hidden">
+              <input type="text" id="opt-1" placeholder="Option 1">
+              <input type="text" id="opt-2" placeholder="Option 2">
+              <input type="text" id="opt-3" placeholder="Option 3">
+              <input type="text" id="opt-4" placeholder="Option 4">
+            </div>
+            <input type="text" id="q-ans" placeholder="Correct Answer">
+            <button onclick="addQuestionToTopic()">Save Question</button>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div id="group-controls" class="group-controls hidden">
-          <div class="member-input-wrap">
-            <input type="text" id="member-name" placeholder="Add Member Name...">
-            <button onclick="addGroupMember()">Add Member</button>
-          </div>
-          <div id="members-list"></div>
-
-          <div class="spinner-section">
-            <button class="btn-spinner" onclick="spinWheel()">🎡 Spin Dynamic Wheel</button>
-            <div id="spin-result" class="spin-result"></div>
-          </div>
-
-          <div class="punishment-section">
-            <input type="text" id="punishment-input" placeholder="Add custom punishment...">
-            <button onclick="addPunishment()">Add Punishment</button>
-          </div>
+    <!-- PAGE 4: REVISION PAGE -->
+    <section id="page-4" class="page-screen blue-theme-page">
+      <div class="revision-top-bar">
+        <div class="mode-buttons">
+          <button id="btn-you-mode" class="mode-btn active" onclick="setMode('you')">You</button>
+          <button id="btn-group-mode" class="mode-btn" onclick="setMode('group')">Group</button>
         </div>
 
-        <div class="revision-options">
-          <button onclick="setOrder('random')">Random</button>
-          <button onclick="setOrder('series')">Series</button>
-          <button id="btn-mistake-toggle" onclick="toggleMistakeMode()">Mistake Mode: OFF</button>
-        </div>
-
-        <div class="q-card">
-          <h3 id="current-topic-name">Topic: All</h3>
-          <p id="q-display-text">Select options above to start revision.</p>
-
-          <div id="q-answer-area"></div>
-
-          <button id="btn-show-ans" onclick="showAnswer()">Show Answer</button>
-          <p id="hidden-answer" class="hidden"></p>
-
-          <div class="q-actions">
-            <button class="btn-correct" onclick="gradeAnswer(true)">Correct (+10)</button>
-            <button class="btn-wrong" onclick="gradeAnswer(false)">Wrong (-20)</button>
-          </div>
-        </div>
-
-        <div class="results-board">
-          <h4 id="board-title">Results / Score</h4>
-          <div id="score-display">Score: 0</div>
-          <div id="ranking-list" class="hidden"></div>
-        </div>
-      </section>
-
-      <section id="page-mistakes" class="app-page">
-        <h2>Mistakes Tracker</h2>
-        <div class="mistake-tabs">
-          <button id="tab-mistake-you" class="active" onclick="switchMistakeView('you')">You Mistakes</button>
-          <button id="tab-mistake-group" onclick="switchMistakeView('group')">Group Mistakes</button>
-        </div>
-
-        <div class="mistake-topic-filter">
-          <select id="mistake-topic-select" onchange="renderMistakesList()">
+        <div class="topic-select-group">
+          <label>Select Topic:</label>
+          <select id="revision-topic-dropdown" onchange="initRevision()">
             <option value="all">All Topics</option>
           </select>
         </div>
+      </div>
 
-        <div id="mistakes-container"></div>
-      </section>
-    </main>
+      <!-- Group Mode Extra Tools (Hidden in 'You' Mode) -->
+      <div id="group-tools" class="group-panel page-hidden">
+        <div class="member-add-row">
+          <input type="text" id="member-input" placeholder="Add Member Name">
+          <button onclick="addMember()">Add Member</button>
+        </div>
+        <div id="members-chip-list" class="chips-wrap"></div>
 
+        <div class="spinner-box">
+          <button class="btn-spin" onclick="spinDynamicWheel()">🎡 Spin Dynamic Wheel</button>
+          <div id="spin-output" class="spin-output"></div>
+        </div>
+
+        <div class="punishment-box">
+          <input type="text" id="punishment-input" placeholder="Add Custom Punishment">
+          <button onclick="addPunishment()">Add Punishment</button>
+        </div>
+      </div>
+
+      <!-- Revision Question Box -->
+      <div class="revision-card">
+        <div class="rev-card-header">
+          <h3 id="rev-active-topic">Topic: All Topics</h3>
+          <button id="btn-mistake-mode" class="btn-mistake-off" onclick="toggleMistakeMode()">Mistake Mode: OFF</button>
+        </div>
+
+        <div class="order-type-buttons">
+          <button onclick="setOrder('random')">Random</button>
+          <button onclick="setOrder('series')">Series</button>
+        </div>
+
+        <div class="q-display-area">
+          <p id="q-text-display">Select topic to start revision.</p>
+          <button id="btn-show-ans" onclick="revealAnswer()">Show Answer</button>
+          <p id="q-ans-display" class="page-hidden"></p>
+        </div>
+
+        <div class="score-buttons">
+          <button class="btn-plus" onclick="gradeUser(10)">Correct (+10)</button>
+          <button class="btn-minus" onclick="gradeUser(-20)">Wrong (-20)</button>
+        </div>
+      </div>
+
+      <!-- Result / Score Board -->
+      <div class="score-board">
+        <h4 id="score-board-title">Result / Score</h4>
+        <div id="score-display">Score: 0</div>
+      </div>
+    </section>
+
+    <!-- PAGE 5: MISTAKES TRACKER PAGE -->
+    <section id="page-5" class="page-screen blue-theme-page">
+      <h2>Mistakes Tracker</h2>
+
+      <div class="mistake-tabs">
+        <button id="tab-you-mistakes" class="tab-btn active" onclick="switchMistakeView('you')">You Mistakes</button>
+        <button id="tab-group-mistakes" class="tab-btn" onclick="switchMistakeView('group')">Group Mistakes</button>
+      </div>
+
+      <div class="mistake-filter">
+        <select id="mistake-topic-select" onchange="renderMistakes()">
+          <option value="all">All Topics</option>
+        </select>
+      </div>
+
+      <div id="mistakes-list" class="mistakes-container"></div>
+    </section>
+
+    <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
-      <button class="nav-item active" onclick="switchPage('dashboard')">
-        <span class="icon">🏠</span>
-        <span class="label">Home</span>
+      <button class="nav-item active" onclick="openPage('page-2', this)">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Home</span>
       </button>
-      <button class="nav-item" onclick="switchPage('topics')">
-        <span class="icon">📚</span>
-        <span class="label">Topics</span>
+      <button class="nav-item" onclick="openPage('page-3', this)">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Topics</span>
       </button>
-      <button class="nav-item" onclick="switchPage('revision')">
-        <span class="icon">🔄</span>
-        <span class="label">Revision</span>
+      <button class="nav-item" onclick="openPage('page-4', this)">
+        <span class="nav-icon">🔄</span>
+        <span class="nav-label">Revision</span>
       </button>
-      <button class="nav-item" onclick="switchPage('mistakes')">
-        <span class="icon">⚠️</span>
-        <span class="label">Mistakes</span>
+      <button class="nav-item" onclick="openPage('page-5', this)">
+        <span class="nav-icon">⚠️</span>
+        <span class="nav-label">Mistakes</span>
       </button>
     </nav>
   </div>
