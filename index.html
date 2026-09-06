@@ -8,8 +8,8 @@
 </head>
 <body>
 
-  <!-- PAGE 1: HOME / AUTH (Pure White Background) -->
-  <div id="page-1" class="page-screen active-page">
+  <!-- PAGE 1: HOME / AUTH (Clean White Background) -->
+  <div id="page-1" class="auth-wrapper">
     <div class="auth-container">
       <h1 class="brand-title">Yourself</h1>
       <p class="brand-tagline">Test yourself without needing anyone to ask you question</p>
@@ -36,10 +36,10 @@
     </div>
   </div>
 
-  <!-- APP MAIN CONTAINER (Appears after Sign In/Up) -->
+  <!-- APP MAIN CONTAINER (Hidden initially, opens on Auth success) -->
   <div id="app-wrapper" class="page-hidden">
 
-    <!-- Header Bar -->
+    <!-- Top Header Bar -->
     <header class="top-header">
       <div class="header-brand">
         <span class="logo-icon">🎯</span>
@@ -57,16 +57,16 @@
       </div>
     </header>
 
-    <!-- PAGE 2: HOME DASHBOARD -->
-    <section id="page-2" class="page-screen blue-theme-page">
+    <!-- PAGE 2: DASHBOARD HOME -->
+    <section id="page-2" class="app-screen blue-theme-page page-hidden">
       <div class="dashboard-center">
         <h2>Welcome to Yourself</h2>
-        <p>Aap niche menu bar se Topics add kar sakti hain ya Revision shuru kar sakti hain.</p>
+        <p>Apna self-revision aur group study session shuru karne ke liye niche topics ya revision option chunein.</p>
       </div>
     </section>
 
     <!-- PAGE 3: TOPICS PAGE -->
-    <section id="page-3" class="page-screen blue-theme-page">
+    <section id="page-3" class="app-screen blue-theme-page page-hidden">
       <h2 class="page-heading">Add Your Topics</h2>
 
       <div class="topic-input-bar">
@@ -74,10 +74,9 @@
         <button class="btn-done" onclick="saveNewTopic()">Done</button>
       </div>
 
-      <!-- Topics Grid Container -->
       <div id="topics-grid" class="topics-grid"></div>
 
-      <!-- Topic View Modal (Pop-up on Clicking Topic Card) -->
+      <!-- Topic View Modal -->
       <div id="topic-modal" class="modal-overlay page-hidden">
         <div class="modal-body">
           <span class="close-modal" onclick="closeTopicModal()">&times;</span>
@@ -91,7 +90,6 @@
             <input type="file" id="img-input" accept="image/*" class="page-hidden" onchange="alert('Image Uploaded!')">
           </div>
 
-          <!-- Hidden Form inside Modal -->
           <div id="q-add-box" class="add-q-box page-hidden">
             <input type="text" id="q-text" placeholder="Enter Question">
             <select id="q-format" onchange="toggleMCQInputs()">
@@ -111,8 +109,8 @@
       </div>
     </section>
 
-    <!-- PAGE 4: REVISION PAGE -->
-    <section id="page-4" class="page-screen blue-theme-page">
+    <!-- PAGE 4: REVISION & GROUP PAGE -->
+    <section id="page-4" class="app-screen blue-theme-page page-hidden">
       <div class="revision-top-bar">
         <div class="mode-buttons">
           <button id="btn-you-mode" class="mode-btn active" onclick="setMode('you')">You</button>
@@ -127,7 +125,7 @@
         </div>
       </div>
 
-      <!-- Group Mode Extra Tools (Hidden in 'You' Mode) -->
+      <!-- Group Mode Extra Controls -->
       <div id="group-tools" class="group-panel page-hidden">
         <div class="member-add-row">
           <input type="text" id="member-input" placeholder="Add Member Name">
@@ -146,7 +144,7 @@
         </div>
       </div>
 
-      <!-- Revision Question Box -->
+      <!-- Revision Question Card -->
       <div class="revision-card">
         <div class="rev-card-header">
           <h3 id="rev-active-topic">Topic: All Topics</h3>
@@ -170,15 +168,15 @@
         </div>
       </div>
 
-      <!-- Result / Score Board -->
+      <!-- Score Board -->
       <div class="score-board">
         <h4 id="score-board-title">Result / Score</h4>
         <div id="score-display">Score: 0</div>
       </div>
     </section>
 
-    <!-- PAGE 5: MISTAKES TRACKER PAGE -->
-    <section id="page-5" class="page-screen blue-theme-page">
+    <!-- PAGE 5: MISTAKES PAGE -->
+    <section id="page-5" class="app-screen blue-theme-page page-hidden">
       <h2>Mistakes Tracker</h2>
 
       <div class="mistake-tabs">
@@ -197,7 +195,7 @@
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
-      <button class="nav-item active" onclick="openPage('page-2', this)">
+      <button class="nav-item" onclick="openPage('page-2', this)">
         <span class="nav-icon">🏠</span>
         <span class="nav-label">Home</span>
       </button>

@@ -1,4 +1,4 @@
-// Global State
+// Application State
 let appData = {
   topics: [],
   mistakes: [],
@@ -10,7 +10,7 @@ let appData = {
   activeTopicId: null
 };
 
-// AUTHENTICATION & LOGIN
+// AUTHENTICATION LOGIC (Switch from Page 1 to App Layout)
 function switchAuthTab(tab) {
   document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
   document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
@@ -20,42 +20,48 @@ function switchAuthTab(tab) {
 
 function handleAuthSubmit(e) {
   e.preventDefault();
-  document.getElementById('page-1').classList.remove('active-page');
+  
+  // Hide Page 1 Completely
+  document.getElementById('page-1').style.display = 'none';
+  
+  // Show Main Application
   document.getElementById('app-wrapper').classList.remove('page-hidden');
-  openPage('page-2'); // Open Dashboard
+  
+  // Open Dashboard (Page 2) By Default
+  openPage('page-2', document.querySelector('.bottom-nav .nav-item'));
 }
 
 function handleLogout() {
   document.getElementById('app-wrapper').classList.add('page-hidden');
-  document.getElementById('page-1').classList.add('active-page');
+  document.getElementById('page-1').style.display = 'flex';
 }
 
 function toggleMenu() {
   document.getElementById('dropdown-menu').classList.toggle('page-hidden');
 }
 
-// REAL PAGE SWITCHING ROUTER
+// NAVIGATION ROUTER (Hides inactive pages, shows active page)
 function openPage(pageId, navBtn) {
   // Hide all screens
-  document.querySelectorAll('.page-screen').forEach(screen => {
-    screen.classList.remove('active-page');
+  document.querySelectorAll('.app-screen').forEach(screen => {
+    screen.classList.add('page-hidden');
   });
 
   // Show selected screen
-  document.getElementById(pageId).classList.add('active-page');
+  document.getElementById(pageId).classList.remove('page-hidden');
 
-  // Highlight bottom nav button
+  // Highlight active bottom menu item
   if (navBtn) {
     document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
     navBtn.classList.add('active');
   }
 
-  // Load page specific data
+  // Auto update dropdowns and data
   if (pageId === 'page-4') initRevision();
   if (pageId === 'page-5') renderMistakes();
 }
 
-// PAGE 3: TOPICS LOGIC
+// TOPICS PAGE (PAGE 3)
 function saveNewTopic() {
   const input = document.getElementById('topic-title-input');
   const title = input.value.trim();
@@ -97,17 +103,24 @@ function toggleQuestionForm() {
   document.getElementById('q-add-box').classList.toggle('page-hidden');
 }
 
+function toggleMCQInputs() {
+  const format = document.getElementById('q-format').value;
+  document.getElementById('mcq-box').classList.toggle('page-hidden', format !== 'mcq');
+}
+
 function addQuestionToTopic() {
   const text = document.getElementById('q-text').value;
   const ans = document.getElementById('q-ans').value;
   const topic = appData.topics.find(t => t.id === appData.activeTopicId);
 
-  topic.questions.push({ id: Date.now(), text, ans });
-  alert("Question saved!");
-  closeTopicModal();
+  if (topic && text) {
+    topic.questions.push({ id: Date.now(), text, ans });
+    alert("Question saved successfully!");
+    closeTopicModal();
+  }
 }
 
-// PAGE 4: REVISION & GROUP LOGIC
+// REVISION PAGE (PAGE 4)
 function setMode(mode) {
   appData.revMode = mode;
   document.getElementById('btn-you-mode').classList.toggle('active', mode === 'you');
@@ -150,7 +163,7 @@ function initRevision() {
     document.getElementById('q-text-display').innerText = questions[0].text;
     document.getElementById('q-ans-display').innerText = questions[0].ans;
   } else {
-    document.getElementById('q-text-display').innerText = "No questions available.";
+    document.getElementById('q-text-display').innerText = "No questions available in this topic.";
   }
 }
 
@@ -166,7 +179,7 @@ function gradeUser(pts) {
   }
 }
 
-// Group Tools
+// GROUP TOOLS
 function addMember() {
   const val = document.getElementById('member-input').value.trim();
   if (val) {
@@ -182,7 +195,21 @@ function spinDynamicWheel() {
   document.getElementById('spin-output').innerText = `Turn: ${appData.members[idx]}`;
 }
 
-// PAGE 5: MISTAKES LOGIC
+function addPunishment() {
+  const p = document.getElementById('punishment-input').value.trim();
+  if (p) {
+    appData.punishments.push(p);
+    alert('Punishment added!');
+    document.getElementById('punishment-input').value = '';
+  }
+}
+
+// MISTAKES PAGE (PAGE 5)
+function switchMistakeView(view) {
+  document.getElementById('tab-you-mistakes').classList.toggle('active', view === 'you');
+  document.getElementById('tab-group-mistakes').classList.toggle('active', view === 'group');
+}
+
 function renderMistakes() {
   document.getElementById('mistakes-list').innerText = `Total Mistakes Recorded: ${appData.mistakes.length}`;
 }
