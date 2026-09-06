@@ -1,304 +1,186 @@
-/* =========================================================
-   YOURSELF - Main JavaScript (Fixed & Complete)
-   ========================================================= */
+// State Management
+let appData = {
+  topics: [],
+  mistakes: [],
+  members: [],
+  punishments: [],
+  score: 0,
+  revMode: 'you', // 'you' or 'group'
+  mistakeMode: false,
+  selectedTopic: 'all',
+  currentQIndex: 0
+};
 
-/* =========================================================
-   1. STATE DATA
-   ========================================================= */
-
-let subjects = JSON.parse(localStorage.getItem("yourselfSubjects")) || [];
-let currentSubjectId = null;
-let currentQuestion = null;
-let usedQuestionIds = [];
-let players = [];
-let currentPlayerIndex = 0;
-let scores = {};
-
-/* =========================================================
-   2. HELPER & UTILITY FUNCTIONS
-   ========================================================= */
-
-function saveSubjects() {
-    localStorage.setItem("yourselfSubjects", JSON.stringify(subjects));
+// Authentication Tabs & Flow
+function switchAuthTab(type) {
+  document.getElementById('tab-signup').classList.toggle('active', type === 'signup');
+  document.getElementById('tab-signin').classList.toggle('active', type === 'signin');
+  document.getElementById('form-signup').classList.toggle('hidden', type !== 'signup');
+  document.getElementById('form-signin').classList.toggle('hidden', type !== 'signin');
 }
 
-// Fixed Missing Modal Controllers
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = "flex";
-        modal.classList.add("active");
-    }
+function handleAuth(event) {
+  event.preventDefault();
+  document.getElementById('page-home').classList.remove('active');
+  document.getElementById('app-container').classList.remove('hidden');
 }
 
-function closeAllModals() {
-    document.querySelectorAll(".modal").forEach(function(modal) {
-        modal.style.display = "none";
-        modal.classList.remove("active");
-    });
+function logout() {
+  document.getElementById('app-container').classList.add('hidden');
+  document.getElementById('page-home').classList.add('active');
 }
 
-// Fixed Missing Revision Dropdown Sync
-function updateRevisionSubjects() {
-    if (!revisionSubject) return;
-    
-    revisionSubject.innerHTML = '<option value="">-- Select Subject --</option>';
-    subjects.forEach(function(subject) {
-        const option = document.createElement("option");
-        option.value = subject.id;
-        option.textContent = subject.name;
-        revisionSubject.appendChild(option);
-    });
+function toggleMenu() {
+  document.getElementById('dropdown-menu').classList.toggle('hidden');
 }
 
-/* =========================================================
-   3. DOM ELEMENTS
-   ========================================================= */
-
-const subjectList = document.getElementById("subjectList");
-const noSubjectsMessage = document.getElementById("noSubjectsMessage");
-const addSubjectButton = document.getElementById("addSubjectButton");
-const subjectNameInput = document.getElementById("subjectName");
-const saveSubjectButton = document.getElementById("saveSubjectButton");
-const questionInput = document.getElementById("questionInput");
-const answerInput = document.getElementById("answerInput");
-const addQuestionButton = document.getElementById("addQuestionButton");
-const revisionSubject = document.getElementById("revisionSubject");
-const questionText = document.getElementById("questionText");
-const answerText = document.getElementById("answerText");
-const answerBox = document.getElementById("answerBox");
-const showAnswerButton = document.getElementById("showAnswerButton");
-const randomQuestionButton = document.getElementById("randomQuestionButton");
-const correctButton = document.getElementById("correctButton");
-const wrongButton = document.getElementById("wrongButton");
-const playerNameInput = document.getElementById("playerName");
-const addPlayerButton = document.getElementById("addPlayerButton");
-const playerList = document.getElementById("playerList");
-const spinButton = document.getElementById("spinButton");
-const currentPlayer = document.getElementById("currentPlayer");
-const scoreBoard = document.getElementById("scoreBoard");
-const savedQuestions = document.getElementById("savedQuestions");
-
-/* =========================================================
-   4. NAVIGATION & INIT
-   ========================================================= */
-
-function showPage(pageId) {
-    const pages = document.querySelectorAll(".page");
-    pages.forEach(function(page) {
-        page.classList.remove("active");
-    });
-
-    const selectedPage = document.getElementById(pageId);
-    if (selectedPage) {
-        selectedPage.classList.add("active");
-    }
-
-    const navigationButtons = document.querySelectorAll(".navigation-button");
-    navigationButtons.forEach(function(button) {
-        button.classList.remove("active");
-    });
+// Navigation
+function switchPage(pageName) {
+  document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  document.getElementById(`page-${pageName}`).classList.add('active');
+  if (pageName === 'revision') loadRevisionQuestions();
+  if (pageName === 'mistakes') renderMistakesList();
 }
 
-document.querySelectorAll(".navigation-button").forEach(function(button) {
-    button.addEventListener("click", function() {
-        const target = button.dataset.page;
-        if (target) {
-            showPage(target);
-        }
-    });
-});
-
-/* =========================================================
-   5. DISPLAY SUBJECTS
-   ========================================================= */
-
-function displaySubjects() {
-    if (!subjectList) return;
-
-    subjectList.innerHTML = "";
-
-    if (subjects.length === 0) {
-        if (noSubjectsMessage) noSubjectsMessage.style.display = "block";
-        updateRevisionSubjects();
-        return;
-    }
-
-    if (noSubjectsMessage) noSubjectsMessage.style.display = "none";
-
-    subjects.forEach(function(subject) {
-        const card = document.createElement("div");
-        card.className = "subject-card";
-
-        const title = document.createElement("h3");
-        title.textContent = subject.name;
-
-        const information = document.createElement("p");
-        information.textContent = `${subject.questions ? subject.questions.length : 0} question(s)`;
-
-        const openButton = document.createElement("button");
-        openButton.className = "open-subject-button";
-        openButton.textContent = "Open";
-        openButton.addEventListener("click", function() {
-            openSubject(subject.id);
-        });
-
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-subject-button";
-        deleteButton.textContent = "Delete";
-        deleteButton.addEventListener("click", function() {
-            deleteSubject(subject.id);
-        });
-
-        card.appendChild(title);
-        card.appendChild(information);
-        card.appendChild(openButton);
-        card.appendChild(deleteButton);
-        subjectList.appendChild(card);
-    });
-
-    updateRevisionSubjects();
+// TOPICS MANAGEMENT (PAGE 3)
+function addTopic() {
+  const name = document.getElementById('topic-input').value.trim();
+  if (!name) return;
+  const newTopic = { id: Date.now(), name: name, questions: [] };
+  appData.topics.push(newTopic);
+  document.getElementById('topic-input').value = '';
+  renderTopicsGrid();
+  updateTopicDropdowns();
 }
 
-/* =========================================================
-   6. SUBJECT MANAGEMENT (Add, Delete, Open)
-   ========================================================= */
-
-if (saveSubjectButton) {
-    saveSubjectButton.addEventListener("click", function() {
-        if (!subjectNameInput) return;
-        const name = subjectNameInput.value.trim();
-
-        if (name === "") {
-            alert("Please enter a subject name.");
-            return;
-        }
-
-        const alreadyExists = subjects.some(function(subject) {
-            return subject.name.toLowerCase() === name.toLowerCase();
-        });
-
-        if (alreadyExists) {
-            alert("This subject already exists.");
-            return;
-        }
-
-        const newSubject = {
-            id: Date.now().toString(),
-            name: name,
-            questions: []
-        };
-
-        subjects.push(newSubject);
-        saveSubjects();
-        subjectNameInput.value = "";
-        closeAllModals();
-        displaySubjects();
-    });
+function renderTopicsGrid() {
+  const grid = document.getElementById('topics-grid');
+  grid.innerHTML = '';
+  appData.topics.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'topic-card';
+    card.innerText = t.name;
+    card.onclick = () => openTopicModal(t.id);
+    grid.appendChild(card);
+  });
 }
 
-function deleteSubject(subjectId) {
-    const subject = subjects.find(function(item) {
-        return item.id === subjectId;
-    });
-
-    if (!subject) return;
-
-    if (!confirm(`Delete "${subject.name}"?`)) return;
-
-    subjects = subjects.filter(function(item) {
-        return item.id !== subjectId;
-    });
-
-    saveSubjects();
-    displaySubjects();
+let activeTopicId = null;
+function openTopicModal(id) {
+  activeTopicId = id;
+  const topic = appData.topics.find(t => t.id === id);
+  document.getElementById('modal-topic-title').innerText = topic.name;
+  document.getElementById('topic-modal').classList.remove('hidden');
 }
 
-function openSubject(subjectId) {
-    currentSubjectId = subjectId;
-    const subject = subjects.find(function(item) {
-        return item.id === subjectId;
-    });
-
-    if (!subject) return;
-
-    const selectedSubjectName = document.getElementById("selectedSubjectName");
-    if (selectedSubjectName) {
-        selectedSubjectName.textContent = subject.name;
-    }
-
-    displaySavedQuestions();
-    openModal("subjectDetailsModal");
+function closeTopicModal() {
+  document.getElementById('topic-modal').classList.add('hidden');
 }
 
-/* =========================================================
-   7. QUESTION MANAGEMENT (Fixed Incomplete Code)
-   ========================================================= */
-
-if (addQuestionButton) {
-    addQuestionButton.addEventListener("click", function() {
-        if (!questionInput || !answerInput || !currentSubjectId) return;
-
-        const qText = questionInput.value.trim();
-        const aText = answerInput.value.trim();
-
-        if (!qText || !aText) {
-            alert("Please enter both question and answer.");
-            return;
-        }
-
-        const subject = subjects.find(s => s.id === currentSubjectId);
-        if (subject) {
-            subject.questions.push({
-                id: Date.now().toString(),
-                question: qText,
-                answer: aText
-            });
-            saveSubjects();
-            displaySavedQuestions();
-            displaySubjects();
-            questionInput.value = "";
-            answerInput.value = "";
-        }
-    });
+function showQuestionForm() {
+  document.getElementById('add-q-form').classList.remove('hidden');
 }
 
-function displaySavedQuestions() {
-    if (!savedQuestions) return;
+function saveQuestionToTopic() {
+  const text = document.getElementById('q-text').value;
+  const ans = document.getElementById('q-ans').value;
+  const type = document.getElementById('q-type').value;
 
-    savedQuestions.innerHTML = "";
-
-    const subject = subjects.find(function(item) {
-        return item.id === currentSubjectId;
-    });
-
-    if (!subject || !subject.questions || subject.questions.length === 0) {
-        savedQuestions.innerHTML = "<p>No questions added yet.</p>";
-        return;
-    }
-
-    subject.questions.forEach(function(q, index) {
-        const item = document.createElement("div");
-        item.className = "question-item";
-        item.style.marginBottom = "10px";
-        item.innerHTML = `
-            <strong>Q${index + 1}: ${q.question}</strong>
-            <p>A: ${q.answer}</p>
-            <button onclick="deleteQuestion('${q.id}')" style="color:red; background:none; border:none; cursor:pointer;">Delete</button>
-        `;
-        savedQuestions.appendChild(item);
-    });
+  const topic = appData.topics.find(t => t.id === activeTopicId);
+  topic.questions.push({ id: Date.now(), text, ans, type });
+  alert("Question added successfully!");
+  closeTopicModal();
 }
 
-function deleteQuestion(questionId) {
-    const subject = subjects.find(s => s.id === currentSubjectId);
-    if (!subject) return;
-
-    subject.questions = subject.questions.filter(q => q.id !== questionId);
-    saveSubjects();
-    displaySavedQuestions();
-    displaySubjects();
+// REVISION PAGE LOGIC (PAGE 4)
+function setRevisionMode(mode) {
+  appData.revMode = mode;
+  document.getElementById('btn-mode-you').classList.toggle('active', mode === 'you');
+  document.getElementById('btn-mode-group').classList.toggle('active', mode === 'group');
+  document.getElementById('group-controls').classList.toggle('hidden', mode === 'you');
 }
 
-// Initial Call on Load
-displaySubjects();
+function updateTopicDropdowns() {
+  const select = document.getElementById('revision-topic-select');
+  const mSelect = document.getElementById('mistake-topic-select');
+  select.innerHTML = '<option value="all">All Topics</option>';
+  mSelect.innerHTML = '<option value="all">All Topics</option>';
+
+  appData.topics.forEach(t => {
+    select.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+    mSelect.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+  });
+}
+
+function toggleMistakeMode() {
+  appData.mistakeMode = !appData.mistakeMode;
+  document.getElementById('btn-mistake-toggle').innerText = `Mistake Mode: ${appData.mistakeMode ? 'ON' : 'OFF'}`;
+  loadRevisionQuestions();
+}
+
+function loadRevisionQuestions() {
+  let questions = [];
+  const selected = document.getElementById('revision-topic-select').value;
+  
+  if (selected === 'all') {
+    appData.topics.forEach(t => questions.push(...t.questions));
+  } else {
+    const t = appData.topics.find(top => top.id == selected);
+    if (t) questions = t.questions;
+  }
+
+  if (appData.mistakeMode) {
+    const mistakeIds = appData.mistakes.map(m => m.questionId);
+    questions = questions.filter(q => mistakeIds.includes(q.id));
+  }
+
+  if (questions.length > 0) {
+    const q = questions[0];
+    document.getElementById('q-display-text').innerText = q.text;
+    document.getElementById('hidden-answer').innerText = q.ans;
+  } else {
+    document.getElementById('q-display-text').innerText = "No questions found.";
+  }
+}
+
+function showAnswer() {
+  document.getElementById('hidden-answer').classList.remove('hidden');
+}
+
+function gradeAnswer(isCorrect) {
+  if (isCorrect) {
+    appData.score += 10;
+  } else {
+    appData.score -= 20;
+    // Add to mistakes
+    appData.mistakes.push({
+      topicId: document.getElementById('revision-topic-select').value,
+      questionId: Date.now(),
+      mode: appData.revMode
+    });
+  }
+  document.getElementById('score-display').innerText = `Score: ${appData.score}`;
+}
+
+// SPINNER & PUNISHMENT (GROUP MODE)
+function addGroupMember() {
+  const name = document.getElementById('member-name').value;
+  if (name) {
+    appData.members.push(name);
+    document.getElementById('members-list').innerText = appData.members.join(', ');
+  }
+}
+
+function spinWheel() {
+  if (appData.members.length === 0) return alert("Add members first!");
+  const randomIndex = Math.floor(Math.random() * appData.members.length);
+  document.getElementById('spin-result').innerText = `Turn: ${appData.members[randomIndex]}`;
+}
+
+// MISTAKES PAGE LOGIC (PAGE 5)
+function renderMistakesList() {
+  const container = document.getElementById('mistakes-container');
+  container.innerHTML = `<p>Total Mistakes Saved: ${appData.mistakes.length}</p>`;
+}

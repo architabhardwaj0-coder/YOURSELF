@@ -1,665 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-
-    <!-- Makes the website work properly on mobile, tablet and laptop -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>YOURSELF</title>
-
-    <!-- Our CSS file will be connected here later -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOURSELF</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <!-- =====================================================
-         TOP HEADER
-         Website name + Account
-    ====================================================== -->
+  <div id="page-home" class="page active">
+    <div class="auth-container">
+      <h1 class="brand-title">Yourself</h1>
+      <p class="tagline">Test yourself without needing anyone to ask you question</p>
 
-    <header class="top-header">
-
-        <!-- Website Logo / Name -->
-        <div class="logo">
-            YOURSELF
+      <div class="auth-box">
+        <div class="auth-tabs">
+          <button id="tab-signup" class="active" onclick="switchAuthTab('signup')">Sign Up</button>
+          <button id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
         </div>
 
-        <!-- Account button -->
-        <button class="account-button" id="accountButton">
-            <span class="account-icon">○</span>
-            <span>Account</span>
-        </button>
+        <form id="form-signup" onsubmit="handleAuth(event)">
+          <input type="text" placeholder="Username" required />
+          <input type="email" placeholder="Email (email.com)" required />
+          <input type="password" placeholder="Password" required />
+          <button type="submit" class="btn-primary">Sign Up</button>
+        </form>
 
+        <form id="form-signin" class="hidden" onsubmit="handleAuth(event)">
+          <input type="email" placeholder="Email (email.com)" required />
+          <input type="password" placeholder="Password" required />
+          <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-container" class="hidden">
+    <header class="app-header">
+      <div class="header-left">
+        <span class="logo-icon">🎯</span>
+        <span class="logo-text">Yourself</span>
+      </div>
+      <div class="header-right">
+        <span class="user-icon">👤</span>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+      </div>
+      <div id="dropdown-menu" class="dropdown-menu hidden">
+        <a href="#">Help</a>
+        <a href="#">Settings</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
     </header>
 
+    <main class="content-area">
+      <section id="page-dashboard" class="app-page active">
+        <h2>Welcome to Yourself Dashboard</h2>
+        <p>Niche diye gaye options se apne Topics add karein ya Revision shuru karein!</p>
+      </section>
 
-    <!-- =====================================================
-         MAIN WEBSITE CONTENT
-    ====================================================== -->
+      <section id="page-topics" class="app-page">
+        <h2 class="section-heading">Add Your Topics</h2>
+        
+        <div class="topic-input-group">
+          <input type="text" id="topic-input" placeholder="Enter topic name (e.g. Environment)...">
+          <button class="btn-action" onclick="addTopic()">Done</button>
+        </div>
 
-    <main>
+        <div id="topics-grid" class="topics-grid"></div>
 
-
-        <!-- =================================================
-             PAGE 1 : HOME
-        ================================================== -->
-
-        <section id="homePage" class="page">
-
-            <div class="home-content">
-
-                <h1>Welcome to YOURSELF</h1>
-
-                <p>
-                    Learn. Revise. Test Yourself.
-                </p>
-
-                <p>
-                    Revise your questions and test yourself
-                    without needing anyone to ask you questions.
-                </p>
-
-                <button id="startRevisionButton">
-                    Start Revision
-                </button>
-
+        <div id="topic-modal" class="modal hidden">
+          <div class="modal-content">
+            <span class="close-btn" onclick="closeTopicModal()">&times;</span>
+            <h3 id="modal-topic-title">Topic Details</h3>
+            
+            <div class="modal-actions">
+              <button onclick="showQuestionForm()">Add Questions</button>
+              <button onclick="triggerPdfUpload()">Upload PDF</button>
+              <button onclick="triggerImageUpload()">Add Image/Photo</button>
+              <input type="file" id="pdf-file-input" accept=".pdf" style="display:none;" onchange="handleFileUpload('PDF')">
+              <input type="file" id="img-file-input" accept="image/*" style="display:none;" onchange="handleFileUpload('Image')">
             </div>
 
-        </section>
-
-
-
-        <!-- =================================================
-             PAGE 2 : SUBJECTS
-        ================================================== -->
-
-        <section id="subjectsPage" class="page">
-
-            <div class="page-header">
-
-                <div>
-                    <h2>Subjects</h2>
-
-                    <p>
-                        Create your subjects and add your questions.
-                    </p>
-                </div>
-
-                <!-- Add Subject button -->
-                <button id="addSubjectButton">
-                    + Add Subject
-                </button>
-
+            <div id="add-q-form" class="hidden">
+              <input type="text" id="q-text" placeholder="Enter question text...">
+              <select id="q-type" onchange="toggleQTypeInputs()">
+                <option value="text">Text Answer</option>
+                <option value="mcq">MCQ Options</option>
+              </select>
+              <div id="mcq-inputs" class="hidden">
+                <input type="text" id="opt1" placeholder="Option 1">
+                <input type="text" id="opt2" placeholder="Option 2">
+                <input type="text" id="opt3" placeholder="Option 3">
+                <input type="text" id="opt4" placeholder="Option 4">
+                <input type="text" id="correct-opt" placeholder="Correct Option Number (1-4)">
+              </div>
+              <input type="text" id="q-ans" placeholder="Correct Answer text...">
+              <button onclick="saveQuestionToTopic()">Save Question</button>
             </div>
-
-
-            <!--
-                Subjects created by the user
-                will appear inside this container.
-            -->
-
-            <div id="subjectList">
-
-                <!-- Example subject card -->
-
-                <div class="subject-card">
-
-                    <h3>English</h3>
-
-                    <p>
-                        0 Questions
-                    </p>
-
-                    <button class="open-subject-button">
-                        Open Subject
-                    </button>
-
-                    <button class="delete-subject-button">
-                        Delete
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- Message when there are no subjects -->
-
-            <div id="noSubjectsMessage">
-
-                <p>
-                    No subjects yet.
-                </p>
-
-                <p>
-                    Click "Add Subject" to create your first subject.
-                </p>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             PAGE 3 : REVISION MODE
-        ================================================== -->
-
-        <section id="revisionPage" class="page">
-
-            <div class="page-header">
-
-                <div>
-
-                    <h2>Revision Mode</h2>
-
-                    <p>
-                        Let YOURSELF ask you questions.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- =============================================
-                 SELECT SUBJECT
-            ============================================== -->
-
-            <div class="revision-controls">
-
-                <label for="revisionSubject">
-                    Select Subject
-                </label>
-
-                <select id="revisionSubject">
-
-                    <option value="">
-                        Select a Subject
-                    </option>
-
-                    <!-- Subjects created by user
-                         will appear here -->
-
-                </select>
-
-            </div>
-
-
-
-            <!-- =============================================
-                 RANDOM QUESTION
-            ============================================== -->
-
-            <div class="random-question-section">
-
-                <button id="randomQuestionButton">
-                    Random Question
-                </button>
-
-                <button id="spinButton">
-                    Spin
-                </button>
-
-            </div>
-
-
-
-            <!-- =============================================
-                 PLAYER / SPIN SECTION
-            ============================================== -->
-
-            <div class="spin-section">
-
-                <h3>Spin / Players</h3>
-
-                <p>
-                    Add the names of people who are going
-                    to revise together.
-                </p>
-
-
-                <label for="playerName">
-                    Add your name
-                </label>
-
-                <input
-                    type="text"
-                    id="playerName"
-                    placeholder="Enter your name"
-                >
-
-                <button id="addPlayerButton">
-                    Add Name
-                </button>
-
-
-                <!-- Names will appear here -->
-
-                <div id="playerList">
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =============================================
-                 QUESTION CARD
-            ============================================== -->
-
-            <div class="question-card">
-
-                <!-- Current player's name -->
-
-                <p id="currentPlayer">
-                    Player: —
-                </p>
-
-
-                <!-- Question -->
-
-                <h3 id="questionText">
-                    Select a subject and click
-                    "Random Question".
-                </h3>
-
-
-                <!-- Show Answer -->
-
-                <button id="showAnswerButton">
-                    Show Answer
-                </button>
-
-
-                <!-- Answer -->
-
-                <div id="answerBox">
-
-                    <p id="answerText">
-                        Answer will appear here.
-                    </p>
-
-                </div>
-
-
-                <!-- Correct / Wrong -->
-
-                <div class="answer-buttons">
-
-                    <button id="correctButton">
-                        ✓ Correct
-                    </button>
-
-                    <button id="wrongButton">
-                        ✕ Wrong
-                    </button>
-
-                </div>
-
-
-                <!-- Question progress -->
-
-                <p id="questionProgress">
-                    No question loaded.
-                </p>
-
-            </div>
-
-
-
-            <!-- =============================================
-                 SCORE
-            ============================================== -->
-
-            <div class="score-section">
-
-                <h3>Score</h3>
-
-                <div id="scoreBoard">
-
-                    <p>
-                        No score yet.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
+            
+            <div id="topic-q-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-revision" class="app-page">
+        <div class="revision-header">
+          <div class="mode-toggle">
+            <button id="btn-mode-you" class="active" onclick="setRevisionMode('you')">You</button>
+            <button id="btn-mode-group" onclick="setRevisionMode('group')">Group</button>
+          </div>
+          
+          <div class="topic-select-wrap">
+            <label>Select Topic:</label>
+            <select id="revision-topic-select" onchange="loadRevisionQuestions()">
+              <option value="all">All Topics</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="group-controls" class="group-controls hidden">
+          <div class="member-input-wrap">
+            <input type="text" id="member-name" placeholder="Add Member Name...">
+            <button onclick="addGroupMember()">Add Member</button>
+          </div>
+          <div id="members-list"></div>
+
+          <div class="spinner-section">
+            <button class="btn-spinner" onclick="spinWheel()">🎡 Spin Dynamic Wheel</button>
+            <div id="spin-result" class="spin-result"></div>
+          </div>
+
+          <div class="punishment-section">
+            <input type="text" id="punishment-input" placeholder="Add custom punishment...">
+            <button onclick="addPunishment()">Add Punishment</button>
+          </div>
+        </div>
+
+        <div class="revision-options">
+          <button onclick="setOrder('random')">Random</button>
+          <button onclick="setOrder('series')">Series</button>
+          <button id="btn-mistake-toggle" onclick="toggleMistakeMode()">Mistake Mode: OFF</button>
+        </div>
+
+        <div class="q-card">
+          <h3 id="current-topic-name">Topic: All</h3>
+          <p id="q-display-text">Select options above to start revision.</p>
+
+          <div id="q-answer-area"></div>
+
+          <button id="btn-show-ans" onclick="showAnswer()">Show Answer</button>
+          <p id="hidden-answer" class="hidden"></p>
+
+          <div class="q-actions">
+            <button class="btn-correct" onclick="gradeAnswer(true)">Correct (+10)</button>
+            <button class="btn-wrong" onclick="gradeAnswer(false)">Wrong (-20)</button>
+          </div>
+        </div>
+
+        <div class="results-board">
+          <h4 id="board-title">Results / Score</h4>
+          <div id="score-display">Score: 0</div>
+          <div id="ranking-list" class="hidden"></div>
+        </div>
+      </section>
+
+      <section id="page-mistakes" class="app-page">
+        <h2>Mistakes Tracker</h2>
+        <div class="mistake-tabs">
+          <button id="tab-mistake-you" class="active" onclick="switchMistakeView('you')">You Mistakes</button>
+          <button id="tab-mistake-group" onclick="switchMistakeView('group')">Group Mistakes</button>
+        </div>
+
+        <div class="mistake-topic-filter">
+          <select id="mistake-topic-select" onchange="renderMistakesList()">
+            <option value="all">All Topics</option>
+          </select>
+        </div>
+
+        <div id="mistakes-container"></div>
+      </section>
     </main>
 
-
-
-    <!-- =====================================================
-         BOTTOM NAVIGATION
-         Only 3 main pages
-    ====================================================== -->
-
-    <nav class="bottom-navigation">
-
-        <!-- Home -->
-
-        <button
-            class="navigation-button active"
-            data-page="homePage"
-            id="homeNavigationButton">
-
-            <span class="navigation-icon">
-                ⌂
-            </span>
-
-            <span>
-                Home
-            </span>
-
-        </button>
-
-
-        <!-- Subjects -->
-
-        <button
-            class="navigation-button"
-            data-page="subjectsPage"
-            id="subjectsNavigationButton">
-
-            <span class="navigation-icon">
-                ▣
-            </span>
-
-            <span>
-                Subjects
-            </span>
-
-        </button>
-
-
-        <!-- Revision -->
-
-        <button
-            class="navigation-button"
-            data-page="revisionPage"
-            id="revisionNavigationButton">
-
-            <span class="navigation-icon">
-                ↻
-            </span>
-
-            <span>
-                Revision
-            </span>
-
-        </button>
-
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="switchPage('dashboard')">
+        <span class="icon">🏠</span>
+        <span class="label">Home</span>
+      </button>
+      <button class="nav-item" onclick="switchPage('topics')">
+        <span class="icon">📚</span>
+        <span class="label">Topics</span>
+      </button>
+      <button class="nav-item" onclick="switchPage('revision')">
+        <span class="icon">🔄</span>
+        <span class="label">Revision</span>
+      </button>
+      <button class="nav-item" onclick="switchPage('mistakes')">
+        <span class="icon">⚠️</span>
+        <span class="label">Mistakes</span>
+      </button>
     </nav>
+  </div>
 
-
-
-    <!-- =====================================================
-         ACCOUNT WINDOW
-    ====================================================== -->
-
-    <div
-        id="accountModal"
-        class="modal"
-        hidden>
-
-        <div class="modal-content">
-
-            <button
-                id="closeAccountButton"
-                class="close-button">
-                ×
-            </button>
-
-
-            <h2>Account</h2>
-
-            <p>
-                Sign in to your YOURSELF account.
-            </p>
-
-
-            <!-- Name -->
-
-            <label for="accountName">
-                Name
-            </label>
-
-            <input
-                type="text"
-                id="accountName"
-                placeholder="Enter your name"
-            >
-
-
-            <!-- Password -->
-
-            <label for="accountPassword">
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="accountPassword"
-                placeholder="Enter your password"
-            >
-
-
-            <!-- Sign In -->
-
-            <button id="signInButton">
-                Sign In
-            </button>
-
-
-            <!-- Sign Up -->
-
-            <button id="signUpButton">
-                Sign Up
-            </button>
-
-
-            <!-- Log Out -->
-
-            <button id="logoutButton">
-                Log Out
-            </button>
-
-
-            <p id="accountStatus">
-                Not signed in.
-            </p>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         ADD SUBJECT WINDOW
-    ====================================================== -->
-
-    <div
-        id="addSubjectModal"
-        class="modal"
-        hidden>
-
-        <div class="modal-content">
-
-            <button
-                id="closeSubjectButton"
-                class="close-button">
-                ×
-            </button>
-
-
-            <h2>Add Subject</h2>
-
-
-            <p>
-                Create a subject for your revision.
-            </p>
-
-
-            <label for="subjectName">
-                Subject Name
-            </label>
-
-            <input
-                type="text"
-                id="subjectName"
-                placeholder="For example: English"
-            >
-
-
-            <button id="saveSubjectButton">
-                Save Subject
-            </button>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         SUBJECT DETAILS / QUESTIONS WINDOW
-    ====================================================== -->
-
-    <div
-        id="subjectDetailsModal"
-        class="modal"
-        hidden>
-
-        <div class="modal-content subject-details">
-
-            <button
-                id="closeSubjectDetailsButton"
-                class="close-button">
-                ×
-            </button>
-
-
-            <!-- Selected subject name -->
-
-            <h2 id="selectedSubjectName">
-                English
-            </h2>
-
-
-            <p>
-                Add questions to this subject.
-            </p>
-
-
-
-            <!-- =============================================
-                 ADD QUESTIONS
-            ============================================== -->
-
-            <div class="question-input-section">
-
-                <h3>Add Questions</h3>
-
-
-                <label for="questionInput">
-                    Question
-                </label>
-
-                <textarea
-                    id="questionInput"
-                    placeholder="Write your question here..."
-                ></textarea>
-
-
-                <label for="answerInput">
-                    Answer
-                </label>
-
-                <textarea
-                    id="answerInput"
-                    placeholder="Write the answer here..."
-                ></textarea>
-
-
-                <button id="addQuestionButton">
-                    Add Question
-                </button>
-
-            </div>
-
-
-
-            <!-- =============================================
-                 UPLOAD PDF
-            ============================================== -->
-
-            <div class="pdf-section">
-
-                <h3>Upload Your PDF of Questions</h3>
-
-                <p>
-                    You can upload a PDF containing your
-                    questions for this subject.
-                </p>
-
-
-                <label for="pdfInput">
-                    Choose PDF
-                </label>
-
-                <input
-                    type="file"
-                    id="pdfInput"
-                    accept=".pdf"
-                >
-
-
-                <button id="uploadPdfButton">
-                    Upload PDF
-                </button>
-
-            </div>
-
-
-
-            <!-- =============================================
-                 SAVED QUESTIONS
-            ============================================== -->
-
-            <div class="saved-questions-section">
-
-                <h3>Saved Questions</h3>
-
-                <div id="savedQuestions">
-
-                    <p>
-                        No questions added yet.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-         We will add functionality here later.
-    ====================================================== -->
-
-    <script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
-
 </html>
