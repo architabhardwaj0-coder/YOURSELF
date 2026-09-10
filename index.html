@@ -14,6 +14,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+        }
+
+        /* Back Arrow for All Pages */
+        .global-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
         }
 
         /* 1. Home Page: Pure White Background */
@@ -30,13 +43,13 @@
             max-width: 600px;
         }
         .main-title {
-            color: #0000FF; /* Blue */
+            color: #0000FF;
             font-size: 50px;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .sub-text {
-            color: #000000; /* Black */
+            color: #000000;
             font-size: 16px;
             margin-bottom: 30px;
         }
@@ -47,7 +60,7 @@
             margin: 0 auto;
         }
         .auth-links a {
-            color: #0000FF; /* Blue */
+            color: #0000FF;
             text-decoration: none;
             font-size: 18px;
             font-weight: bold;
@@ -57,18 +70,19 @@
             text-decoration: underline;
         }
 
-        /* 2. Sign Up & Sign In Pages: Blue Background & White Box */
+        /* 2. Sign Up & Sign In Pages */
         .form-page {
-            background-color: #0000FF; /* Blue Background */
+            background-color: #0000FF;
             width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            display: none; /* Hidden by default */
+            display: none;
+            position: relative;
         }
         .box {
-            background-color: #ffffff; /* White Box */
+            background-color: #ffffff;
             padding: 40px;
             border-radius: 10px;
             width: 350px;
@@ -110,31 +124,438 @@
             background-color: #0000cc;
         }
 
-        /* 3. Dashboard Page: Pure Black Background */
+        /* 3. Dashboard Page */
         #dashboard-page {
-            background-color: #000000; /* Pure Black Background */
+            background-color: #0000FF;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+        .dashboard-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            box-sizing: border-box;
+        }
+        .dashboard-logo {
+            color: #000000;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .dashboard-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 22px;
+            color: #000000;
+            cursor: pointer;
+        }
+        .menu-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 40px;
+            background: #ffffff;
+            color: #000000;
+            border-radius: 5px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            width: 120px;
+        }
+        .menu-dropdown a {
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #000000;
+            font-size: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        .menu-dropdown a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dashboard-content {
+            position: relative;
+            width: 450px;
+            height: 220px;
+        }
+        .dash-box {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            width: 120px;
+            cursor: pointer;
+        }
+        .dash-box:hover {
+            background-color: #f5f5f5;
+        }
+        #box-topic {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        #box-revision {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        #box-mistake {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 110px;
+        }
+
+        /* 4. Account Profile Page */
+        #account-page {
+            background-color: #000000;
             color: #ffffff;
             width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            text-align: center;
             display: none;
+            position: relative;
         }
-        #dashboard-page h1 {
-            color: #0000FF;
-            font-size: 40px;
+        .account-box {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0px 4px 15px rgba(255,255,255,0.1);
         }
-        .back-link {
-            color: #0000FF;
-            text-decoration: none;
+        .profile-pic-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background: #444;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+        .camera-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #0000FF;
+            color: white;
+            border-radius: 50%;
+            padding: 5px;
+            font-size: 12px;
             cursor: pointer;
+        }
+        .account-input-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .account-input-group label {
+            font-size: 12px;
+            color: #bbb;
+        }
+        .account-input-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            background: #333;
+            border: 1px solid #555;
+            color: white;
+            border-radius: 4px;
+            margin-top: 3px;
+        }
+        .btn-logout {
+            width: 100%;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* 5. TOPIC MANAGEMENT PAGE */
+        #topic-page {
+            background-color: #0000FF;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            display: none;
+            overflow-y: auto;
+            position: relative;
+        }
+        .topic-main-box {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 450px;
+            max-width: 90%;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+        .topic-input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
             font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
         }
-        .back-link:hover {
-            text-decoration: underline;
+        .topics-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            width: 450px;
+            max-width: 90%;
+            justify-content: flex-start;
         }
+        .topic-card {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            width: 47%;
+            box-sizing: border-box;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+            text-align: center;
+            cursor: pointer;
+            word-break: break-word;
+        }
+
+        /* 6. INDIVIDUAL TOPIC DETAIL PAGE */
+        #topic-detail-page {
+            background-color: #0000FF;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            display: none;
+            overflow-y: auto;
+            position: relative;
+        }
+        .detail-main-box {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+        .detail-select, .detail-input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: #333;
+            background: #fff;
+        }
+        .upload-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .upload-btn-label {
+            flex: 1;
+            background: #f0f0f0;
+            padding: 8px;
+            font-size: 12px;
+            border: 1px dashed #0000FF;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #0000FF;
+            font-weight: bold;
+            text-align: center;
+        }
+        .upload-btn-label input { display: none; }
+        .questions-list {
+            width: 500px;
+            max-width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .question-card {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+            text-align: left;
+            word-break: break-word;
+        }
+        .question-card img { max-width: 100%; border-radius: 5px; margin-top: 10px; }
+
+        /* 7. REVISION PAGE (Black Background, Top Settings & Controls) */
+        #revision-page {
+            background-color: #000000;
+            color: #ffffff;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            display: none;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        .revision-top-controls {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .rev-control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rev-control-group select {
+            background: #222;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .revision-center-box {
+            text-align: center;
+            max-width: 500px;
+        }
+        .rev-select-topic-btn {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0px 4px 15px rgba(255,255,255,0.2);
+            margin-bottom: 25px;
+        }
+        .rev-options-row {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .rev-options-row select {
+            background: #222;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 6px;
+            border-radius: 4px;
+        }
+        /* Topic selector popup inside revision */
+        #revTopicListPopup {
+            display: none;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .rev-topic-item {
+            padding: 8px;
+            background: #333;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .rev-topic-item:hover { background: #444; }
+
+        /* 8. ACTIVE QUIZ / REVISION GAME PLAY PAGE */
+        #quiz-play-page {
+            background-color: #000000;
+            color: #ffffff;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            display: none;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .quiz-score-board {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #00ffcc;
+        }
+        .quiz-card-box {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            width: 450px;
+            max-width: 90%;
+            box-shadow: 0px 4px 15px rgba(255,255,255,0.1);
+        }
+        .quiz-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .quiz-btn {
+            padding: 10px 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-correct { background-color: #28a745; color: white; }
+        .btn-wrong { background-color: #dc3545; color: white; }
     </style>
 </head>
 <body>
@@ -153,72 +574,376 @@
 
     <!-- PAGE 2: SIGN UP PAGE -->
     <div id="signup-page" class="form-page">
+        <div class="global-back" onclick="showPage('home-page')">&larr;</div>
         <div class="box">
             <h2>Sign Up</h2>
             <form onsubmit="handleFormSubmit(event)">
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" required>
-                </div>
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" required>
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" required>
-                </div>
+                <div class="input-group"><label>Username</label><input type="text" required></div>
+                <div class="input-group"><label>Email</label><input type="email" required></div>
+                <div class="input-group"><label>Password</label><input type="password" required></div>
                 <button type="submit" class="btn-done">Done</button>
             </form>
-            <br>
-            <a onclick="showPage('home-page')" class="back-link" style="font-size: 13px; text-align: center; display: block;">Back to Home</a>
         </div>
     </div>
 
     <!-- PAGE 3: SIGN IN PAGE -->
     <div id="signin-page" class="form-page">
+        <div class="global-back" onclick="showPage('home-page')">&larr;</div>
         <div class="box">
             <h2>Sign In</h2>
             <form onsubmit="handleFormSubmit(event)">
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" required>
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" required>
-                </div>
+                <div class="input-group"><label>Username</label><input type="text" required></div>
+                <div class="input-group"><label>Password</label><input type="password" required></div>
                 <button type="submit" class="btn-done">Done</button>
             </form>
-            <br>
-            <a onclick="showPage('home-page')" class="back-link" style="font-size: 13px; text-align: center; display: block;">Back to Home</a>
         </div>
     </div>
 
-    <!-- PAGE 4: DASHBOARD / SUCCESS PAGE -->
+    <!-- PAGE 4: MAIN DASHBOARD PAGE -->
     <div id="dashboard-page">
-        <div>
-            <h1>Welcome to YOURSELF!</h1>
-            <p>You have successfully completed the process.</p>
-            <br>
-            <a onclick="showPage('home-page')" class="back-link">Go Back to Home</a>
+        <div class="dashboard-header">
+            <div class="dashboard-logo">YOURSELF</div>
+            <div class="dashboard-icons">
+                <span onclick="showPage('account-page')" title="Account">👤</span>
+                <span onclick="toggleMenu()" title="Menu">☰</span>
+            </div>
+        </div>
+
+        <div id="menuDropdown" class="menu-dropdown">
+            <a href="#">Menu</a>
+            <a href="#">Help</a>
+            <a href="#">Setting</a>
+        </div>
+
+        <div class="dashboard-content">
+            <div id="box-topic" class="dash-box" onclick="showPage('topic-page')">Topic</div>
+            <div id="box-revision" class="dash-box" onclick="showPage('revision-page')">Revision</div>
+            <div id="box-mistake" class="dash-box">Mistake</div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: ACCOUNT PROFILE PAGE -->
+    <div id="account-page">
+        <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
+        <div class="account-box">
+            <h2>Account Profile</h2>
+            <div class="profile-pic-container">👤<span class="camera-icon">📷</span></div>
+            <div class="account-input-group"><label>Change Username</label><input type="text" value="CurrentUsername"></div>
+            <div class="account-input-group"><label>Change Password</label><input type="password" placeholder="New Password"></div>
+            <button class="btn-done" style="margin-top: 5px;">Save Changes</button>
+            <button class="btn-logout" onclick="showPage('home-page')">Log Out</button>
+        </div>
+    </div>
+
+    <!-- PAGE 6: TOPIC MANAGEMENT PAGE -->
+    <div id="topic-page">
+        <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
+        <div class="topic-main-box">
+            <h2>Manage Topics</h2>
+            <input type="text" id="topicInput" class="topic-input" placeholder="Add topic">
+            <button class="btn-done" onclick="addNewTopic()">Done</button>
+        </div>
+        <div id="topicsContainer" class="topics-grid"></div>
+    </div>
+
+    <!-- PAGE 7: INDIVIDUAL TOPIC DETAIL PAGE -->
+    <div id="topic-detail-page">
+        <div class="global-back" onclick="showPage('topic-page')">&larr;</div>
+        <div class="detail-main-box">
+            <h2 id="currentTopicTitle">Topic Name</h2>
+            <select id="questionType" class="detail-select">
+                <option value="MCQs">MCQs (Multiple Choice)</option>
+                <option value="Fill in the blanks">Fill in the blanks</option>
+                <option value="English Meanings">English Meanings</option>
+                <option value="Hindi Meanings">Hindi Meanings</option>
+                <option value="Question & Answer">Question & Answer</option>
+            </select>
+            <input type="text" id="questionInput" class="detail-input" placeholder="Type your question here...">
+            <div class="upload-options">
+                <label class="upload-btn-label">📷 Camera<input type="file" accept="image/*" capture="environment" onchange="previewFile(event)"></label>
+                <label class="upload-btn-label">🖼️ Gallery<input type="file" accept="image/*" onchange="previewFile(event)"></label>
+                <label class="upload-btn-label">📄 PDF<input type="file" accept=".pdf" onchange="previewFile(event)"></label>
+            </div>
+            <div id="fileInfoDisplay" style="font-size: 12px; color: #555; margin-bottom: 10px; font-style: italic;"></div>
+            <button class="btn-done" onclick="addNewQuestion()">Add Question (Done)</button>
+        </div>
+        <div id="questionsContainer" class="questions-list"></div>
+    </div>
+
+    <!-- PAGE 8: REVISION SETTINGS PAGE -->
+    <div id="revision-page">
+        <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
+        
+        <div class="revision-top-controls">
+            <div class="rev-control-group">
+                <span>Mode:</span>
+                <select id="revModeSelect">
+                    <option value="Single">Single</option>
+                    <option value="Group">Group (Ranking)</option>
+                </select>
+            </div>
+            <div class="rev-control-group">
+                <span>Mistake:</span>
+                <select id="revMistakeSelect">
+                    <option value="Off">Off</option>
+                    <option value="On">On</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="revision-center-box">
+            <div class="rev-select-topic-btn" onclick="toggleRevTopics()">Select The Topic</div>
+            <div id="revTopicListPopup"></div>
+
+            <div class="rev-options-row">
+                <div>
+                    <label>Order: </label>
+                    <select id="revOrderSelect">
+                        <option value="Series">Series</option>
+                        <option value="Random">Random</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Answer View: </label>
+                    <select id="revAnswerViewSelect">
+                        <option value="Hide">Hide Answer</option>
+                        <option value="Show">Show Answer</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-done" style="margin-top: 30px;" onclick="startQuizPlay()">Start The Questions</button>
+        </div>
+    </div>
+
+    <!-- PAGE 9: QUIZ PLAY GAME PAGE -->
+    <div id="quiz-play-page">
+        <div class="global-back" onclick="showPage('revision-page')">&larr;</div>
+        <div id="quizScoreDisplay" class="quiz-score-board">Score: 0</div>
+        
+        <div class="quiz-card-box">
+            <h3 id="quizTopicHeader" style="color: #0000FF; margin-top:0;">Topic</h3>
+            <div id="quizQuestionBox" style="font-size: 18px; margin: 20px 0;">Question will appear here</div>
+            <div id="quizAnswerBox" style="font-size: 15px; color: #aaa; margin-bottom: 20px; display: none;">Answer details</div>
+            
+            <div class="quiz-actions">
+                <button class="quiz-btn btn-wrong" onclick="answerQuiz(false)">Wrong (-20)</button>
+                <button class="quiz-btn btn-correct" onclick="answerQuiz(true)">Correct (+10)</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // JavaScript to switch pages smoothly without any backend errors
+        let selectedTopicName = "";
+        let topicData = {};
+        
+        // Revision settings variables
+        let chosenRevisionTopic = "";
+        let currentQuizQuestions = [];
+        let currentQuizIndex = 0;
+        let currentScore = 0;
+
         function showPage(pageId) {
             document.getElementById('home-page').style.display = 'none';
             document.getElementById('signup-page').style.display = 'none';
             document.getElementById('signin-page').style.display = 'none';
             document.getElementById('dashboard-page').style.display = 'none';
+            document.getElementById('account-page').style.display = 'none';
+            document.getElementById('topic-page').style.display = 'none';
+            document.getElementById('topic-detail-page').style.display = 'none';
+            document.getElementById('revision-page').style.display = 'none';
+            document.getElementById('quiz-play-page').style.display = 'none';
 
             document.getElementById(pageId).style.display = 'flex';
+            let menu = document.getElementById('menuDropdown');
+            if(menu) menu.style.display = 'none';
         }
 
         function handleFormSubmit(event) {
-            event.preventDefault(); // Stops the page from refreshing
-            showPage('dashboard-page'); // Shows the black dashboard page
+            event.preventDefault();
+            showPage('dashboard-page');
+        }
+
+        function toggleMenu() {
+            let menu = document.getElementById('menuDropdown');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function addNewTopic() {
+            let inputField = document.getElementById('topicInput');
+            let topicText = inputField.value.trim();
+            if (topicText === "") { alert("Please enter a topic name!"); return; }
+            if (!topicData[topicText]) { topicData[topicText] = []; }
+            renderTopicsList();
+            inputField.value = "";
+        }
+
+        function renderTopicsList() {
+            let container = document.getElementById('topicsContainer');
+            container.innerHTML = "";
+            for (let topic in topicData) {
+                let card = document.createElement('div');
+                card.className = 'topic-card';
+                card.innerText = topic;
+                card.onclick = function() { openTopicDetail(topic); };
+                container.appendChild(card);
+            }
+        }
+
+        function openTopicDetail(topicName) {
+            selectedTopicName = topicName;
+            document.getElementById('currentTopicTitle').innerText = topicName;
+            showPage('topic-detail-page');
+            renderQuestionsList();
+        }
+
+        let uploadedFileObject = null;
+        function previewFile(event) {
+            let file = event.target.files[0];
+            if (file) {
+                uploadedFileObject = file;
+                document.getElementById('fileInfoDisplay').innerText = "Attached file: " + file.name;
+            }
+        }
+
+        function addNewQuestion() {
+            let qType = document.getElementById('questionType').value;
+            let qText = document.getElementById('questionInput').value.trim();
+            if (qText === "" && !uploadedFileObject) { alert("Please write a question or upload a file!"); return; }
+
+            let questionObj = { type: qType, text: qText, fileData: null, fileName: null, fileType: null };
+            if (uploadedFileObject) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    questionObj.fileData = e.target.result;
+                    questionObj.fileName = uploadedFileObject.name;
+                    questionObj.fileType = uploadedFileObject.type;
+                    topicData[selectedTopicName].push(questionObj);
+                    resetQuestionForm();
+                    renderQuestionsList();
+                };
+                reader.readAsDataURL(uploadedFileObject);
+            } else {
+                topicData[selectedTopicName].push(questionObj);
+                resetQuestionForm();
+                renderQuestionsList();
+            }
+        }
+
+        function resetQuestionForm() {
+            document.getElementById('questionInput').value = "";
+            document.getElementById('fileInfoDisplay').innerText = "";
+            uploadedFileObject = null;
+        }
+
+        function renderQuestionsList() {
+            let container = document.getElementById('questionsContainer');
+            container.innerHTML = "";
+            let questions = topicData[selectedTopicName] || [];
+            if (questions.length === 0) {
+                container.innerHTML = `<div style="color:white; text-align:center;">No questions added yet.</div>`;
+                return;
+            }
+            questions.forEach((q, index) => {
+                let card = document.createElement('div');
+                card.className = 'question-card';
+                let htmlContent = `<div style="font-size:12px; color:#0000FF; font-weight:bold;">Type: ${q.type}</div>`;
+                if(q.text) htmlContent += `<div><strong>Q${index + 1}:</strong> ${q.text}</div>`;
+                if(q.fileData && q.fileType && q.fileType.includes('image')) {
+                    htmlContent += `<img src="${q.fileData}">`;
+                }
+                card.innerHTML = htmlContent;
+                container.appendChild(card);
+            });
+        }
+
+        // Revision Topic Selector Popup
+        function toggleRevTopics() {
+            let popup = document.getElementById('revTopicListPopup');
+            if (popup.style.display === 'block') {
+                popup.style.display = 'none';
+            } else {
+                popup.style.display = 'block';
+                popup.innerHTML = "";
+                let keys = Object.keys(topicData);
+                if(keys.length === 0) {
+                    popup.innerHTML = "<div style='color:#aaa;'>No topics created yet!</div>";
+                    return;
+                }
+                keys.forEach(topic => {
+                    let item = document.createElement('div');
+                    item.className = 'rev-topic-item';
+                    item.innerText = topic;
+                    item.onclick = function() {
+                        chosenRevisionTopic = topic;
+                        document.querySelector('.rev-select-topic-btn').innerText = "Topic: " + topic;
+                        popup.style.display = 'none';
+                    };
+                    popup.appendChild(item);
+                });
+            }
+        }
+
+        function startQuizPlay() {
+            if (!chosenRevisionTopic || !topicData[chosenRevisionTopic] || topicData[chosenRevisionTopic].length === 0) {
+                alert("Please select a valid topic that has questions first!");
+                return;
+            }
+            
+            currentQuizQuestions = [...topicData[chosenRevisionTopic]];
+            let order = document.getElementById('revOrderSelect').value;
+            if (order === 'Random') {
+                currentQuizQuestions.sort(() => Math.random() - 0.5);
+            }
+
+            currentQuizIndex = 0;
+            currentScore = 0;
+            showPage('quiz-play-page');
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizIndex >= currentQuizQuestions.length) {
+                alert("Revision completed! Final Score: " + currentScore);
+                showPage('revision-page');
+                return;
+            }
+
+            let q = currentQuizQuestions[currentQuizIndex];
+            document.getElementById('quizTopicHeader').innerText = chosenRevisionTopic + " (" + (currentQuizIndex + 1) + "/" + currentQuizQuestions.length + ")";
+            document.getElementById('quizQuestionBox').innerText = q.text || "Attached Question File";
+            
+            let mode = document.getElementById('revModeSelect').value;
+            let scoreLabel = document.getElementById('quizScoreDisplay');
+            if(mode === 'Group') {
+                scoreLabel.innerText = "Ranking / Score: " + currentScore;
+            } else {
+                scoreLabel.innerText = "Result Score: " + currentScore;
+            }
+
+            let answerView = document.getElementById('revAnswerViewSelect').value;
+            let ansBox = document.getElementById('quizAnswerBox');
+            if(answerView === 'Show') {
+                ansBox.style.display = 'block';
+                ansBox.innerText = "Type: " + q.type;
+            } else {
+                ansBox.style.display = 'none';
+            }
+        }
+
+        function answerQuiz(isCorrect) {
+            if (isCorrect) {
+                currentScore += 10;
+            } else {
+                currentScore -= 20;
+                let mistakeSetting = document.getElementById('revMistakeSelect').value;
+                if(mistakeSetting === 'On') {
+                    // Re-add this wrong question back later in the queue if mistake is ON
+                    currentQuizQuestions.push(currentQuizQuestions[currentQuizIndex]);
+                }
+            }
+            currentQuizIndex++;
+            loadQuizQuestion();
         }
     </script>
 
