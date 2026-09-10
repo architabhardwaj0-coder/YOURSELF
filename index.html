@@ -39,36 +39,12 @@
             align-items: center;
             text-align: center;
         }
-        .home-container {
-            max-width: 600px;
-        }
-        .main-title {
-            color: #0000FF;
-            font-size: 50px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .sub-text {
-            color: #000000;
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-        .auth-links {
-            display: flex;
-            justify-content: space-between;
-            width: 250px;
-            margin: 0 auto;
-        }
-        .auth-links a {
-            color: #0000FF;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .auth-links a:hover {
-            text-decoration: underline;
-        }
+        .home-container { max-width: 600px; }
+        .main-title { color: #0000FF; font-size: 50px; font-weight: bold; margin-bottom: 10px; }
+        .sub-text { color: #000000; font-size: 16px; margin-bottom: 30px; }
+        .auth-links { display: flex; justify-content: space-between; width: 250px; margin: 0 auto; }
+        .auth-links a { color: #0000FF; text-decoration: none; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .auth-links a:hover { text-decoration: underline; }
 
         /* 2. Sign Up & Sign In Pages */
         .form-page {
@@ -88,27 +64,10 @@
             width: 350px;
             box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
         }
-        .box h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-size: 14px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+        .box h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #333; font-size: 14px; }
+        .input-group input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
         .btn-done {
             width: 100%;
             background-color: #0000FF;
@@ -120,9 +79,7 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        .btn-done:hover {
-            background-color: #0000cc;
-        }
+        .btn-done:hover { background-color: #0000cc; }
 
         /* 3. Dashboard Page */
         #dashboard-page {
@@ -137,423 +94,118 @@
         }
         .dashboard-header {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            box-sizing: border-box;
+            top: 0; left: 0; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; box-sizing: border-box;
         }
-        .dashboard-logo {
-            color: #000000;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .dashboard-icons {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 22px;
-            color: #000000;
-            cursor: pointer;
-        }
+        .dashboard-logo { color: #000000; font-size: 24px; font-weight: bold; }
+        .dashboard-icons { display: flex; align-items: center; gap: 20px; font-size: 22px; color: #000000; cursor: pointer; }
         .menu-dropdown {
-            position: absolute;
-            top: 60px;
-            right: 40px;
-            background: #ffffff;
-            color: #000000;
-            border-radius: 5px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
-            display: none;
-            flex-direction: column;
-            width: 120px;
+            position: absolute; top: 60px; right: 40px; background: #ffffff; color: #000000;
+            border-radius: 5px; box-shadow: 0px 4px 10px rgba(0,0,0,0.3); display: none; flex-direction: column; width: 120px;
         }
-        .menu-dropdown a {
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #000000;
-            font-size: 14px;
-            border-bottom: 1px solid #eee;
-        }
-        .menu-dropdown a:hover {
-            background-color: #f0f0f0;
-        }
+        .menu-dropdown a { padding: 10px 15px; text-decoration: none; color: #000000; font-size: 14px; border-bottom: 1px solid #eee; }
+        .menu-dropdown a:hover { background-color: #f0f0f0; }
 
-        .dashboard-content {
-            position: relative;
-            width: 450px;
-            height: 220px;
-        }
+        .dashboard-content { position: relative; width: 450px; height: 220px; }
         .dash-box {
-            background-color: #ffffff;
-            color: #000000;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-            width: 120px;
-            cursor: pointer;
+            background-color: #ffffff; color: #000000; padding: 20px; border-radius: 8px;
+            text-align: center; font-weight: bold; font-size: 18px; box-shadow: 0px 4px 10px rgba(0,0,0,0.2); width: 120px; cursor: pointer;
         }
-        .dash-box:hover {
-            background-color: #f5f5f5;
-        }
-        #box-topic {
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        #box-revision {
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-        #box-mistake {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 110px;
-        }
+        .dash-box:hover { background-color: #f5f5f5; }
+        #box-topic { position: absolute; left: 0; top: 0; }
+        #box-revision { position: absolute; right: 0; top: 0; }
+        #box-mistake { position: absolute; left: 50%; transform: translateX(-50%); top: 110px; }
 
         /* 4. Account Profile Page */
         #account-page {
-            background-color: #000000;
-            color: #ffffff;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            display: none;
-            position: relative;
+            background-color: #000000; color: #ffffff; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center; display: none; position: relative;
         }
-        .account-box {
-            background-color: #1a1a1a;
-            padding: 30px;
-            border-radius: 10px;
-            width: 350px;
-            text-align: center;
-            box-shadow: 0px 4px 15px rgba(255,255,255,0.1);
-        }
-        .profile-pic-container {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            background: #444;
-            border-radius: 50%;
-            margin: 0 auto 15px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 30px;
-        }
-        .camera-icon {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: #0000FF;
-            color: white;
-            border-radius: 50%;
-            padding: 5px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .account-input-group {
-            margin-bottom: 12px;
-            text-align: left;
-        }
-        .account-input-group label {
-            font-size: 12px;
-            color: #bbb;
-        }
-        .account-input-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            background: #333;
-            border: 1px solid #555;
-            color: white;
-            border-radius: 4px;
-            margin-top: 3px;
-        }
-        .btn-logout {
-            width: 100%;
-            background-color: #ff4d4d;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 15px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        .account-box { background-color: #1a1a1a; padding: 30px; border-radius: 10px; width: 350px; text-align: center; box-shadow: 0px 4px 15px rgba(255,255,255,0.1); }
+        .profile-pic-container { position: relative; width: 80px; height: 80px; background: #444; border-radius: 50%; margin: 0 auto 15px auto; display: flex; justify-content: center; align-items: center; font-size: 30px; }
+        .camera-icon { position: absolute; bottom: 0; right: 0; background: #0000FF; color: white; border-radius: 50%; padding: 5px; font-size: 12px; cursor: pointer; }
+        .account-input-group { margin-bottom: 12px; text-align: left; }
+        .account-input-group label { font-size: 12px; color: #bbb; }
+        .account-input-group input { width: 100%; padding: 8px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; border-radius: 4px; margin-top: 3px; }
+        .btn-logout { width: 100%; background-color: #ff4d4d; color: white; padding: 10px; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; margin-top: 10px; }
 
         /* 5. TOPIC MANAGEMENT PAGE */
         #topic-page {
-            background-color: #0000FF;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            display: none;
-            overflow-y: auto;
-            position: relative;
+            background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;
+            padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative;
         }
-        .topic-main-box {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            width: 450px;
-            max-width: 90%;
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 30px;
-        }
-        .topic-input {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        .topics-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            width: 450px;
-            max-width: 90%;
-            justify-content: flex-start;
-        }
-        .topic-card {
-            background-color: #ffffff;
-            color: #000000;
-            padding: 15px;
-            border-radius: 8px;
-            width: 47%;
-            box-sizing: border-box;
-            font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
-            text-align: center;
-            cursor: pointer;
-            word-break: break-word;
-        }
+        .topic-main-box { background-color: #ffffff; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); text-align: center; margin-bottom: 30px; margin-top: 30px; }
+        .topic-input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; margin-bottom: 15px; color: #333; }
+        .topics-grid { display: flex; flex-wrap: wrap; gap: 15px; width: 450px; max-width: 90%; justify-content: flex-start; }
+        .topic-card { background-color: #ffffff; color: #000000; padding: 15px; border-radius: 8px; width: 47%; box-sizing: border-box; font-weight: bold; font-size: 16px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: center; cursor: pointer; word-break: break-word; }
 
         /* 6. INDIVIDUAL TOPIC DETAIL PAGE */
         #topic-detail-page {
-            background-color: #0000FF;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            display: none;
-            overflow-y: auto;
-            position: relative;
+            background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;
+            padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative;
         }
-        .detail-main-box {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            width: 500px;
-            max-width: 90%;
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 30px;
-        }
-        .detail-select, .detail-input {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 15px;
-            margin-bottom: 12px;
-            color: #333;
-            background: #fff;
-        }
-        .upload-options {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .upload-btn-label {
-            flex: 1;
-            background: #f0f0f0;
-            padding: 8px;
-            font-size: 12px;
-            border: 1px dashed #0000FF;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #0000FF;
-            font-weight: bold;
-            text-align: center;
-        }
+        .detail-main-box { background-color: #ffffff; padding: 30px; border-radius: 12px; width: 500px; max-width: 90%; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); text-align: center; margin-bottom: 30px; margin-top: 30px; }
+        .detail-select, .detail-input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; margin-bottom: 12px; color: #333; background: #fff; }
+        .upload-options { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 15px; }
+        .upload-btn-label { flex: 1; background: #f0f0f0; padding: 8px; font-size: 12px; border: 1px dashed #0000FF; border-radius: 5px; cursor: pointer; color: #0000FF; font-weight: bold; text-align: center; }
         .upload-btn-label input { display: none; }
-        .questions-list {
-            width: 500px;
-            max-width: 90%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .question-card {
-            background-color: #ffffff;
-            color: #000000;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
-            text-align: left;
-            word-break: break-word;
-        }
+        .questions-list { width: 500px; max-width: 90%; display: flex; flex-direction: column; gap: 12px; }
+        .question-card { background-color: #ffffff; color: #000000; padding: 15px; border-radius: 8px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: left; word-break: break-word; }
         .question-card img { max-width: 100%; border-radius: 5px; margin-top: 10px; }
 
-        /* 7. REVISION PAGE (Black Background, Top Settings & Controls) */
+        /* 7. REVISION PAGE 1: SELECT TOPIC & QUESTIONS */
         #revision-page {
-            background-color: #000000;
-            color: #ffffff;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            display: none;
-            box-sizing: border-box;
-            padding: 20px;
+            background-color: #000000; color: #ffffff; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; display: none; box-sizing: border-box; padding: 20px; overflow-y: auto;
         }
-        .revision-top-controls {
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 40px;
-            box-sizing: border-box;
-            font-size: 14px;
+        .revision-center-box { text-align: center; max-width: 500px; width: 90%; }
+        .rev-topic-box {
+            background-color: #ffffff; color: #000000; padding: 20px; border-radius: 10px;
+            font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); margin-bottom: 20px;
         }
-        .rev-control-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        #revTopicSelectionList {
+            display: none; background: #1a1a1a; border: 1px solid #444; padding: 15px;
+            border-radius: 8px; margin-bottom: 20px; max-height: 180px; overflow-y: auto; text-align: left;
         }
-        .rev-control-group select {
-            background: #222;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 5px;
-            border-radius: 4px;
-        }
-        .revision-center-box {
-            text-align: center;
-            max-width: 500px;
-        }
-        .rev-select-topic-btn {
-            background-color: #ffffff;
-            color: #000000;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0px 4px 15px rgba(255,255,255,0.2);
-            margin-bottom: 25px;
-        }
-        .rev-options-row {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .rev-options-row select {
-            background: #222;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 6px;
-            border-radius: 4px;
-        }
-        /* Topic selector popup inside revision */
-        #revTopicListPopup {
-            display: none;
-            background: #1a1a1a;
-            border: 1px solid #444;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        .rev-topic-item {
-            padding: 8px;
-            background: #333;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .rev-topic-item:hover { background: #444; }
+        .rev-topic-option-item { padding: 8px; background: #333; margin-bottom: 6px; border-radius: 4px; cursor: pointer; }
+        .rev-topic-option-item:hover { background: #444; }
 
-        /* 8. ACTIVE QUIZ / REVISION GAME PLAY PAGE */
+        /* Question selection list for revision */
+        #revQuestionPickerBox {
+            display: none; background: #1a1a1a; border: 1px solid #444; padding: 15px;
+            border-radius: 8px; margin-bottom: 20px; max-height: 200px; overflow-y: auto; text-align: left;
+        }
+        .rev-q-checkbox-item { padding: 6px; font-size: 14px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 10px; }
+
+        /* 8. REVISION PAGE 2: START THE REVISION PAGE */
+        #revision-start-page {
+            background-color: #000000; color: #ffffff; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; display: none; box-sizing: border-box; padding: 20px;
+        }
+        .rev-left-controls {
+            position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 12px; font-size: 13px;
+        }
+        .rev-ctrl-item { display: flex; align-items: center; gap: 8px; background: #1a1a1a; padding: 6px 10px; border-radius: 5px; border: 1px solid #444; }
+        .rev-ctrl-item select { background: #333; color: #fff; border: 1px solid #555; padding: 3px; border-radius: 3px; }
+
+        .rev-start-center-box {
+            background-color: #ffffff; color: #000000; padding: 25px 40px; border-radius: 10px;
+            font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); text-align: center;
+        }
+
+        /* 9. ACTIVE QUIZ PLAY PAGE */
         #quiz-play-page {
-            background-color: #000000;
-            color: #ffffff;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            display: none;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
+            background-color: #000000; color: #ffffff; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; display: none; padding: 20px; box-sizing: border-box; text-align: center;
         }
-        .quiz-score-board {
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #00ffcc;
-        }
-        .quiz-card-box {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 10px;
-            width: 450px;
-            max-width: 90%;
-            box-shadow: 0px 4px 15px rgba(255,255,255,0.1);
-        }
-        .quiz-actions {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .quiz-btn {
-            padding: 10px 20px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        .quiz-score-board { position: absolute; top: 20px; right: 40px; font-size: 16px; font-weight: bold; color: #00ffcc; }
+        .quiz-card-box { background: #1a1a1a; padding: 30px; border-radius: 10px; width: 450px; max-width: 90%; box-shadow: 0px 4px 15px rgba(255,255,255,0.1); }
+        .quiz-actions { margin-top: 20px; display: flex; justify-content: center; gap: 15px; }
+        .quiz-btn { padding: 10px 20px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
         .btn-correct { background-color: #28a745; color: white; }
         .btn-wrong { background-color: #dc3545; color: white; }
     </style>
@@ -578,7 +230,7 @@
         <div class="box">
             <h2>Sign Up</h2>
             <form onsubmit="handleFormSubmit(event)">
-                <div class="input-group"><label>Username</label><input type="text" required></div>
+                <div class="input-group"><label>Username</label><input type="text" id="signupUsernameInput" required></div>
                 <div class="input-group"><label>Email</label><input type="email" required></div>
                 <div class="input-group"><label>Password</label><input type="password" required></div>
                 <button type="submit" class="btn-done">Done</button>
@@ -592,7 +244,7 @@
         <div class="box">
             <h2>Sign In</h2>
             <form onsubmit="handleFormSubmit(event)">
-                <div class="input-group"><label>Username</label><input type="text" required></div>
+                <div class="input-group"><label>Username</label><input type="text" id="signinUsernameInput" required></div>
                 <div class="input-group"><label>Password</label><input type="password" required></div>
                 <button type="submit" class="btn-done">Done</button>
             </form>
@@ -617,7 +269,7 @@
 
         <div class="dashboard-content">
             <div id="box-topic" class="dash-box" onclick="showPage('topic-page')">Topic</div>
-            <div id="box-revision" class="dash-box" onclick="showPage('revision-page')">Revision</div>
+            <div id="box-revision" class="dash-box" onclick="openRevisionFirstPage()">Revision</div>
             <div id="box-mistake" class="dash-box">Mistake</div>
         </div>
     </div>
@@ -628,9 +280,9 @@
         <div class="account-box">
             <h2>Account Profile</h2>
             <div class="profile-pic-container">👤<span class="camera-icon">📷</span></div>
-            <div class="account-input-group"><label>Change Username</label><input type="text" value="CurrentUsername"></div>
+            <div class="account-input-group"><label>Change Username</label><input type="text" id="profileUsernameInput" value="Ashita Bhardwaj"></div>
             <div class="account-input-group"><label>Change Password</label><input type="password" placeholder="New Password"></div>
-            <button class="btn-done" style="margin-top: 5px;">Save Changes</button>
+            <button class="btn-done" style="margin-top: 5px;" onclick="updateUsername()">Save Changes</button>
             <button class="btn-logout" onclick="showPage('home-page')">Log Out</button>
         </div>
     </div>
@@ -670,61 +322,60 @@
         <div id="questionsContainer" class="questions-list"></div>
     </div>
 
-    <!-- PAGE 8: REVISION SETTINGS PAGE -->
+    <!-- PAGE 8: REVISION SELECT TOPIC & QUESTIONS PAGE -->
     <div id="revision-page">
         <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
+        <div class="revision-center-box">
+            <div class="rev-topic-box" onclick="toggleRevTopicDropdown()">Topic</div>
+            <div id="revTopicSelectionList"></div>
+            
+            <div id="revQuestionPickerBox"></div>
+            <button id="revDoneBtn" class="btn-done" style="display:none;" onclick="goToRevisionStartPage()">Done</button>
+        </div>
+    </div>
+
+    <!-- PAGE 9: START THE REVISION PAGE (Left Controls & Center Start Button) -->
+    <div id="revision-start-page">
+        <div class="global-back" onclick="openRevisionFirstPage()">&larr;</div>
         
-        <div class="revision-top-controls">
-            <div class="rev-control-group">
+        <!-- Left Side Controls -->
+        <div class="rev-left-controls">
+            <div class="rev-ctrl-item">
                 <span>Mode:</span>
                 <select id="revModeSelect">
-                    <option value="Single">Single</option>
-                    <option value="Group">Group (Ranking)</option>
+                    <option value="Series">Series</option>
+                    <option value="Random">Random</option>
                 </select>
             </div>
-            <div class="rev-control-group">
+            <div class="rev-ctrl-item">
                 <span>Mistake:</span>
                 <select id="revMistakeSelect">
                     <option value="Off">Off</option>
                     <option value="On">On</option>
                 </select>
             </div>
+            <div class="rev-ctrl-item">
+                <span id="displayUsernameLabel">User: Ashita</span>
+                <select id="revGroupSelect">
+                    <option value="Individual">Individual</option>
+                    <option value="Group">Group</option>
+                </select>
+            </div>
         </div>
 
-        <div class="revision-center-box">
-            <div class="rev-select-topic-btn" onclick="toggleRevTopics()">Select The Topic</div>
-            <div id="revTopicListPopup"></div>
-
-            <div class="rev-options-row">
-                <div>
-                    <label>Order: </label>
-                    <select id="revOrderSelect">
-                        <option value="Series">Series</option>
-                        <option value="Random">Random</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Answer View: </label>
-                    <select id="revAnswerViewSelect">
-                        <option value="Hide">Hide Answer</option>
-                        <option value="Show">Show Answer</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="btn-done" style="margin-top: 30px;" onclick="startQuizPlay()">Start The Questions</button>
+        <div class="rev-start-center-box" onclick="startActiveQuiz()">
+            Start The Revision
         </div>
     </div>
 
-    <!-- PAGE 9: QUIZ PLAY GAME PAGE -->
+    <!-- PAGE 10: ACTIVE QUIZ PLAY PAGE -->
     <div id="quiz-play-page">
-        <div class="global-back" onclick="showPage('revision-page')">&larr;</div>
+        <div class="global-back" onclick="showPage('revision-start-page')">&larr;</div>
         <div id="quizScoreDisplay" class="quiz-score-board">Score: 0</div>
         
         <div class="quiz-card-box">
             <h3 id="quizTopicHeader" style="color: #0000FF; margin-top:0;">Topic</h3>
-            <div id="quizQuestionBox" style="font-size: 18px; margin: 20px 0;">Question will appear here</div>
-            <div id="quizAnswerBox" style="font-size: 15px; color: #aaa; margin-bottom: 20px; display: none;">Answer details</div>
+            <div id="quizQuestionBox" style="font-size: 18px; margin: 20px 0;">Question here</div>
             
             <div class="quiz-actions">
                 <button class="quiz-btn btn-wrong" onclick="answerQuiz(false)">Wrong (-20)</button>
@@ -734,11 +385,12 @@
     </div>
 
     <script>
+        let globalUsername = "Ashita Bhardwaj";
         let selectedTopicName = "";
         let topicData = {};
         
-        // Revision settings variables
         let chosenRevisionTopic = "";
+        let selectedQuestionsForRevision = [];
         let currentQuizQuestions = [];
         let currentQuizIndex = 0;
         let currentScore = 0;
@@ -752,6 +404,7 @@
             document.getElementById('topic-page').style.display = 'none';
             document.getElementById('topic-detail-page').style.display = 'none';
             document.getElementById('revision-page').style.display = 'none';
+            document.getElementById('revision-start-page').style.display = 'none';
             document.getElementById('quiz-play-page').style.display = 'none';
 
             document.getElementById(pageId).style.display = 'flex';
@@ -761,7 +414,20 @@
 
         function handleFormSubmit(event) {
             event.preventDefault();
+            let uNameInput = document.getElementById('signupUsernameInput') || document.getElementById('signinUsernameInput');
+            if(uNameInput && uNameInput.value.trim() !== "") {
+                globalUsername = uNameInput.value.trim();
+                document.getElementById('profileUsernameInput').value = globalUsername;
+            }
             showPage('dashboard-page');
+        }
+
+        function updateUsername() {
+            let val = document.getElementById('profileUsernameInput').value.trim();
+            if(val) {
+                globalUsername = val;
+                alert("Username updated successfully!");
+            }
         }
 
         function toggleMenu() {
@@ -857,42 +523,85 @@
             });
         }
 
-        // Revision Topic Selector Popup
-        function toggleRevTopics() {
-            let popup = document.getElementById('revTopicListPopup');
-            if (popup.style.display === 'block') {
-                popup.style.display = 'none';
+        // REVISION FLOW FUNCTIONS
+        function openRevisionFirstPage() {
+            showPage('revision-page');
+            document.getElementById('revTopicSelectionList').style.display = 'none';
+            document.getElementById('revQuestionPickerBox').style.display = 'none';
+            document.getElementById('revDoneBtn').style.display = 'none';
+        }
+
+        function toggleRevTopicDropdown() {
+            let list = document.getElementById('revTopicSelectionList');
+            if (list.style.display === 'block') {
+                list.style.display = 'none';
             } else {
-                popup.style.display = 'block';
-                popup.innerHTML = "";
+                list.style.display = 'block';
+                list.innerHTML = "";
                 let keys = Object.keys(topicData);
                 if(keys.length === 0) {
-                    popup.innerHTML = "<div style='color:#aaa;'>No topics created yet!</div>";
+                    list.innerHTML = "<div style='color:#aaa;'>No topics created yet!</div>";
                     return;
                 }
                 keys.forEach(topic => {
                     let item = document.createElement('div');
-                    item.className = 'rev-topic-item';
+                    item.className = 'rev-topic-option-item';
                     item.innerText = topic;
                     item.onclick = function() {
                         chosenRevisionTopic = topic;
-                        document.querySelector('.rev-select-topic-btn').innerText = "Topic: " + topic;
-                        popup.style.display = 'none';
+                        list.style.display = 'none';
+                        loadQuestionsForRevisionPicker(topic);
                     };
-                    popup.appendChild(item);
+                    list.appendChild(item);
                 });
             }
         }
 
-        function startQuizPlay() {
-            if (!chosenRevisionTopic || !topicData[chosenRevisionTopic] || topicData[chosenRevisionTopic].length === 0) {
-                alert("Please select a valid topic that has questions first!");
+        function loadQuestionsForRevisionPicker(topic) {
+            let pickerBox = document.getElementById('revQuestionPickerBox');
+            pickerBox.style.display = 'block';
+            pickerBox.innerHTML = `<div style="font-weight:bold; margin-bottom:8px; color:#00ffcc;">Select Questions for ${topic}:</div>`;
+            
+            let questions = topicData[topic] || [];
+            if(questions.length === 0) {
+                pickerBox.innerHTML += `<div style="color:#aaa;">No questions inside this topic!</div>`;
+                document.getElementById('revDoneBtn').style.display = 'none';
                 return;
             }
+
+            questions.forEach((q, idx) => {
+                let div = document.createElement('div');
+                div.className = 'rev-q-checkbox-item';
+                div.innerHTML = `<input type="checkbox" value="${idx}" class="rev-q-chk"> <span>Q${idx+1}: ${q.text || 'Image/PDF file'}</span>`;
+                pickerBox.appendChild(div);
+            });
+
+            document.getElementById('revDoneBtn').style.display = 'block';
+        }
+
+        function goToRevisionStartPage() {
+            let checkboxes = document.querySelectorAll('.rev-q-chk:checked');
+            if(checkboxes.length === 0) {
+                alert("Please select at least one question!");
+                return;
+            }
+
+            selectedQuestionsForRevision = [];
+            checkboxes.forEach(chk => {
+                let qIndex = parseInt(chk.value);
+                selectedQuestionsForRevision.push(topicData[chosenRevisionTopic][qIndex]);
+            });
+
+            // Update username display label
+            document.getElementById('displayUsernameLabel').innerText = "User: " + globalUsername;
+            showPage('revision-start-page');
+        }
+
+        function startActiveQuiz() {
+            currentQuizQuestions = [...selectedQuestionsForRevision];
             
-            currentQuizQuestions = [...topicData[chosenRevisionTopic]];
-            let order = document.getElementById('revOrderSelect').value;
-            if (order === 'Random') {
+            let mode = document.getElementById('revModeSelect').value;
+            if (mode === 'Random') {
                 currentQuizQuestions.sort(() => Math.random() - 0.5);
             }
 
@@ -905,7 +614,7 @@
         function loadQuizQuestion() {
             if (currentQuizIndex >= currentQuizQuestions.length) {
                 alert("Revision completed! Final Score: " + currentScore);
-                showPage('revision-page');
+                showPage('revision-start-page');
                 return;
             }
 
@@ -913,21 +622,12 @@
             document.getElementById('quizTopicHeader').innerText = chosenRevisionTopic + " (" + (currentQuizIndex + 1) + "/" + currentQuizQuestions.length + ")";
             document.getElementById('quizQuestionBox').innerText = q.text || "Attached Question File";
             
-            let mode = document.getElementById('revModeSelect').value;
+            let groupOption = document.getElementById('revGroupSelect').value;
             let scoreLabel = document.getElementById('quizScoreDisplay');
-            if(mode === 'Group') {
-                scoreLabel.innerText = "Ranking / Score: " + currentScore;
+            if(groupOption === 'Group') {
+                scoreLabel.innerText = globalUsername + " (Group) | Score: " + currentScore;
             } else {
-                scoreLabel.innerText = "Result Score: " + currentScore;
-            }
-
-            let answerView = document.getElementById('revAnswerViewSelect').value;
-            let ansBox = document.getElementById('quizAnswerBox');
-            if(answerView === 'Show') {
-                ansBox.style.display = 'block';
-                ansBox.innerText = "Type: " + q.type;
-            } else {
-                ansBox.style.display = 'none';
+                scoreLabel.innerText = globalUsername + " | Score: " + currentScore;
             }
         }
 
@@ -938,7 +638,7 @@
                 currentScore -= 20;
                 let mistakeSetting = document.getElementById('revMistakeSelect').value;
                 if(mistakeSetting === 'On') {
-                    // Re-add this wrong question back later in the queue if mistake is ON
+                    // Push wrong question back into queue for later repetition
                     currentQuizQuestions.push(currentQuizQuestions[currentQuizIndex]);
                 }
             }
