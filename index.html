@@ -1,219 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yourself</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourSelf</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-  <!-- PAGE 1: HOME / AUTH (Clean White Background) -->
-  <div id="page-1" class="auth-wrapper">
-    <div class="auth-container">
-      <h1 class="brand-title">Yourself</h1>
-      <p class="brand-tagline">Test yourself without needing anyone to ask you question</p>
-
-      <div class="auth-card">
-        <div class="auth-tabs">
-          <button id="tab-signup" class="tab-btn active" onclick="switchAuthTab('signup')">Sign Up</button>
-          <button id="tab-signin" class="tab-btn" onclick="switchAuthTab('signin')">Sign In</button>
-        </div>
-
-        <form id="form-signup" onsubmit="handleAuthSubmit(event)">
-          <input type="text" placeholder="Username" required>
-          <input type="email" placeholder="Email" required>
-          <input type="password" placeholder="Password" required>
-          <button type="submit" class="btn-blue">Sign Up</button>
-        </form>
-
-        <form id="form-signin" class="page-hidden" onsubmit="handleAuthSubmit(event)">
-          <input type="email" placeholder="Email" required>
-          <input type="password" placeholder="Password" required>
-          <button type="submit" class="btn-blue">Sign In</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- APP MAIN CONTAINER (Hidden initially, opens on Auth success) -->
-  <div id="app-wrapper" class="page-hidden">
-
-    <!-- Top Header Bar -->
-    <header class="top-header">
-      <div class="header-brand">
-        <span class="logo-icon">🎯</span>
-        <span class="logo-text">Yourself</span>
-      </div>
-      <div class="header-controls">
-        <span class="account-icon">👤</span>
-        <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
-        
-        <div id="dropdown-menu" class="dropdown-content page-hidden">
-          <a href="#" onclick="alert('Help section')">Help</a>
-          <a href="#" onclick="alert('Settings section')">Settings</a>
-          <a href="#" onclick="handleLogout()">Logout</a>
-        </div>
-      </div>
-    </header>
-
-    <!-- PAGE 2: DASHBOARD HOME -->
-    <section id="page-2" class="app-screen blue-theme-page page-hidden">
-      <div class="dashboard-center">
-        <h2>Welcome to Yourself</h2>
-        <p>Apna self-revision aur group study session shuru karne ke liye niche topics ya revision option chunein.</p>
-      </div>
-    </section>
-
-    <!-- PAGE 3: TOPICS PAGE -->
-    <section id="page-3" class="app-screen blue-theme-page page-hidden">
-      <h2 class="page-heading">Add Your Topics</h2>
-
-      <div class="topic-input-bar">
-        <input type="text" id="topic-title-input" placeholder="Topic ka naam likhein...">
-        <button class="btn-done" onclick="saveNewTopic()">Done</button>
-      </div>
-
-      <div id="topics-grid" class="topics-grid"></div>
-
-      <!-- Topic View Modal -->
-      <div id="topic-modal" class="modal-overlay page-hidden">
-        <div class="modal-body">
-          <span class="close-modal" onclick="closeTopicModal()">&times;</span>
-          <h3 id="modal-topic-title">Topic Title</h3>
-
-          <div class="modal-options-row">
-            <button onclick="toggleQuestionForm()">Add Questions</button>
-            <button onclick="document.getElementById('pdf-input').click()">Upload PDF</button>
-            <button onclick="document.getElementById('img-input').click()">Add Images</button>
-            <input type="file" id="pdf-input" accept=".pdf" class="page-hidden" onchange="alert('PDF Uploaded!')">
-            <input type="file" id="img-input" accept="image/*" class="page-hidden" onchange="alert('Image Uploaded!')">
-          </div>
-
-          <div id="q-add-box" class="add-q-box page-hidden">
-            <input type="text" id="q-text" placeholder="Enter Question">
-            <select id="q-format" onchange="toggleMCQInputs()">
-              <option value="text">Text Base Question</option>
-              <option value="mcq">MCQ Question</option>
-            </select>
-            <div id="mcq-box" class="page-hidden">
-              <input type="text" id="opt-1" placeholder="Option 1">
-              <input type="text" id="opt-2" placeholder="Option 2">
-              <input type="text" id="opt-3" placeholder="Option 3">
-              <input type="text" id="opt-4" placeholder="Option 4">
+    <!-- PAGE 1: Landing & Auth Page -->
+    <div id="page-landing" class="page active">
+        <div class="landing-container">
+            <h1 class="app-title">YourSelf</h1>
+            <p class="tagline">Test yourself without needing anyone to ask you question.</p>
+            
+            <div class="auth-box">
+                <button id="show-signup-btn" class="btn-primary">Sign Up</button>
+                <button id="show-signin-btn" class="btn-secondary">Sign In</button>
             </div>
-            <input type="text" id="q-ans" placeholder="Correct Answer">
-            <button onclick="addQuestionToTopic()">Save Question</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PAGE 4: REVISION & GROUP PAGE -->
-    <section id="page-4" class="app-screen blue-theme-page page-hidden">
-      <div class="revision-top-bar">
-        <div class="mode-buttons">
-          <button id="btn-you-mode" class="mode-btn active" onclick="setMode('you')">You</button>
-          <button id="btn-group-mode" class="mode-btn" onclick="setMode('group')">Group</button>
         </div>
 
-        <div class="topic-select-group">
-          <label>Select Topic:</label>
-          <select id="revision-topic-dropdown" onchange="initRevision()">
-            <option value="all">All Topics</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Group Mode Extra Controls -->
-      <div id="group-tools" class="group-panel page-hidden">
-        <div class="member-add-row">
-          <input type="text" id="member-input" placeholder="Add Member Name">
-          <button onclick="addMember()">Add Member</button>
-        </div>
-        <div id="members-chip-list" class="chips-wrap"></div>
-
-        <div class="spinner-box">
-          <button class="btn-spin" onclick="spinDynamicWheel()">🎡 Spin Dynamic Wheel</button>
-          <div id="spin-output" class="spin-output"></div>
+        <!-- Signup Modal/Form -->
+        <div id="signup-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Create Account</h2>
+                <form id="signup-form">
+                    <input type="text" id="su-username" placeholder="Username" required>
+                    <input type="email" id="su-email" placeholder="Email (must include .com)" required>
+                    <input type="password" id="su-password" placeholder="Password" required>
+                    <button type="submit" class="btn-primary">Register</button>
+                    <button type="button" class="close-modal">Cancel</button>
+                </form>
+            </div>
         </div>
 
-        <div class="punishment-box">
-          <input type="text" id="punishment-input" placeholder="Add Custom Punishment">
-          <button onclick="addPunishment()">Add Punishment</button>
+        <!-- Signin Modal/Form -->
+        <div id="signin-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Welcome Back</h2>
+                <form id="signin-form">
+                    <input type="text" id="si-identifier" placeholder="Username or Email" required>
+                    <input type="password" id="si-password" placeholder="Password" required>
+                    <button type="submit" class="btn-primary">Log In</button>
+                    <button type="button" class="close-modal">Cancel</button>
+                </form>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- Revision Question Card -->
-      <div class="revision-card">
-        <div class="rev-card-header">
-          <h3 id="rev-active-topic">Topic: All Topics</h3>
-          <button id="btn-mistake-mode" class="btn-mistake-off" onclick="toggleMistakeMode()">Mistake Mode: OFF</button>
+    <!-- PAGE 2: Dashboard Page -->
+    <div id="page-dashboard" class="page">
+        <header class="top-bar">
+            <div class="logo-area">
+                <span class="logo-text">YourSelf</span>
+            </div>
+            <div class="user-controls">
+                <span class="account-icon">👤</span>
+                <div class="hamburger-menu">
+                    <div class="lines" id="hamburger-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div id="dropdown-menu" class="dropdown hidden">
+                        <a href="#" id="menu-settings">Settings</a>
+                        <a href="#" id="menu-help">Help</a>
+                        <a href="#" id="menu-logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-grid">
+            <div class="dash-card" data-target="topic">Topic</div>
+            <div class="dash-card" data-target="revision">Revision</div>
+            <div class="dash-card" data-target="group">Group</div>
+            <div class="dash-card" data-target="mistake">Mistake</div>
+        </main>
+    </div>
+
+    <!-- PAGE 3: Topic Page -->
+    <div id="page-topic" class="page">
+        <button class="back-btn" data-back="dashboard">← Back</button>
+        <div class="topic-wrapper">
+            <div class="topic-input-box">
+                <input type="text" id="topic-input" placeholder="Add the Topic">
+            </div>
+            <div id="topics-container" class="topics-grid"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: Add Questions Page -->
+    <div id="page-questions" class="page">
+        <button class="back-btn" data-back="topic">← Back to Topics</button>
+        <header class="question-header">
+            <h2 id="current-topic-title">Topic Name</h2>
+        </header>
+        <div class="center-content">
+            <div class="add-q-box" id="open-q-modal">Add Questions</div>
         </div>
 
-        <div class="order-type-buttons">
-          <button onclick="setOrder('random')">Random</button>
-          <button onclick="setOrder('series')">Series</button>
+        <!-- Question Type Selection Modal -->
+        <div id="q-type-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Select Question Type</h3>
+                <button class="q-type-opt" data-type="mcq">MCQs</button>
+                <button class="q-type-opt" data-type="qa">Question & Answer / One Word</button>
+                <button class="q-type-opt" data-type="vocab">English Meaning / Hindi Meaning</button>
+                <button type="button" class="close-modal">Cancel</button>
+            </div>
         </div>
 
-        <div class="q-display-area">
-          <p id="q-text-display">Select topic to start revision.</p>
-          <button id="btn-show-ans" onclick="revealAnswer()">Show Answer</button>
-          <p id="q-ans-display" class="page-hidden"></p>
+        <!-- Input Method Modal -->
+        <div id="q-input-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3 id="selected-type-title">Add Content</h3>
+                <div class="input-method-tabs">
+                    <button class="tab-btn active" data-method="manual">Text Input</button>
+                    <button class="tab-btn" data-method="pdf">PDF Upload</button>
+                    <button class="tab-btn" data-method="image">Image Capture/Upload</button>
+                </div>
+                
+                <div id="method-manual" class="method-panel active">
+                    <input type="text" id="q-text" placeholder="Enter Question">
+                    <input type="text" id="a-text" placeholder="Enter Answer">
+                    <input type="text" id="opt-text" placeholder="Options (comma separated, for MCQs)">
+                    <button id="save-question-btn" class="btn-primary">Save Question</button>
+                </div>
+                <div id="method-pdf" class="method-panel hidden">
+                    <input type="file" id="pdf-file" accept=".pdf">
+                    <button class="btn-primary">Upload PDF</button>
+                </div>
+                <div id="method-image" class="method-panel hidden">
+                    <input type="file" id="img-file" accept="image/*" capture="environment">
+                    <button class="btn-primary">Upload/Capture Image</button>
+                </div>
+                <button type="button" class="close-modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 5: Revision System Page -->
+    <div id="page-revision" class="page">
+        <button class="back-btn" data-back="dashboard">← Back to Dashboard</button>
+        <div class="revision-wrapper">
+            <h2>Select Topic to Revise</h2>
+            <div id="revision-topics-list" class="topics-grid"></div>
         </div>
 
-        <div class="score-buttons">
-          <button class="btn-plus" onclick="gradeUser(10)">Correct (+10)</button>
-          <button class="btn-minus" onclick="gradeUser(-20)">Wrong (-20)</button>
+        <!-- Active Revision Session View -->
+        <div id="revision-session" class="modal hidden" style="background:#000; position:fixed; top:0; left:0; width:100%; height:100%; z-index:2000; padding:20px; overflow-y:auto;">
+            <button class="back-btn" id="quit-revision">✕ Quit Revision</button>
+            <div class="revision-control-panel">
+                <div class="score-box">Score: <span id="live-score">0</span></div>
+                <div class="settings-toggle">
+                    <label>Mode:</label>
+                    <select id="rev-mode-type">
+                        <option value="single">Single</option>
+                        <option value="group">Group</option>
+                    </select>
+                    <select id="rev-flow-type">
+                        <option value="random">Random Mode</option>
+                        <option value="series">Series Mode</option>
+                    </select>
+                    <label>Mistake Mode:</label>
+                    <input type="checkbox" id="mistake-mode-toggle" checked>
+                </div>
+            </div>
+            
+            <div class="quiz-card-container">
+                <h3 id="quiz-q-text">Question goes here</h3>
+                <div id="quiz-options-container"></div>
+                <input type="text" id="quiz-answer-input" placeholder="Type your answer">
+                <button id="submit-answer-btn" class="btn-primary">Submit Answer</button>
+                <p id="quiz-feedback"></p>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- Score Board -->
-      <div class="score-board">
-        <h4 id="score-board-title">Result / Score</h4>
-        <div id="score-display">Score: 0</div>
-      </div>
-    </section>
-
-    <!-- PAGE 5: MISTAKES PAGE -->
-    <section id="page-5" class="app-screen blue-theme-page page-hidden">
-      <h2>Mistakes Tracker</h2>
-
-      <div class="mistake-tabs">
-        <button id="tab-you-mistakes" class="tab-btn active" onclick="switchMistakeView('you')">You Mistakes</button>
-        <button id="tab-group-mistakes" class="tab-btn" onclick="switchMistakeView('group')">Group Mistakes</button>
-      </div>
-
-      <div class="mistake-filter">
-        <select id="mistake-topic-select" onchange="renderMistakes()">
-          <option value="all">All Topics</option>
-        </select>
-      </div>
-
-      <div id="mistakes-list" class="mistakes-container"></div>
-    </section>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="bottom-nav">
-      <button class="nav-item" onclick="openPage('page-2', this)">
-        <span class="nav-icon">🏠</span>
-        <span class="nav-label">Home</span>
-      </button>
-      <button class="nav-item" onclick="openPage('page-3', this)">
-        <span class="nav-icon">📚</span>
-        <span class="nav-label">Topics</span>
-      </button>
-      <button class="nav-item" onclick="openPage('page-4', this)">
-        <span class="nav-icon">🔄</span>
-        <span class="nav-label">Revision</span>
-      </button>
-      <button class="nav-item" onclick="openPage('page-5', this)">
-        <span class="nav-icon">⚠️</span>
-        <span class="nav-label">Mistakes</span>
-      </button>
-    </nav>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

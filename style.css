@@ -1,265 +1,365 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
-.page-hidden {
-  display: none !important;
+body {
+    background-color: #FFFFFF;
+    color: #000000;
 }
 
-/* Page 1 (Auth) Styling - Pure White Theme */
-.auth-wrapper {
-  background-color: #ffffff;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+.page {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
-.auth-container {
-  text-align: center;
-  max-width: 380px;
-  width: 100%;
+.page.active {
+    display: flex;
+    flex-direction: column;
 }
 
-.brand-title {
-  color: #1e88e5;
-  font-size: 3.2rem;
-  font-weight: bold;
-  margin-bottom: 5px;
+/* Page 1: Landing */
+#page-landing {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
-.brand-tagline {
-  color: #000000;
-  font-size: 0.85rem;
-  margin-bottom: 25px;
+.app-title {
+    color: #0056b3;
+    font-size: 3.5rem;
+    margin-bottom: 10px;
 }
 
-.auth-card {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.tagline {
+    color: #000000;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
 }
 
-.auth-tabs {
-  display: flex;
-  margin-bottom: 15px;
+.auth-box {
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px;
 }
 
-.tab-btn {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  background: #e0e0e0;
-  cursor: pointer;
-  color: #000;
+.btn-primary {
+    background-color: #0056b3;
+    color: #FFFFFF;
+    border: 2px solid #0056b3;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-.tab-btn.active {
-  background: #1e88e5;
-  color: #fff;
+.btn-secondary {
+    background-color: #FFFFFF;
+    color: #0056b3;
+    border: 2px solid #0056b3;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  color: #000;
+.btn-primary:hover, .btn-secondary:hover {
+    opacity: 0.9;
 }
 
-.btn-blue {
-  width: 100%;
-  padding: 10px;
-  background-color: #1e88e5;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-/* App Blue Pages Styling */
-.blue-theme-page {
-  background-color: #dbeafe;
-  color: #000000;
-  padding: 20px;
-  padding-bottom: 90px;
-  min-height: calc(100vh - 60px);
+.modal.hidden {
+    display: none;
 }
 
-.top-header {
-  background-color: #93c5fd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  border-bottom: 2px solid #60a5fa;
-  position: relative;
+.modal-content {
+    background: #FFFFFF;
+    padding: 30px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 320px;
+    color: #000;
+}
+
+.modal-content input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Page 2: Dashboard */
+#page-dashboard {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #222;
 }
 
 .logo-text {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #000;
+    color: #0056b3;
+    font-size: 1.8rem;
+    font-weight: bold;
 }
 
-.hamburger-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #000;
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
 }
 
-.dropdown-content {
-  position: absolute;
-  top: 45px;
-  right: 10px;
-  background: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  z-index: 100;
+.account-icon {
+    color: #0056b3;
+    font-size: 1.5rem;
 }
 
-.dropdown-content a {
-  padding: 10px 20px;
-  color: #000;
-  text-decoration: none;
+.hamburger-menu {
+    cursor: pointer;
 }
 
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #93c5fd;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 2px solid #60a5fa;
-  z-index: 99;
+.hamburger-menu .lines span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #FFFFFF;
+    margin: 5px 0;
 }
 
-.nav-item {
-  background: none;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #000;
-  cursor: pointer;
+.dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 120px;
 }
 
-.nav-item.active {
-  font-weight: bold;
-  color: #1d4ed8;
+.dropdown.hidden {
+    display: none;
 }
 
-.topic-input-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+.dropdown a {
+    color: #FFF;
+    padding: 10px;
+    text-decoration: none;
+    text-align: left;
 }
 
-.topic-input-bar input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #60a5fa;
+.dropdown a:hover {
+    background: #0056b3;
 }
 
-.btn-done {
-  padding: 10px 20px;
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 40px;
+    flex: 1;
+}
+
+.dash-card {
+    background-color: #0056b3;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    min-height: 150px;
+    transition: transform 0.2s;
+}
+
+.dash-card:hover {
+    transform: scale(1.02);
+}
+
+/* Page 3 & 4 & 5 Common */
+#page-topic, #page-questions, #page-revision {
+    background-color: #000000;
+    color: #FFFFFF;
+    padding: 20px;
+}
+
+.back-btn {
+    background: transparent;
+    border: none;
+    color: #0056b3;
+    font-size: 1.1rem;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-bottom: 20px;
+}
+
+.topic-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15vh;
+}
+
+.topic-input-box {
+    background: #FFFFFF;
+    padding: 15px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+}
+
+.topic-input-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.topic-input-box input::placeholder {
+    color: #88c0f0;
 }
 
 .topics-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 400px;
+    max-width: 90%;
+    margin-top: 30px;
 }
 
 .topic-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: bold;
-  color: #000;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  cursor: pointer;
+    background-color: #0056b3;
+    color: #FFFFFF;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.revision-top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+/* Zig-Zag Alignment for Topic Cards */
+.topic-card:nth-child(odd) {
+    align-self: flex-start;
+}
+.topic-card:nth-child(even) {
+    align-self: flex-end;
 }
 
-.revision-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  color: #000;
-  margin-top: 15px;
+/* Page 4: Add Questions */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
 
-.btn-plus {
-  background: #22c55e;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.add-q-box {
+    background: #FFFFFF;
+    color: #88c0f0;
+    padding: 25px 50px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.btn-minus {
-  background: #ef4444;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.q-type-opt {
+    background: #0056b3;
+    color: #FFF;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+.input-method-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
 }
 
-.modal-body {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 450px;
-  color: #000;
+.tab-btn {
+    flex: 1;
+    padding: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
 }
 
-.close-modal {
-  float: right;
-  font-size: 1.5rem;
-  cursor: pointer;
+.method-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.method-panel.hidden {
+    display: none;
+}
+
+/* Revision Section */
+.revision-control-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.score-box {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #0056b3;
+}
+
+.quiz-card-container {
+    background: #111;
+    padding: 30px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+.quiz-card-container input {
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background: #222;
+    color: #FFF;
 }
