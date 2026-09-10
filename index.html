@@ -3,197 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YourSelf</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Yourself - Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff; /* Pure white background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+        .main-title {
+            color: #0000FF; /* Blue color */
+            font-size: 50px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .sub-text {
+            color: #000000; /* Black color */
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .auth-links {
+            display: flex;
+            justify-content: space-between;
+            width: 250px;
+            margin: 0 auto;
+        }
+        .auth-links a {
+            color: #0000FF; /* Blue color */
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- PAGE 1: Landing & Authentication Page -->
-    <div id="page-landing" class="page active">
-        <div class="landing-center-wrapper">
-            <h1 class="app-main-title">YourSelf</h1>
-            <p class="app-tagline">Test yourself without needing anyone to ask you question.</p>
-            
-            <div class="auth-white-box">
-                <button id="btn-open-signup" class="btn-auth-blue">Sign Up</button>
-                <button id="btn-open-signin" class="btn-auth-outline">Sign In</button>
-            </div>
-        </div>
-
-        <!-- Sign Up Modal -->
-        <div id="modal-signup" class="custom-modal hidden">
-            <div class="modal-card">
-                <h2>Create Your Account</h2>
-                <form id="form-signup">
-                    <input type="text" id="su-username" placeholder="Username" required>
-                    <input type="email" id="su-email" placeholder="Email (must include .com)" required>
-                    <input type="password" id="su-password" placeholder="Password" required>
-                    <button type="submit" class="btn-auth-blue">Register</button>
-                    <button type="button" class="btn-close-modal">Cancel</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Sign In Modal -->
-        <div id="modal-signin" class="custom-modal hidden">
-            <div class="modal-card">
-                <h2>Welcome Back</h2>
-                <form id="form-signin">
-                    <input type="text" id="si-identifier" placeholder="Username or Email" required>
-                    <input type="password" id="si-password" placeholder="Password" required>
-                    <button type="submit" class="btn-auth-blue">Sign In</button>
-                    <button type="button" class="btn-close-modal">Cancel</button>
-                </form>
-            </div>
+    <div class="container">
+        <div class="main-title">YOURSELF</div>
+        <div class="sub-text">Test yourself without needing any one to ask you question.</div>
+        
+        <div class="auth-links">
+            <a href="/signup">Sign Up</a>
+            <a href="/signin">Sign In</a>
         </div>
     </div>
 
-    <!-- PAGE 2: Dashboard Page -->
-    <div id="page-dashboard" class="page">
-        <header class="dash-top-bar">
-            <div class="dash-logo-side">
-                <span class="dash-logo-text">YourSelf</span>
-            </div>
-            <div class="dash-menu-side">
-                <span class="dash-account-icon">👤</span>
-                <div class="hamburger-wrapper">
-                    <div class="hamburger-lines" id="hamburger-btn">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <div id="dropdown-box" class="dropdown-content hidden">
-                        <a href="#">Settings</a>
-                        <a href="#">Help</a>
-                        <a href="#" id="logout-btn">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <main class="dash-grid-wrapper">
-            <div class="dashboard-2x2-grid">
-                <div class="dash-option-box" data-page="topic">Topic</div>
-                <div class="dash-option-box" data-page="revision">Revision</div>
-                <div class="dash-option-box" data-page="group">Group</div>
-                <div class="dash-option-box" data-page="mistake">Mistake</div>
-            </div>
-        </main>
-    </div>
-
-    <!-- PAGE 3: Topic Page -->
-    <div id="page-topic" class="page black-bg">
-        <div class="page-top-nav">
-            <button class="back-navigation-btn" data-target="dashboard">← Back to Dashboard</button>
-        </div>
-        <div class="page-center-flow">
-            <div class="white-input-container">
-                <input type="text" id="topic-input-field" placeholder="Add the Topic">
-            </div>
-            <div id="topics-zigzag-list" class="zigzag-cards-container"></div>
-        </div>
-    </div>
-
-    <!-- PAGE 4: Add Questions Page -->
-    <div id="page-questions" class="page black-bg">
-        <div class="page-top-nav">
-            <button class="back-navigation-btn" data-target="topic">← Back to Topics</button>
-            <h2 id="active-topic-name-header" class="header-title-white">Topic Name</h2>
-        </div>
-        <div class="page-center-flow">
-            <div class="white-input-container clickable-box" id="open-question-type-modal">
-                <span>Add Questions</span>
-            </div>
-        </div>
-
-        <!-- Question Type Selection Modal -->
-        <div id="modal-q-type" class="custom-modal hidden">
-            <div class="modal-card">
-                <h3>Select Question Format</h3>
-                <button class="modal-action-btn" data-qtype="mcq">MCQs</button>
-                <button class="modal-action-btn" data-qtype="qa">Question & Answer / One Word</button>
-                <button class="modal-action-btn" data-qtype="vocab">English Meaning / Hindi Meaning</button>
-                <button type="button" class="btn-close-modal">Cancel</button>
-            </div>
-        </div>
-
-        <!-- Question Input Method Modal -->
-        <div id="modal-q-input" class="custom-modal hidden">
-            <div class="modal-card wide-card">
-                <h3 id="modal-input-heading">Add Content</h3>
-                <div class="tabs-switcher">
-                    <button class="tab-item active" data-tab="manual">Text Input</button>
-                    <button class="tab-item" data-tab="pdf">PDF Upload</button>
-                    <button class="tab-item" data-tab="image">Camera / Image</button>
-                </div>
-
-                <div id="tab-panel-manual" class="tab-panel active">
-                    <input type="text" id="q-text-input" placeholder="Type question...">
-                    <input type="text" id="a-text-input" placeholder="Type answer...">
-                    <input type="text" id="options-text-input" placeholder="Options separated by comma (for MCQs)">
-                    <button id="save-question-submit" class="btn-auth-blue">Save Question</button>
-                </div>
-                <div id="tab-panel-pdf" class="tab-panel hidden">
-                    <input type="file" id="pdf-file-upload" accept=".pdf">
-                    <p class="sub-hint">Upload your questionnaire PDF</p>
-                </div>
-                <div id="tab-panel-image" class="tab-panel hidden">
-                    <input type="file" id="image-file-upload" accept="image/*" capture="environment">
-                    <p class="sub-hint">Capture live image or select from gallery</p>
-                </div>
-                <button type="button" class="btn-close-modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PAGE 5: Revision System & Workflow -->
-    <div id="page-revision" class="page black-bg">
-        <div class="page-top-nav">
-            <button class="back-navigation-btn" data-target="dashboard">← Back to Dashboard</button>
-        </div>
-        <div class="page-center-flow">
-            <h2 class="header-title-white" style="margin-bottom: 20px;">Select Topic to Revise</h2>
-            <div id="revision-topics-zigzag" class="zigzag-cards-container"></div>
-        </div>
-
-        <!-- Live Quiz Session Screen -->
-        <div id="quiz-session-overlay" class="fullscreen-session hidden">
-            <div class="session-nav-bar">
-                <button class="back-navigation-btn" id="quit-quiz-btn">✕ Quit Revision</button>
-                <div class="live-score-badge">Score: <span id="current-score-num">0</span></div>
-            </div>
-
-            <div class="session-settings-bar">
-                <div class="setting-item">
-                    <label>Mode:</label>
-                    <select id="rev-mode-dropdown">
-                        <option value="single">Single</option>
-                        <option value="group">Group</option>
-                    </select>
-                </div>
-                <div class="setting-item">
-                    <label>Flow:</label>
-                    <select id="rev-flow-dropdown">
-                        <option value="random">Random Mode</option>
-                        <option value="series">Series Mode</option>
-                    </select>
-                </div>
-                <div class="setting-item">
-                    <label>Mistake Mode:</label>
-                    <input type="checkbox" id="mistake-mode-switch" checked>
-                </div>
-            </div>
-
-            <div class="quiz-active-card">
-                <h3 id="quiz-q-title">Question loading...</h3>
-                <div id="quiz-options-container" class="options-v-stack"></div>
-                <input type="text" id="quiz-user-input" placeholder="Type your answer here">
-                <button id="submit-quiz-answer-btn" class="btn-auth-blue">Submit Answer</button>
-                <p id="quiz-feedback-msg"></p>
-            </div>
-        </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
