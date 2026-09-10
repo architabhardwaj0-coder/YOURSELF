@@ -46,7 +46,7 @@
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; margin-bottom: 5px; color: #333; font-size: 14px; }
         .input-group input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
-        .btn-done { width: 100%; background-color: #0000FF; color: white; padding: 10px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .btn-done { width: 100%; background-color: #0000FF; color: white; padding: 12px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
 
         #dashboard-page { background-color: #0000FF; width: 100%; height: 100%; position: relative; display: flex; justify-content: center; align-items: center; display: none; }
         .dashboard-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; box-sizing: border-box; }
@@ -73,55 +73,54 @@
 
         /* 4. Topic & Detail Pages */
         #topic-page, #topic-detail-page { background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative; }
-        .topic-main-box, .detail-main-box { background-color: #ffffff; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); text-align: center; margin-bottom: 20px; margin-top: 30px; }
-        .topic-input, .detail-input, .detail-select { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; margin-bottom: 12px; color: #333; }
-        .topics-grid, .questions-list { width: 450px; max-width: 90%; display: flex; flex-direction: column; gap: 12px; }
+        .topic-main-box, .detail-main-box { background-color: #ffffff; padding: 30px; border-radius: 12px; width: 480px; max-width: 95%; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); text-align: center; margin-bottom: 20px; margin-top: 30px; }
+        .topic-input, .detail-input, .detail-select { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; margin-bottom: 12px; color: #333; }
+        .topics-grid, .questions-list { width: 480px; max-width: 95%; display: flex; flex-direction: column; gap: 12px; }
         .topic-card, .question-card { background-color: #ffffff; color: #000000; padding: 15px; border-radius: 8px; font-weight: bold; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: left; word-break: break-word; }
         .topic-card { text-align: center; cursor: pointer; width: 47%; display: inline-block; }
         .upload-options { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-        .upload-btn-label { flex: 1; background: #f0f0f0; padding: 8px; font-size: 12px; border: 1px dashed #0000FF; border-radius: 5px; cursor: pointer; color: #0000FF; font-weight: bold; text-align: center; }
+        .upload-btn-label { flex: 1; background: #f0f0f0; padding: 10px; font-size: 13px; border: 1px dashed #0000FF; border-radius: 5px; cursor: pointer; color: #0000FF; font-weight: bold; text-align: center; }
         .upload-btn-label input { display: none; }
 
         /* 5. Revision Page 1 */
         #revision-page { background-color: #000000; color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; display: none; box-sizing: border-box; padding: 20px; overflow-y: auto; }
         .revision-center-box { text-align: center; max-width: 500px; width: 90%; }
-        .rev-topic-box { background-color: #ffffff; color: #000000; padding: 20px; border-radius: 10px; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); margin-bottom: 20px; }
+        .rev-topic-box { background-color: #ffffff; color: #000000; padding: 20px; border-radius: 10px; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); margin-bottom: 20px; }
         #revTopicSelectionList, #revQuestionPickerBox { display: none; background: #1a1a1a; border: 1px solid #444; padding: 15px; border-radius: 8px; margin-bottom: 20px; max-height: 180px; overflow-y: auto; text-align: left; }
-        .rev-topic-option-item, .rev-q-checkbox-item { padding: 8px; background: #333; margin-bottom: 6px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .rev-topic-option-item, .rev-q-checkbox-item { padding: 10px; background: #333; margin-bottom: 6px; border-radius: 4px; cursor: pointer; font-size: 15px; }
         .rev-q-checkbox-item { display: flex; align-items: center; gap: 10px; background: transparent; border-bottom: 1px solid #333; }
 
         /* 6. Revision Start Page */
         #revision-start-page { background-color: #000000; color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; display: none; box-sizing: border-box; padding: 20px; }
-        .rev-left-controls { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 12px; font-size: 13px; }
-        .rev-right-controls { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; font-size: 13px; }
-        .rev-ctrl-item { display: flex; align-items: center; gap: 8px; background: #1a1a1a; padding: 6px 10px; border-radius: 5px; border: 1px solid #444; }
-        .rev-ctrl-item select { background: #333; color: #fff; border: 1px solid #555; padding: 3px; border-radius: 3px; }
-        .rev-start-center-box { background-color: #ffffff; color: #000000; padding: 25px 40px; border-radius: 10px; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); text-align: center; }
+        .rev-left-controls { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
+        .rev-right-controls { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
+        .rev-ctrl-item { display: flex; align-items: center; gap: 8px; background: #1a1a1a; padding: 8px 12px; border-radius: 5px; border: 1px solid #444; }
+        .rev-ctrl-item select { background: #333; color: #fff; border: 1px solid #555; padding: 4px; border-radius: 3px; font-size: 14px; }
+        .rev-start-center-box { background-color: #ffffff; color: #000000; padding: 30px 50px; border-radius: 12px; font-size: 26px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); text-align: center; }
 
-        #groupNamesModal { display: none; position: absolute; top: 70px; right: 20px; background: #1a1a1a; border: 1px solid #555; padding: 15px; border-radius: 8px; width: 240px; z-index: 200; }
-        #groupNamesListDisplay { background: #222; padding: 8px; border-radius: 5px; min-height: 50px; max-height: 120px; overflow-y: auto; margin-top: 8px; font-size: 13px; }
+        #groupNamesModal { display: none; position: absolute; top: 75px; right: 20px; background: #1a1a1a; border: 1px solid #555; padding: 15px; border-radius: 8px; width: 250px; z-index: 200; }
+        #groupNamesListDisplay { background: #222; padding: 8px; border-radius: 5px; min-height: 50px; max-height: 120px; overflow-y: auto; margin-top: 8px; font-size: 14px; }
 
-        /* 7. Active Quiz Play Page */
+        /* 7. Active Quiz Play Page (Larger & Clean UI) */
         #quiz-play-page { background-color: #000000; color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; display: none; padding: 20px; box-sizing: border-box; text-align: center; }
-        .quiz-score-board { position: absolute; top: 20px; right: 40px; font-size: 15px; font-weight: bold; color: #00ffcc; text-align: right; }
-        .quiz-card-box { background: #1a1a1a; padding: 30px; border-radius: 10px; width: 450px; max-width: 90%; box-shadow: 0px 4px 15px rgba(255,255,255,0.1); }
-        .quiz-actions { margin-top: 20px; display: flex; justify-content: center; gap: 15px; }
-        .quiz-btn { padding: 10px 20px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-correct { background-color: #28a745; color: white; }
-        .btn-wrong { background-color: #dc3545; color: white; }
-        .hidden-answer { background: #333; color: #333; padding: 8px; border-radius: 5px; cursor: pointer; margin-top: 10px; user-select: none; }
-        .hidden-answer.revealed { color: #00ffcc; background: #222; }
+        .quiz-card-box { background: #1a1a1a; padding: 40px; border-radius: 12px; width: 550px; max-width: 95%; box-shadow: 0px 4px 20px rgba(255,255,255,0.15); }
+        .quiz-input-row { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
+        .quiz-text-input { flex: 1; padding: 14px; background: #333; border: 1px solid #555; color: white; border-radius: 6px; font-size: 18px; }
+        .mic-btn { background: #0000FF; color: white; border: none; padding: 14px 18px; border-radius: 6px; font-size: 18px; cursor: pointer; }
+        .submit-answer-btn { width: 100%; background-color: #28a745; color: white; padding: 14px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .next-question-btn { width: 100%; background-color: #0000FF; color: white; padding: 14px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; display: none; }
+        #quizFeedbackDisplay { margin-top: 15px; font-size: 20px; font-weight: bold; }
 
         /* 8. MISTAKE SECTIONS */
         #mistake-topics-page { background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative; }
         .mistake-top-heading { position: absolute; top: 20px; right: 30px; color: #ffffff; font-size: 22px; font-weight: bold; }
-        .mistake-topic-grid { display: flex; flex-wrap: wrap; gap: 15px; width: 450px; max-width: 90%; justify-content: flex-start; margin-top: 50px; }
-        .mistake-topic-card { background-color: #ffffff; color: #000000; padding: 15px; border-radius: 8px; width: 47%; box-sizing: border-box; font-weight: bold; font-size: 16px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: center; cursor: pointer; word-break: break-word; }
+        .mistake-topic-grid { display: flex; flex-wrap: wrap; gap: 15px; width: 480px; max-width: 95%; justify-content: flex-start; margin-top: 50px; }
+        .mistake-topic-card { background-color: #ffffff; color: #000000; padding: 18px; border-radius: 8px; width: 47%; box-sizing: border-box; font-weight: bold; font-size: 18px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: center; cursor: pointer; word-break: break-word; }
 
         #mistake-detail-page { background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative; }
-        .mistake-detail-container { width: 500px; max-width: 90%; display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
-        .mistake-question-card { background-color: #ffffff; color: #000000; padding: 15px; border-radius: 8px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: left; word-break: break-word; font-weight: bold; }
-        .mistake-count-badge { background-color: #ff4d4d; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; float: right; }
+        .mistake-detail-container { width: 550px; max-width: 95%; display: flex; flex-direction: column; gap: 15px; margin-top: 40px; }
+        .mistake-question-card { background-color: #ffffff; color: #000000; padding: 20px; border-radius: 10px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: left; word-break: break-word; font-size: 18px; font-weight: bold; }
+        .mistake-count-badge { background-color: #ff4d4d; color: white; padding: 4px 10px; border-radius: 4px; font-size: 14px; float: right; }
     </style>
 </head>
 <body>
@@ -215,18 +214,18 @@
             <select id="questionType" class="detail-select">
                 <option value="MCQs">MCQs (Multiple Choice)</option>
                 <option value="Fill in the blanks">Fill in the blanks</option>
-                <option value="English Meanings">English Meanings</option>
-                <option value="Hindi Meanings">Hindi Meanings</option>
+                <option value="English Meanings">English Meanings (Photo: Eng=Q, Hin=Ans)</option>
+                <option value="Hindi Meanings">Hindi Meanings (Photo: Hin=Q, Eng=Ans)</option>
                 <option value="Question & Answer">Question & Answer</option>
             </select>
             <input type="text" id="questionInput" class="detail-input" placeholder="Type your question here...">
-            <input type="text" id="answerInput" class="detail-input" placeholder="Type answer (hidden during quiz)...">
+            <input type="text" id="answerInput" class="detail-input" placeholder="Type answer here...">
             <div class="upload-options">
                 <label class="upload-btn-label">📷 Camera<input type="file" accept="image/*" capture="environment" onchange="previewFile(event)"></label>
                 <label class="upload-btn-label">🖼️ Gallery<input type="file" accept="image/*" onchange="previewFile(event)"></label>
                 <label class="upload-btn-label">📄 PDF<input type="file" accept=".pdf" onchange="previewFile(event)"></label>
             </div>
-            <div id="fileInfoDisplay" style="font-size: 12px; color: #555; margin-bottom: 10px; font-style: italic;"></div>
+            <div id="fileInfoDisplay" style="font-size: 13px; color: #555; margin-bottom: 10px; font-style: italic;"></div>
             <button class="btn-done" onclick="addNewQuestion()">Add Question (Done)</button>
         </div>
         <div id="questionsContainer" class="questions-list"></div>
@@ -272,9 +271,9 @@
             </div>
         </div>
         <div id="groupNamesModal">
-            <div style="font-weight:bold; font-size:13px; margin-bottom:5px;">Add the Name & Emoji:</div>
-            <input type="text" id="groupMemberInput" placeholder="Name 😃" style="width:100%; padding:6px; box-sizing:border-box; background:#333; color:#fff; border:1px solid #555; border-radius:4px;">
-            <button class="btn-done" style="padding:6px; font-size:13px; margin-top:6px;" onclick="addMemberToGroup()">Add</button>
+            <div style="font-weight:bold; font-size:14px; margin-bottom:6px;">Add the Name & Emoji:</div>
+            <input type="text" id="groupMemberInput" placeholder="Name 😃" style="width:100%; padding:8px; box-sizing:border-box; background:#333; color:#fff; border:1px solid #555; border-radius:4px;">
+            <button class="btn-done" style="padding:8px; font-size:14px; margin-top:8px;" onclick="addMemberToGroup()">Add</button>
             <div id="groupNamesListDisplay">No members added yet.</div>
         </div>
         <div class="rev-start-center-box" onclick="startActiveQuiz()">
@@ -285,16 +284,20 @@
     <!-- ACTIVE QUIZ PLAY PAGE -->
     <div id="quiz-play-page">
         <div class="global-back" onclick="showPage('revision-start-page')">&larr;</div>
-        <div id="quizScoreDisplay" class="quiz-score-board">Score: 0</div>
         <div class="quiz-card-box">
-            <h3 id="quizTopicHeader" style="color: #0000FF; margin-top:0;">Topic</h3>
-            <div id="assignedUserDisplay" style="color: #00ffcc; font-size: 14px; font-weight: bold; margin-bottom: 10px;"></div>
-            <div id="quizQuestionBox" style="font-size: 18px; margin: 15px 0;">Question here</div>
-            <div id="quizAnswerBox" class="hidden-answer" onclick="revealAnswer()">Click to view answer (Hidden)</div>
-            <div class="quiz-actions">
-                <button class="quiz-btn btn-wrong" onclick="answerQuiz(false)">Wrong (-20)</button>
-                <button class="quiz-btn btn-correct" onclick="answerQuiz(true)">Correct (+10)</button>
+            <h3 id="quizTopicHeader" style="color: #0000FF; margin-top:0; font-size:20px;">Topic</h3>
+            <div id="assignedUserDisplay" style="color: #00ffcc; font-size: 16px; font-weight: bold; margin-bottom: 12px;"></div>
+            <div id="quizQuestionBox" style="font-size: 24px; font-weight: bold; margin: 25px 0; line-height: 1.4;">Question here</div>
+            
+            <div class="quiz-input-row">
+                <input type="text" id="userAnswerInput" class="quiz-text-input" placeholder="Type answer here...">
+                <button class="mic-btn" onclick="startVoiceInput()" title="Speak Answer">🎤</button>
             </div>
+
+            <button id="submitAnsBtn" class="submit-answer-btn" onclick="submitQuizAnswer()">Submit Answer</button>
+            <button id="nextQBtn" class="next-question-btn" onclick="nextQuizQuestion()">Next Question &rarr;</button>
+
+            <div id="quizFeedbackDisplay"></div>
         </div>
     </div>
 
@@ -314,7 +317,7 @@
 
     <script>
         let globalUsername = "";
-        let usersDB = JSON.parse(localStorage.getItem('yourself_usersDB')) || {}; // Stores accounts & data
+        let usersDB = JSON.parse(localStorage.getItem('yourself_usersDB')) || {};
         let topicData = {}; 
         let selectedTopicName = "";
         let chosenRevisionTopic = "";
@@ -322,7 +325,6 @@
         let currentQuizQuestions = [];
         let currentQuizIndex = 0;
         let groupMembers = [];
-        let participantScores = {};
 
         function showPage(pageId) {
             ['home-page', 'signup-page', 'signin-page', 'dashboard-page', 'account-page', 'topic-page', 'topic-detail-page', 'revision-page', 'revision-start-page', 'quiz-play-page', 'mistake-topics-page', 'mistake-detail-page'].forEach(p => {
@@ -334,21 +336,13 @@
             if(menu) menu.style.display = 'none';
         }
 
-        // SIGN UP LOGIC
         function handleSignUp(event) {
             event.preventDefault();
             let u = document.getElementById('signupUsernameInput').value.trim();
             let p = document.getElementById('signupPasswordInput').value.trim();
-            
-            if(usersDB[u]) {
-                alert("Username already exists! Please Sign In or use another username.");
-                return;
-            }
-
-            // Create new account with empty topics
+            if(usersDB[u]) { alert("Username already exists!"); return; }
             usersDB[u] = { password: p, topicData: {} };
             localStorage.setItem('yourself_usersDB', JSON.stringify(usersDB));
-            
             globalUsername = u;
             topicData = usersDB[u].topicData;
             document.getElementById('profileUsernameInput').value = globalUsername;
@@ -357,18 +351,14 @@
             renderTopicsList();
         }
 
-        // SIGN IN LOGIC
         function handleSignIn(event) {
             event.preventDefault();
             let u = document.getElementById('signinUsernameInput').value.trim();
             let p = document.getElementById('signinPasswordInput').value.trim();
-
             if(!usersDB[u] || usersDB[u].password !== p) {
-                alert("Incorrect username or password! Please check your details.");
+                alert("Incorrect username or password!");
                 return;
             }
-
-            // Load existing account data safely without erasing it
             globalUsername = u;
             topicData = usersDB[u].topicData;
             document.getElementById('profileUsernameInput').value = globalUsername;
@@ -422,7 +412,7 @@
             let file = event.target.files[0];
             if (file) {
                 uploadedFileObject = file;
-                document.getElementById('fileInfoDisplay').innerText = "Attached: " + file.name;
+                document.getElementById('fileInfoDisplay').innerText = "File Attached: " + file.name;
             }
         }
 
@@ -430,35 +420,35 @@
             let qType = document.getElementById('questionType').value;
             let qText = document.getElementById('questionInput').value.trim();
             let aText = document.getElementById('answerInput').value.trim();
-            if (!qText && !uploadedFileObject) { alert("Add question or file!"); return; }
+
+            if (!qText && !uploadedFileObject) { alert("Please add question text or upload a file!"); return; }
+
+            let finalQText = qText;
+            let finalAnsText = aText;
+
+            // Handle English / Hindi Meanings mapping if file is uploaded
+            if ((qType === "English Meanings" || qType === "Hindi Meanings") && uploadedFileObject) {
+                if (qType === "English Meanings") {
+                    finalQText = "Photo (English Meaning Question)";
+                    finalAnsText = "Photo (Hindi Meaning Answer)";
+                } else {
+                    finalQText = "Photo (Hindi Meaning Question)";
+                    finalAnsText = "Photo (English Meaning Answer)";
+                }
+            }
 
             let qObj = { 
                 type: qType, 
-                text: qText, 
-                answer: aText || "No answer provided", 
+                text: finalQText, 
+                answer: finalAnsText || "No answer provided", 
                 mistakeCount: 0,
-                fileData: null, 
-                fileName: null, 
-                fileType: null 
+                hasFile: uploadedFileObject ? true : false
             };
 
-            if (uploadedFileObject) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    qObj.fileData = e.target.result;
-                    qObj.fileType = uploadedFileObject.type;
-                    topicData[selectedTopicName].push(qObj);
-                    saveDataToDB();
-                    resetQuestionForm();
-                    renderQuestionsList();
-                };
-                reader.readAsDataURL(uploadedFileObject);
-            } else {
-                topicData[selectedTopicName].push(qObj);
-                saveDataToDB();
-                resetQuestionForm();
-                renderQuestionsList();
-            }
+            topicData[selectedTopicName].push(qObj);
+            saveDataToDB();
+            resetQuestionForm();
+            renderQuestionsList();
         }
 
         function resetQuestionForm() {
@@ -476,12 +466,11 @@
             qs.forEach((q, i) => {
                 let card = document.createElement('div');
                 card.className = 'question-card';
-                card.innerHTML = `<div style="color:#0000FF; font-size:12px;">[${q.type}]</div><div><strong>Q${i+1}:</strong> ${q.text}</div><div style="color:gray; font-size:13px;">Ans: ${q.answer}</div>`;
+                card.innerHTML = `<div style="color:#0000FF; font-size:13px;">[${q.type}]</div><div><strong>Q${i+1}:</strong> ${q.text}</div><div style="color:gray; font-size:14px; margin-top:4px;">Ans: ${q.answer}</div>`;
                 container.appendChild(card);
             });
         }
 
-        /* REVISION FLOW */
         function openRevisionFirstPage() {
             showPage('revision-page');
             document.getElementById('revTopicSelectionList').style.display = 'none';
@@ -517,7 +506,7 @@
             let qs = topicData[topic] || [];
             if(qs.length === 0) { picker.innerHTML += `<div style='color:#aaa;'>No questions in topic!</div>`; return; }
             qs.forEach((q, idx) => {
-                picker.innerHTML += `<div class="rev-q-checkbox-item"><input type="checkbox" value="${idx}" class="rev-q-chk" checked> <span>Q${idx+1}: ${q.text || 'File'}</span></div>`;
+                picker.innerHTML += `<div class="rev-q-checkbox-item"><input type="checkbox" value="${idx}" class="rev-q-chk" checked> <span>Q${idx+1}: ${q.text}</span></div>`;
             });
             document.getElementById('revDoneBtn').style.display = 'block';
         }
@@ -571,27 +560,21 @@
                 currentQuizQuestions.sort(() => Math.random() - 0.5);
             }
             currentQuizIndex = 0;
-            participantScores = {};
-            groupMembers.forEach(m => participantScores[m] = 0);
             showPage('quiz-play-page');
             loadQuizQuestion();
         }
 
         function loadQuizQuestion() {
             if (currentQuizIndex >= currentQuizQuestions.length) {
-                showFinalRankingOrScore();
+                alert("Revision Completed!");
+                showPage('revision-start-page');
                 return;
             }
 
             let q = currentQuizQuestions[currentQuizIndex];
             document.getElementById('quizTopicHeader').innerText = chosenRevisionTopic + " (" + (currentQuizIndex + 1) + "/" + currentQuizQuestions.length + ")";
-            document.getElementById('quizQuestionBox').innerText = q.text || "Attached File Question";
+            document.getElementById('quizQuestionBox').innerText = q.text;
             
-            let ansBox = document.getElementById('quizAnswerBox');
-            ansBox.innerText = "Click to view answer (Hidden)";
-            ansBox.className = "hidden-answer";
-            ansBox.dataset.answer = q.answer;
-
             let groupMode = document.getElementById('revGroupSelect').value;
             let assignedUser = globalUsername;
             if (groupMode === 'Group' && groupMembers.length > 0) {
@@ -602,41 +585,42 @@
             }
             window.activeAssignedUser = assignedUser;
 
-            updateScoreboardDisplay(groupMode);
+            document.getElementById('userAnswerInput').value = "";
+            document.getElementById('quizFeedbackDisplay').innerText = "";
+            document.getElementById('submitAnsBtn').style.display = 'block';
+            document.getElementById('nextQBtn').style.display = 'none';
         }
 
-        function revealAnswer() {
-            let ansBox = document.getElementById('quizAnswerBox');
-            ansBox.innerText = "Answer: " + ansBox.dataset.answer;
-            ansBox.className = "hidden-answer revealed";
-        }
-
-        function updateScoreboardDisplay(mode) {
-            let sb = document.getElementById('quizScoreDisplay');
-            if (mode === 'Group') {
-                let html = "<b>Group Ranking:</b><br>";
-                let sorted = Object.entries(participantScores).sort((a,b) => b[1] - a[1]);
-                sorted.forEach(([user, score], idx) => {
-                    html += `${idx+1}. ${user}: ${score} pts<br>`;
-                });
-                sb.innerHTML = html;
-            } else {
-                let score = participantScores[globalUsername] || 0;
-                sb.innerHTML = `${globalUsername}<br>Score: ${score}`;
+        function startVoiceInput() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Speech recognition is not supported in your browser.");
+                return;
             }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = function(event) {
+                document.getElementById('userAnswerInput').value = event.results[0][0].transcript;
+            };
+            recognition.start();
         }
 
-        function answerQuiz(isCorrect) {
-            let user = window.activeAssignedUser || globalUsername;
-            if (!(user in participantScores)) participantScores[user] = 0;
-
+        function submitQuizAnswer() {
+            let userAns = document.getElementById('userAnswerInput').value.trim().toLowerCase();
             let currentQ = currentQuizQuestions[currentQuizIndex];
+            let correctAns = currentQ.answer.toLowerCase();
 
-            if (isCorrect) {
-                participantScores[user] += 10;
+            let feedback = document.getElementById('quizFeedbackDisplay');
+            let isMatch = userAns && correctAns.includes(userAns);
+
+            if (isMatch || userAns === correctAns) {
+                feedback.style.color = "#28a745";
+                feedback.innerText = "Correct! 🎉";
             } else {
-                participantScores[user] -= 20;
+                feedback.style.color = "#ff4d4d";
+                feedback.innerText = "Incorrect! (Answer: " + currentQ.answer + ")";
                 
+                // Record mistake
                 if(currentQ._originalTopic !== undefined && currentQ._originalIndex !== undefined) {
                     topicData[currentQ._originalTopic][currentQ._originalIndex].mistakeCount++;
                     saveDataToDB();
@@ -646,24 +630,16 @@
                     currentQuizQuestions.push(currentQ);
                 }
             }
+
+            document.getElementById('submitAnsBtn').style.display = 'none';
+            document.getElementById('nextQBtn').style.display = 'block';
+        }
+
+        function nextQuizQuestion() {
             currentQuizIndex++;
             loadQuizQuestion();
         }
 
-        function showFinalRankingOrScore() {
-            let groupMode = document.getElementById('revGroupSelect').value;
-            if (groupMode === 'Group') {
-                let sorted = Object.entries(participantScores).sort((a,b) => b[1] - a[1]);
-                let rankText = "Final Group Rankings:\n\n";
-                sorted.forEach(([u, s], i) => { rankText += `${i+1}. ${u} - ${s} points\n`; });
-                alert(rankText);
-            } else {
-                alert("Revision Completed! Final Score: " + (participantScores[globalUsername] || 0));
-            }
-            showPage('revision-start-page');
-        }
-
-        /* MISTAKE FEATURE */
         function openMistakeTopicsPage() {
             showPage('mistake-topics-page');
             let container = document.getElementById('mistakeTopicsContainer');
@@ -700,8 +676,8 @@
                 let card = document.createElement('div');
                 card.className = 'mistake-question-card';
                 card.innerHTML = `
-                    <div>Q${index + 1}: ${q.text || 'File question'}</div>
-                    <div style="color:gray; font-size:13px; margin-top:5px;">Answer: ${q.answer}</div>
+                    <div>Q${index + 1}: ${q.text}</div>
+                    <div style="color:gray; font-size:15px; margin-top:8px;">Answer: ${q.answer}</div>
                     <span class="mistake-count-badge">Mistakes: ${q.mistakeCount}</span>
                 `;
                 container.appendChild(card);
