@@ -3,30 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yourself - Home</title>
+    <title>Yourself</title>
     <style>
+        /* General Reset */
         body {
             margin: 0;
             padding: 0;
-            background-color: #ffffff; /* Pure white background */
+            font-family: Arial, sans-serif;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
         }
-        .container {
+
+        /* 1. Home Page: Pure White Background */
+        #home-page {
+            background-color: #ffffff;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+        }
+        .home-container {
             max-width: 600px;
         }
         .main-title {
-            color: #0000FF; /* Blue color */
+            color: #0000FF; /* Blue */
             font-size: 50px;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .sub-text {
-            color: #000000; /* Black color */
+            color: #000000; /* Black */
             font-size: 16px;
             margin-bottom: 30px;
         }
@@ -37,27 +47,180 @@
             margin: 0 auto;
         }
         .auth-links a {
-            color: #0000FF; /* Blue color */
+            color: #0000FF; /* Blue */
             text-decoration: none;
             font-size: 18px;
             font-weight: bold;
+            cursor: pointer;
         }
         .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* 2. Sign Up & Sign In Pages: Blue Background & White Box */
+        .form-page {
+            background-color: #0000FF; /* Blue Background */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none; /* Hidden by default */
+        }
+        .box {
+            background-color: #ffffff; /* White Box */
+            padding: 40px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+        }
+        .box h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-done {
+            width: 100%;
+            background-color: #0000FF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-done:hover {
+            background-color: #0000cc;
+        }
+
+        /* 3. Dashboard Page: Pure Black Background */
+        #dashboard-page {
+            background-color: #000000; /* Pure Black Background */
+            color: #ffffff;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            display: none;
+        }
+        #dashboard-page h1 {
+            color: #0000FF;
+            font-size: 40px;
+        }
+        .back-link {
+            color: #0000FF;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .back-link:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="main-title">YOURSELF</div>
-        <div class="sub-text">Test yourself without needing any one to ask you question.</div>
-        
-        <div class="auth-links">
-            <a href="/signup">Sign Up</a>
-            <a href="/signin">Sign In</a>
+    <!-- PAGE 1: HOME PAGE -->
+    <div id="home-page">
+        <div class="home-container">
+            <div class="main-title">YOURSELF</div>
+            <div class="sub-text">Test yourself without needing any one to ask you question.</div>
+            <div class="auth-links">
+                <a onclick="showPage('signup-page')">Sign Up</a>
+                <a onclick="showPage('signin-page')">Sign In</a>
+            </div>
         </div>
     </div>
+
+    <!-- PAGE 2: SIGN UP PAGE -->
+    <div id="signup-page" class="form-page">
+        <div class="box">
+            <h2>Sign Up</h2>
+            <form onsubmit="handleFormSubmit(event)">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" required>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" required>
+                </div>
+                <button type="submit" class="btn-done">Done</button>
+            </form>
+            <br>
+            <a onclick="showPage('home-page')" class="back-link" style="font-size: 13px; text-align: center; display: block;">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- PAGE 3: SIGN IN PAGE -->
+    <div id="signin-page" class="form-page">
+        <div class="box">
+            <h2>Sign In</h2>
+            <form onsubmit="handleFormSubmit(event)">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" required>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" required>
+                </div>
+                <button type="submit" class="btn-done">Done</button>
+            </form>
+            <br>
+            <a onclick="showPage('home-page')" class="back-link" style="font-size: 13px; text-align: center; display: block;">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- PAGE 4: DASHBOARD / SUCCESS PAGE -->
+    <div id="dashboard-page">
+        <div>
+            <h1>Welcome to YOURSELF!</h1>
+            <p>You have successfully completed the process.</p>
+            <br>
+            <a onclick="showPage('home-page')" class="back-link">Go Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to switch pages smoothly without any backend errors
+        function showPage(pageId) {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('signup-page').style.display = 'none';
+            document.getElementById('signin-page').style.display = 'none';
+            document.getElementById('dashboard-page').style.display = 'none';
+
+            document.getElementById(pageId).style.display = 'flex';
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Stops the page from refreshing
+            showPage('dashboard-page'); // Shows the black dashboard page
+        }
+    </script>
 
 </body>
 </html>
