@@ -1,725 +1,4422 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yourself</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#ffffff" />
+
+<title>Yourself - Better Learning, Brighter Future</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- OCR -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
+        type="module"></script>
+
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                brand: "#2457D6",
+                brandDark: "#173F9F",
+                softBlue: "#EAF4FF",
+                softPurple: "#F4EEFF",
+                softMint: "#ECFBF5",
+                softPeach: "#FFF3EA"
+            }
         }
+    }
+}
+</script>
 
-        .global-back {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #ffffff;
-            font-size: 24px;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 1000;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        /* 1. Home Page */
-        #home-page {
-            background-color: #ffffff;
-            width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center; text-align: center;
-        }
-        .home-container { max-width: 600px; }
-        .main-title { color: #0000FF; font-size: 50px; font-weight: bold; margin-bottom: 10px; }
-        .sub-text { color: #000000; font-size: 16px; margin-bottom: 30px; }
-        .auth-links { display: flex; justify-content: space-between; width: 250px; margin: 0 auto; }
-        .auth-links a { color: #0000FF; text-decoration: none; font-size: 18px; font-weight: bold; cursor: pointer; }
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-        /* 2. Forms & Dashboard */
-        .form-page { background-color: #0000FF; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; display: none; position: relative; }
-        .box { background-color: #ffffff; padding: 40px; border-radius: 10px; width: 350px; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); }
-        .box h2 { text-align: center; color: #333; margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; margin-bottom: 5px; color: #333; font-size: 14px; }
-        .input-group input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
-        .btn-done { width: 100%; background-color: #0000FF; color: white; padding: 12px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+body {
+    color: #111827;
+}
 
-        #dashboard-page { background-color: #0000FF; width: 100%; height: 100%; position: relative; display: flex; justify-content: center; align-items: center; display: none; }
-        .dashboard-header { position: absolute; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; box-sizing: border-box; }
-        .dashboard-logo { color: #000000; font-size: 24px; font-weight: bold; }
-        .dashboard-icons { display: flex; align-items: center; gap: 20px; font-size: 22px; color: #000000; cursor: pointer; }
-        .menu-dropdown { position: absolute; top: 60px; right: 40px; background: #ffffff; color: #000000; border-radius: 5px; display: none; flex-direction: column; width: 120px; z-index: 100; }
-        .menu-dropdown a { padding: 10px 15px; text-decoration: none; color: #000000; font-size: 14px; border-bottom: 1px solid #eee; }
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
 
-        .dashboard-content { position: relative; width: 450px; height: 220px; }
-        .dash-box { background-color: #ffffff; color: #000000; padding: 20px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 18px; box-shadow: 0px 4px 10px rgba(0,0,0,0.2); width: 120px; cursor: pointer; }
-        #box-topic { position: absolute; left: 0; top: 0; }
-        #box-revision { position: absolute; right: 0; top: 0; }
-        #box-mistake { position: absolute; left: 50%; transform: translateX(-50%); top: 110px; }
+button {
+    cursor: pointer;
+}
 
-        /* 3. Account Page */
-        #account-page { background-color: #000000; color: #ffffff; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; display: none; position: relative; }
-        .account-box { background-color: #1a1a1a; padding: 30px; border-radius: 10px; width: 350px; text-align: center; }
-        .profile-pic-container { position: relative; width: 80px; height: 80px; background: #444; border-radius: 50%; margin: 0 auto 15px auto; display: flex; justify-content: center; align-items: center; font-size: 30px; }
-        .camera-icon { position: absolute; bottom: 0; right: 0; background: #0000FF; color: white; border-radius: 50%; padding: 5px; font-size: 12px; cursor: pointer; }
-        .account-input-group { margin-bottom: 12px; text-align: left; }
-        .account-input-group label { font-size: 12px; color: #bbb; }
-        .account-input-group input { width: 100%; padding: 8px; box-sizing: border-box; background: #333; border: 1px solid #555; color: white; border-radius: 4px; }
-        .btn-logout { width: 100%; background-color: #ff4d4d; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+.app {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: #fff;
+    position: relative;
+    overflow-x: hidden;
+}
 
-        /* 4. Topic & Detail Pages */
-        #topic-page, #topic-detail-page { background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative; }
-        .topic-main-box, .detail-main-box { background-color: #ffffff; padding: 30px; border-radius: 12px; width: 480px; max-width: 95%; box-shadow: 0px 4px 15px rgba(0,0,0,0.3); text-align: center; margin-bottom: 20px; margin-top: 30px; }
-        .topic-input, .detail-input, .detail-select { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; margin-bottom: 12px; color: #333; }
-        .topics-grid, .questions-list { width: 480px; max-width: 95%; display: flex; flex-direction: column; gap: 12px; }
-        .topic-card, .question-card { background-color: #ffffff; color: #000000; padding: 15px; border-radius: 8px; font-weight: bold; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: left; word-break: break-word; }
-        .topic-card { text-align: center; cursor: pointer; width: 47%; display: inline-block; }
-        .upload-options { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-        .upload-btn-label { flex: 1; background: #f0f0f0; padding: 10px; font-size: 13px; border: 1px dashed #0000FF; border-radius: 5px; cursor: pointer; color: #0000FF; font-weight: bold; text-align: center; }
-        .upload-btn-label input { display: none; }
-        .delete-btn { background-color: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; float: right; }
+.screen {
+    min-height: 100vh;
+    padding-bottom: 90px;
+}
 
-        /* 5. Revision Page 1 */
-        #revision-page { background-color: #000000; color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; display: none; box-sizing: border-box; padding: 20px; overflow-y: auto; }
-        .revision-center-box { text-align: center; max-width: 500px; width: 90%; }
-        .rev-topic-box { background-color: #ffffff; color: #000000; padding: 20px; border-radius: 10px; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); margin-bottom: 20px; }
-        #revTopicSelectionList, #revQuestionPickerBox { display: none; background: #1a1a1a; border: 1px solid #444; padding: 15px; border-radius: 8px; margin-bottom: 20px; max-height: 180px; overflow-y: auto; text-align: left; }
-        .rev-topic-option-item, .rev-q-checkbox-item { padding: 10px; background: #333; margin-bottom: 6px; border-radius: 4px; cursor: pointer; font-size: 15px; }
-        .rev-q-checkbox-item { display: flex; align-items: center; gap: 10px; background: transparent; border-bottom: 1px solid #333; }
+.hidden {
+    display: none !important;
+}
 
-        /* 6. Revision Start Page */
-        #revision-start-page { background-color: #000000; color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; display: none; box-sizing: border-box; padding: 20px; }
-        .rev-left-controls { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
-        .rev-right-controls { position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
-        .rev-ctrl-item { display: flex; align-items: center; gap: 8px; background: #1a1a1a; padding: 8px 12px; border-radius: 5px; border: 1px solid #444; }
-        .rev-ctrl-item select { background: #333; color: #fff; border: 1px solid #555; padding: 4px; border-radius: 3px; font-size: 14px; }
-        .rev-start-center-box { background-color: #ffffff; color: #000000; padding: 30px 50px; border-radius: 12px; font-size: 26px; font-weight: bold; cursor: pointer; box-shadow: 0px 4px 15px rgba(255,255,255,0.2); text-align: center; }
+/* ---------------- LOGO ---------------- */
 
-        #groupNamesModal { display: none; position: absolute; top: 75px; right: 20px; background: #1a1a1a; border: 1px solid #555; padding: 15px; border-radius: 8px; width: 280px; z-index: 200; }
-        #groupNamesListDisplay { background: #222; padding: 8px; border-radius: 5px; min-height: 50px; max-height: 120px; overflow-y: auto; margin-top: 8px; font-size: 14px; }
-        .group-row-input { display: flex; gap: 6px; align-items: center; }
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        /* 7. Active Quiz Play Page */
-        #quiz-play-page { background-color: #000000; color: #ffffff; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; display: none; padding: 20px; box-sizing: border-box; text-align: center; }
-        .quiz-card-box { background: #1a1a1a; padding: 40px; border-radius: 12px; width: 550px; max-width: 95%; box-shadow: 0px 4px 20px rgba(255,255,255,0.15); }
-        .quiz-input-row { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
-        .quiz-text-input { flex: 1; padding: 14px; background: #333; border: 1px solid #555; color: white; border-radius: 6px; font-size: 18px; }
-        .mic-btn { background: #0000FF; color: white; border: none; padding: 14px 18px; border-radius: 6px; font-size: 18px; cursor: pointer; }
-        .submit-answer-btn { width: 100%; background-color: #28a745; color: white; padding: 14px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .next-question-btn { width: 100%; background-color: #0000FF; color: white; padding: 14px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; display: none; }
-        #quizFeedbackDisplay { margin-top: 15px; font-size: 20px; font-weight: bold; }
+.logo-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+}
 
-        /* 8. MISTAKE SECTIONS */
-        #mistake-topics-page { background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative; }
-        .mistake-top-heading { position: absolute; top: 20px; right: 30px; color: #ffffff; font-size: 22px; font-weight: bold; }
-        .mistake-topic-grid { display: flex; flex-wrap: wrap; gap: 15px; width: 480px; max-width: 95%; justify-content: flex-start; margin-top: 50px; }
-        .mistake-topic-card { background-color: #ffffff; color: #000000; padding: 18px; border-radius: 8px; width: 47%; box-sizing: border-box; font-weight: bold; font-size: 18px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: center; cursor: pointer; word-break: break-word; }
+.logo-text {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #2457D6;
+}
 
-        #mistake-detail-page { background-color: #0000FF; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; display: none; overflow-y: auto; position: relative; }
-        .mistake-detail-container { width: 550px; max-width: 95%; display: flex; flex-direction: column; gap: 15px; margin-top: 40px; }
-        .mistake-question-card { background-color: #ffffff; color: #000000; padding: 20px; border-radius: 10px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); text-align: left; word-break: break-word; font-size: 18px; font-weight: bold; }
-        .mistake-count-badge { background-color: #ff4d4d; color: white; padding: 4px 10px; border-radius: 4px; font-size: 14px; float: right; }
-    </style>
+/* ---------------- HOME ---------------- */
+
+.home-header {
+    padding: 22px 22px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #DDEFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1670D8;
+}
+
+.hero {
+    padding: 32px 22px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.hero h1 {
+    margin: 0;
+    color: #173F9F;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.hero p {
+    margin: 8px 0 0;
+    color: #858B98;
+    font-size: 16px;
+    line-height: 1.55;
+}
+
+.hero-art {
+    width: 150px;
+    min-width: 135px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    padding: 22px;
+}
+
+.feature-card {
+    min-height: 178px;
+    border-radius: 17px;
+    border: 1px solid rgba(31, 64, 120, .12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform .15s ease;
+}
+
+.feature-card:active {
+    transform: scale(.97);
+}
+
+.feature-card h3 {
+    margin: 13px 0 0;
+    color: #173F9F;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.card-blue {
+    background: #EDF7FF;
+}
+
+.card-purple {
+    background: #F5F0FF;
+}
+
+.card-mint {
+    background: #ECFBF6;
+}
+
+.card-peach {
+    background: #FFF4EA;
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+}
+
+.home-bottom {
+    padding: 10px 28px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.motivation {
+    color: #164BA9;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.15;
+    transform: rotate(-5deg);
+}
+
+.motivation span {
+    display: block;
+}
+
+.bottom-art {
+    width: 205px;
+    max-width: 48%;
+}
+
+/* ---------------- BOTTOM NAV ---------------- */
+
+.bottom-nav {
+    position: fixed;
+    z-index: 50;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(520px, 100%);
+    height: 76px;
+    background: rgba(255,255,255,.98);
+    border-top: 1px solid #E7E9EE;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    color: #8B8F99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.nav-btn svg {
+    width: 25px;
+    height: 25px;
+}
+
+.nav-btn span {
+    font-size: 12px;
+}
+
+.nav-btn.active {
+    color: #1E6BE3;
+}
+
+/* ---------------- GENERAL PAGES ---------------- */
+
+.page {
+    padding: 25px 22px 100px;
+    min-height: 100vh;
+}
+
+.page-title {
+    text-align: center;
+    color: #173F9F;
+    font-size: 27px;
+    font-weight: 800;
+    margin: 6px 0 28px;
+}
+
+.back-btn {
+    border: none;
+    background: transparent;
+    color: #2457D6;
+    font-weight: 700;
+    padding: 6px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.label {
+    display: block;
+    font-weight: 700;
+    color: #151922;
+    margin: 0 0 8px;
+}
+
+.input {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #D3D6DC;
+    border-radius: 7px;
+    background: #fff;
+    padding: 0 13px;
+    outline: none;
+}
+
+.input:focus,
+.textarea:focus {
+    border-color: #2457D6;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 125px;
+    resize: vertical;
+    border: 1px solid #D3D6DC;
+    border-radius: 7px;
+    background: #fff;
+    padding: 12px;
+    outline: none;
+}
+
+.primary-btn {
+    width: 100%;
+    min-height: 48px;
+    border: none;
+    border-radius: 7px;
+    background: #1C1F24;
+    color: #fff;
+    font-weight: 700;
+}
+
+.blue-btn {
+    width: 100%;
+    min-height: 48px;
+    border: none;
+    border-radius: 7px;
+    background: #2457D6;
+    color: white;
+    font-weight: 700;
+}
+
+.outline-btn {
+    min-height: 45px;
+    border: 1px solid #222;
+    background: white;
+    color: #2457D6;
+    padding: 0 16px;
+    border-radius: 5px;
+    font-weight: 700;
+}
+
+/* ---------------- AUTH ---------------- */
+
+.auth-page {
+    min-height: 100vh;
+    background: #fff;
+    padding: 60px 25px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 80px;
+}
+
+.auth-content {
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+}
+
+.auth-title {
+    text-align: center;
+    color: #151922;
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 42px;
+}
+
+.auth-field {
+    margin-bottom: 20px;
+}
+
+.auth-field label {
+    display: block;
+    color: #111827;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.auth-input {
+    width: 100%;
+    height: 49px;
+    border: 1px solid #D5D7DC;
+    border-radius: 5px;
+    padding: 0 13px;
+    background: #fff;
+    color: #111;
+    outline: none;
+}
+
+.auth-input:focus {
+    border-color: #2457D6;
+}
+
+.auth-submit {
+    margin-top: 15px;
+    width: 100%;
+    height: 50px;
+    border: none;
+    background: #1E2228;
+    color: white;
+    border-radius: 5px;
+    font-weight: 700;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 22px;
+    color: #666;
+}
+
+.auth-switch button {
+    border: none;
+    background: transparent;
+    color: #2457D6;
+    font-weight: 700;
+}
+
+/* ---------------- PRONUNCIATION ---------------- */
+
+.pronunciation-input-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.pronunciation-input {
+    flex: 1;
+    height: 53px;
+    border: 1px solid #000;
+    background: white;
+    padding: 0 12px;
+    outline: none;
+}
+
+.icon-circle {
+    width: 53px;
+    height: 53px;
+    min-width: 53px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pronunciation-result {
+    margin-top: 22px;
+    min-height: 110px;
+    background: #EAF6FF;
+    border-radius: 10px;
+    padding: 20px;
+    color: #173F9F;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.speaker-btn {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #173F9F;
+    background: white;
+    border-radius: 7px;
+    color: #173F9F;
+}
+
+.bottom-actions {
+    margin-top: 40vh;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+.square-action {
+    width: 90px;
+    height: 80px;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-weight: 700;
+}
+
+.delete-action {
+    color: #C73C3C;
+}
+
+/* ---------------- CONCEPT ---------------- */
+
+.concept-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.language-select {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 1px solid #222;
+    background: white;
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 3px;
+    color: #222;
+}
+
+.language-menu {
+    position: absolute;
+    z-index: 20;
+    right: 0;
+    top: 43px;
+    background: white;
+    border: 1px solid #222;
+    width: 120px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+.language-menu button {
+    width: 100%;
+    border: none;
+    background: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.concept-input-wrap {
+    position: relative;
+}
+
+.concept-input {
+    width: 100%;
+    min-height: 54px;
+    border: 1px solid #000;
+    padding: 0 55px 0 12px;
+    outline: none;
+    resize: none;
+}
+
+.camera-inside {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: white;
+    color: #111;
+}
+
+.concept-canvas {
+    margin-top: 25px;
+    min-height: 430px;
+    position: relative;
+}
+
+.concept-solution {
+    color: #1B2A45;
+    line-height: 1.65;
+}
+
+.solution-box {
+    margin-top: 14px;
+    padding: 15px;
+    border-left: 4px solid #2457D6;
+    background: #F6FAFF;
+}
+
+.decor-art {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+    width: 145px;
+    opacity: .9;
+}
+
+/* ---------------- MODAL ---------------- */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,.35);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.modal {
+    width: min(520px, 100%);
+    background: white;
+    border-radius: 22px 22px 0 0;
+    padding: 22px;
+}
+
+.modal h3 {
+    margin: 0 0 17px;
+    font-size: 20px;
+    color: #173F9F;
+}
+
+.modal-option {
+    width: 100%;
+    min-height: 54px;
+    margin-bottom: 10px;
+    background: white;
+    border: 1px solid #222;
+    border-radius: 7px;
+    text-align: left;
+    padding: 0 14px;
+    color: #173F9F;
+    font-weight: 700;
+}
+
+/* ---------------- QUESTION SET ---------------- */
+
+.section-title {
+    color: #111827;
+    font-size: 21px;
+    font-weight: 800;
+    margin: 28px 0 14px;
+}
+
+.set-create {
+    display: flex;
+    gap: 9px;
+}
+
+.set-create input {
+    flex: 1;
+}
+
+.small-blue-btn {
+    border: none;
+    background: #2457D6;
+    color: white;
+    padding: 0 17px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.set-list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.set-item {
+    width: 100%;
+    min-height: 55px;
+    border: 1px solid #222;
+    background: white;
+    color: #2457D6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.attachment-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+}
+
+.attach-btn {
+    height: 85px;
+    background: white;
+    border: 1px solid #2457D6;
+    color: #2457D6;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.topic-form {
+    border: 1px solid #DCE4F4;
+    border-radius: 12px;
+    padding: 17px;
+    background: #fff;
+}
+
+/* ---------------- RECAP ---------------- */
+
+.recap-header-box {
+    border: 1px solid #222;
+    min-height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2457D6;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.recap-set-list {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recap-set {
+    border: 1px solid #222;
+    background: white;
+    min-height: 52px;
+    color: #2457D6;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+}
+
+.selection-panel {
+    margin-top: 25px;
+    border: 1px solid #222;
+    padding: 15px;
+}
+
+.selection-panel h3 {
+    margin: 0 0 12px;
+    color: #173F9F;
+}
+
+.selection-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.selection-options button {
+    min-height: 48px;
+    border: 1px solid #222;
+    background: white;
+    color: #2457D6;
+    font-weight: 700;
+}
+
+.recap-title {
+    text-align: center;
+    color: #2457D6;
+    font-size: 27px;
+    font-weight: 800;
+    margin: 20px 0 25px;
+}
+
+.recap-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.control-box {
+    border: 1px solid #222;
+    background: white;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.control-box button {
+    height: 43px;
+    border: none;
+    background: white;
+    padding: 0 13px;
+    color: #2457D6;
+    font-weight: 700;
+}
+
+.control-box button.selected {
+    background: #EAF4FF;
+}
+
+.hide-btn {
+    min-height: 45px;
+    border: 1px solid #222;
+    background: white;
+    color: #2457D6;
+    padding: 0 20px;
+    font-weight: 800;
+}
+
+.question-display {
+    margin-top: 27px;
+    border: 1px solid #D4D8DF;
+    padding: 20px;
+    min-height: 180px;
+    border-radius: 7px;
+}
+
+.question-label {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.question-text {
+    font-size: 21px;
+    font-weight: 700;
+    color: #17213A;
+}
+
+.answer-text {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #E4E5E8;
+    color: #2457D6;
+    font-weight: 600;
+}
+
+.next-question {
+    margin-top: 20px;
+    width: 100%;
+    height: 51px;
+    border: 1px solid #111;
+    background: #fff;
+    box-shadow: 0 3px 0 #111;
+    color: #173F9F;
+    font-weight: 800;
+}
+
+.condition-panel {
+    margin-top: 12px;
+    border: 1px solid #222;
+    padding: 12px;
+}
+
+/* ---------------- TOAST ---------------- */
+
+.toast {
+    position: fixed;
+    z-index: 200;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #20242B;
+    color: white;
+    padding: 11px 17px;
+    border-radius: 7px;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 380px) {
+    .feature-grid {
+        gap: 11px;
+        padding: 15px;
+    }
+
+    .feature-card {
+        min-height: 155px;
+    }
+
+    .hero {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .hero-art {
+        width: 120px;
+    }
+
+    .motivation {
+        font-size: 19px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <!-- HOME PAGE -->
-    <div id="home-page">
-        <div class="home-container">
-            <div class="main-title">YOURSELF</div>
-            <div class="sub-text">Test yourself without needing anyone to ask you questions.</div>
-            <div class="auth-links">
-                <a onclick="showPage('signup-page')">Sign Up</a>
-                <a onclick="showPage('signin-page')">Sign In</a>
+<div class="app" id="app">
+
+<!-- =========================================================
+     HOME SCREEN
+========================================================= -->
+
+<section id="homeScreen" class="screen">
+
+    <header class="home-header">
+
+        <div class="logo-wrap">
+
+            <!-- Inline logo so no external image is required -->
+            <svg class="logo-icon" viewBox="0 0 60 60">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#2457D6"/>
+                        <stop offset="55%" stop-color="#5C62E8"/>
+                        <stop offset="100%" stop-color="#A74BEA"/>
+                    </linearGradient>
+                </defs>
+
+                <path
+                    d="M17 10
+                       C13 10 10 13 10 17
+                       C10 21 13 24 17 24
+                       L24 24
+                       L18 45
+                       C17 49 20 52 24 52
+                       C27 52 29 50 30 47
+                       L35 31
+                       L41 38
+                       C44 41 49 40 51 37
+                       C53 34 52 30 49 27
+                       L39 17
+                       C36 14 31 15 29 19
+                       L27 22
+                       L23 15
+                       C22 12 20 10 17 10Z"
+                    fill="url(#logoGradient)"
+                />
+
+                <circle cx="36" cy="12" r="6" fill="#8A45E8"/>
+            </svg>
+
+            <div class="logo-text">Yourself</div>
+
+        </div>
+
+        <button class="profile" onclick="openProfile()" aria-label="Profile">
+            <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/>
+            </svg>
+        </button>
+
+    </header>
+
+
+    <div class="hero">
+
+        <div>
+            <h1>Hey there! 👋</h1>
+
+            <p>
+                Small steps make big progress<br>
+                Keep going! 💙
+            </p>
+        </div>
+
+        <!-- Educational illustration -->
+        <svg class="hero-art" viewBox="0 0 200 180">
+
+            <ellipse cx="100" cy="135" rx="78" ry="25" fill="#EAF4FF"/>
+
+            <rect x="55" y="111" width="90" height="16" rx="5" fill="#3D76DF"/>
+            <rect x="68" y="94" width="78" height="17" rx="5" fill="#8C5BE8"/>
+            <rect x="55" y="78" width="83" height="18" rx="5" fill="#3484E8"/>
+
+            <path d="M85 77 Q92 42 100 70 Q108 42 116 77Z"
+                  fill="#2D94B9"/>
+
+            <circle cx="101" cy="42" r="19" fill="#FFC83D"/>
+            <path d="M91 57h20v12H91z" fill="#FFAA2B"/>
+
+            <g stroke="#FFC83D" stroke-width="3">
+                <path d="M101 13v10"/>
+                <path d="M76 24l7 7"/>
+                <path d="M126 24l-7 7"/>
+                <path d="M69 43H58"/>
+                <path d="M133 43h10"/>
+            </g>
+
+            <path d="M42 94 Q48 76 55 92" stroke="#21A6C7" stroke-width="4" fill="none"/>
+            <path d="M148 70 Q158 57 161 75" stroke="#21A6C7" stroke-width="4" fill="none"/>
+
+            <g fill="#4E8DE8">
+                <path d="M35 47l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/>
+                <path d="M161 102l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/>
+            </g>
+        </svg>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+        <!-- Pronunciation -->
+        <button class="feature-card card-blue" onclick="showScreen('pronunciationScreen')">
+
+            <svg class="card-icon" viewBox="0 0 80 80">
+
+                <path d="M15 32h16l22-16v48L31 48H15z"
+                      fill="#2869D8"/>
+
+                <rect x="8" y="32" width="25" height="16" rx="4"
+                      fill="#5C8CE7"/>
+
+                <path d="M53 25l8-7M55 40h14M53 55l8 7"
+                      stroke="#5C5FE7"
+                      stroke-width="4"
+                      stroke-linecap="round"/>
+
+            </svg>
+
+            <h3>Pronunciation</h3>
+
+        </button>
+
+
+        <!-- Concept -->
+        <button class="feature-card card-purple" onclick="showScreen('conceptScreen')">
+
+            <svg class="card-icon" viewBox="0 0 80 80">
+
+                <path d="M40 8c-14 0-25 10-25 23
+                         0 9 5 15 11 20v8h28v-8
+                         c6-5 11-11 11-20C65 18 54 8 40 8Z"
+                      fill="#2869D8"/>
+
+                <rect x="28" y="59" width="24" height="6" rx="2" fill="#7A55D9"/>
+                <rect x="31" y="68" width="18" height="5" rx="2" fill="#7A55D9"/>
+
+                <path d="M40 19v21M31 29h18"
+                      stroke="#EDE7FF"
+                      stroke-width="3"
+                      stroke-linecap="round"/>
+
+                <g stroke="#705FE7" stroke-width="3">
+                    <path d="M40 2v6"/>
+                    <path d="M15 12l5 5"/>
+                    <path d="M65 12l-5 5"/>
+                </g>
+
+            </svg>
+
+            <h3>Concept</h3>
+
+        </button>
+
+
+        <!-- Vocabulary -->
+        <button class="feature-card card-mint" onclick="showScreen('vocabularyScreen')">
+
+            <svg class="card-icon" viewBox="0 0 80 80">
+
+                <path d="M10 17h28c8 0 13 4 13 10v42H24
+                         c-8 0-14-4-14-11z"
+                      fill="none"
+                      stroke="#246AD7"
+                      stroke-width="5"/>
+
+                <path d="M70 17H42c-8 0-13 4-13 10v42h27
+                         c8 0 14-4 14-11z"
+                      fill="none"
+                      stroke="#246AD7"
+                      stroke-width="5"/>
+
+                <path d="M40 27v42" stroke="#246AD7" stroke-width="4"/>
+
+            </svg>
+
+            <h3>Vocabulary</h3>
+
+        </button>
+
+
+        <!-- Translation -->
+        <button class="feature-card card-peach" onclick="showScreen('translationScreen')">
+
+            <svg class="card-icon" viewBox="0 0 80 80">
+
+                <rect x="8" y="14" width="37" height="30" rx="7"
+                      fill="#1774E8"/>
+
+                <text x="20" y="36" font-size="21"
+                      fill="white" font-weight="bold">A</text>
+
+                <rect x="35" y="36" width="37" height="30" rx="7"
+                      fill="#55A0E8"/>
+
+                <text x="46" y="58" font-size="20"
+                      fill="white">文</text>
+
+                <path d="M44 24l11 4-7 7"
+                      stroke="#705FE7"
+                      stroke-width="3"
+                      fill="none"/>
+
+                <path d="M37 55l-11-4 7-7"
+                      stroke="#705FE7"
+                      stroke-width="3"
+                      fill="none"/>
+
+            </svg>
+
+            <h3>Translation</h3>
+
+        </button>
+
+    </div>
+
+
+    <div class="home-bottom">
+
+        <div class="motivation">
+            <span>Better</span>
+            <span>Learning</span>
+            <span>Brighter</span>
+            <span>Future</span>
+        </div>
+
+        <svg class="bottom-art" viewBox="0 0 250 160">
+
+            <ellipse cx="125" cy="135" rx="105" ry="20"
+                     fill="#EFF7FF"/>
+
+            <rect x="70" y="72" width="45" height="60"
+                  rx="6" fill="#285FD0"/>
+
+            <rect x="77" y="45" width="7" height="38"
+                  rx="3" fill="#F5A623"
+                  transform="rotate(-8 77 45)"/>
+
+            <rect x="92" y="42" width="7" height="41"
+                  rx="3" fill="#E95DAB"
+                  transform="rotate(2 92 42)"/>
+
+            <rect x="106" y="44" width="7" height="40"
+                  rx="3" fill="#45A6E8"
+                  transform="rotate(8 106 44)"/>
+
+            <rect x="122" y="103" width="86" height="17"
+                  rx="4" fill="#386FE0"/>
+
+            <rect x="132" y="86" width="82" height="17"
+                  rx="4" fill="#8058DF"/>
+
+            <rect x="125" y="69" width="84" height="17"
+                  rx="4" fill="#347DDC"/>
+
+            <path d="M202 45l25-14-8 18 8 5z"
+                  fill="#3A83E7"/>
+
+            <path d="M199 51q25 5 31-20"
+                  stroke="#6A9BEA"
+                  stroke-width="2"
+                  fill="none"
+                  stroke-dasharray="5 5"/>
+
+        </svg>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SIGN IN
+========================================================= -->
+
+<section id="signInScreen" class="screen hidden">
+
+    <div class="auth-page">
+
+        <div class="auth-logo">
+            <div class="logo-wrap">
+                <svg class="logo-icon" viewBox="0 0 60 60">
+                    <defs>
+                        <linearGradient id="logoGradient2" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#2457D6"/>
+                            <stop offset="55%" stop-color="#5C62E8"/>
+                            <stop offset="100%" stop-color="#A74BEA"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M17 10C13 10 10 13 10 17C10 21 13 24 17 24H24L18 45C17 49 20 52 24 52C27 52 29 50 30 47L35 31L41 38C44 41 49 40 51 37C53 34 52 30 49 27L39 17C36 14 31 15 29 19L27 22L23 15C22 12 20 10 17 10Z" fill="url(#logoGradient2)"/>
+                    <circle cx="36" cy="12" r="6" fill="#8A45E8"/>
+                </svg>
+                <div class="logo-text">Yourself</div>
             </div>
         </div>
-    </div>
 
-    <!-- SIGN UP -->
-    <div id="signup-page" class="form-page">
-        <div class="global-back" onclick="showPage('home-page')">&larr;</div>
-        <div class="box">
-            <h2>Sign Up</h2>
-            <form onsubmit="handleSignUp(event)">
-                <div class="input-group"><label>Username</label><input type="text" id="signupUsernameInput" required></div>
-                <div class="input-group"><label>Email</label><input type="email" id="signupEmailInput" required></div>
-                <div class="input-group"><label>Password</label><input type="password" id="signupPasswordInput" required></div>
-                <button type="submit" class="btn-done">Done</button>
-            </form>
-        </div>
-    </div>
 
-    <!-- SIGN IN -->
-    <div id="signin-page" class="form-page">
-        <div class="global-back" onclick="showPage('home-page')">&larr;</div>
-        <div class="box">
-            <h2>Sign In</h2>
-            <form onsubmit="handleSignIn(event)">
-                <div class="input-group"><label>Username</label><input type="text" id="signinUsernameInput" required></div>
-                <div class="input-group"><label>Password</label><input type="password" id="signinPasswordInput" required></div>
-                <button type="submit" class="btn-done">Done</button>
-            </form>
-        </div>
-    </div>
+        <div class="auth-content">
 
-    <!-- DASHBOARD -->
-    <div id="dashboard-page">
-        <div class="dashboard-header">
-            <div class="dashboard-logo">YOURSELF</div>
-            <div class="dashboard-icons">
-                <span onclick="showPage('account-page')" title="Account">👤</span>
-                <span onclick="toggleMenu()" title="Menu">☰</span>
-            </div>
-        </div>
-        <div id="menuDropdown" class="menu-dropdown">
-            <a href="#">Menu</a>
-            <a href="#">Help</a>
-            <a href="#">Setting</a>
-        </div>
-        <div class="dashboard-content">
-            <div id="box-topic" class="dash-box" onclick="showPage('topic-page')">Topic</div>
-            <div id="box-revision" class="dash-box" onclick="openRevisionFirstPage()">Revision</div>
-            <div id="box-mistake" class="dash-box" onclick="openMistakeTopicsPage()">Mistake</div>
-        </div>
-    </div>
+            <h1 class="auth-title">Sign In</h1>
 
-    <!-- ACCOUNT PAGE -->
-    <div id="account-page">
-        <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
-        <div class="account-box">
-            <h2>Account Profile</h2>
-            <div class="profile-pic-container">👤<span class="camera-icon">📷</span></div>
-            <div class="account-input-group"><label>Username</label><input type="text" id="profileUsernameInput" readonly></div>
-            <div class="account-input-group"><label>Email</label><input type="text" id="profileEmailInput" readonly></div>
-            <button class="btn-logout" onclick="showPage('home-page')">Log Out</button>
-        </div>
-    </div>
-
-    <!-- TOPIC MANAGEMENT -->
-    <div id="topic-page">
-        <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
-        <div class="topic-main-box">
-            <h2>Manage Topics</h2>
-            <input type="text" id="topicInput" class="topic-input" placeholder="Add topic">
-            <button class="btn-done" onclick="addNewTopic()">Done</button>
-        </div>
-        <div id="topicsContainer" class="topics-grid"></div>
-    </div>
-
-    <!-- TOPIC DETAIL -->
-    <div id="topic-detail-page">
-        <div class="global-back" onclick="showPage('topic-page')">&larr;</div>
-        <div class="detail-main-box">
-            <h2 id="currentTopicTitle">Topic Name</h2>
-            <select id="questionType" class="detail-select">
-                <option value="MCQs">MCQs (Multiple Choice)</option>
-                <option value="Fill in the blanks">Fill in the blanks</option>
-                <option value="English Meanings">English Meanings (Photo: Eng=Q, Hin=Ans)</option>
-                <option value="Hindi Meanings">Hindi Meanings (Photo: Hin=Q, Eng=Ans)</option>
-                <option value="Question & Answer">Question & Answer</option>
-            </select>
-            <input type="text" id="questionInput" class="detail-input" placeholder="Type your question here...">
-            <input type="text" id="answerInput" class="detail-input" placeholder="Type answer here...">
-            <div class="upload-options">
-                <label class="upload-btn-label">📷 Camera<input type="file" accept="image/*" capture="environment" onchange="previewFile(event)"></label>
-                <label class="upload-btn-label">🖼️ Gallery<input type="file" accept="image/*" onchange="previewFile(event)"></label>
-                <label class="upload-btn-label">📄 PDF<input type="file" accept=".pdf" onchange="previewFile(event)"></label>
-            </div>
-            <div id="fileInfoDisplay" style="font-size: 13px; color: #555; margin-bottom: 10px; font-style: italic;"></div>
-            <button class="btn-done" onclick="addNewQuestion()">Add Question (Done)</button>
-        </div>
-        <div id="questionsContainer" class="questions-list"></div>
-    </div>
-
-    <!-- REVISION PAGE 1 -->
-    <div id="revision-page">
-        <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
-        <div class="revision-center-box">
-            <div class="rev-topic-box" onclick="toggleRevTopicDropdown()">Topic</div>
-            <div id="revTopicSelectionList"></div>
-            <div id="revQuestionPickerBox"></div>
-            <button id="revDoneBtn" class="btn-done" style="display:none;" onclick="goToRevisionStartPage()">Done</button>
-        </div>
-    </div>
-
-    <!-- REVISION START PAGE -->
-    <div id="revision-start-page">
-        <div class="global-back" onclick="openRevisionFirstPage()">&larr;</div>
-        <div class="rev-left-controls">
-            <div class="rev-ctrl-item">
-                <span>Mode:</span>
-                <select id="revModeSelect">
-                    <option value="Series">Series</option>
-                    <option value="Random">Random</option>
-                </select>
-            </div>
-            <div class="rev-ctrl-item">
-                <span>Mistake:</span>
-                <select id="revMistakeSelect">
-                    <option value="Off">Off</option>
-                    <option value="On">On</option>
-                </select>
-            </div>
-        </div>
-        <div class="rev-right-controls">
-            <div class="rev-ctrl-item">
-                <span id="displayUsernameLabel">Ashita</span>
-                <select id="revGroupSelect" onchange="handleGroupToggle(this.value)">
-                    <option value="Individual">Individual</option>
-                    <option value="Group">Group</option>
-                </select>
-            </div>
-        </div>
-        <div id="groupNamesModal">
-            <div style="font-weight:bold; font-size:14px; margin-bottom:6px;">Add Name & Image:</div>
-            <div class="group-row-input">
-                <input type="text" id="groupMemberInput" placeholder="Name 😃" style="flex:1; padding:8px; background:#333; color:#fff; border:1px solid #555; border-radius:4px;">
-                <label style="background:#0000FF; color:white; padding:8px 10px; border-radius:4px; cursor:pointer; font-size:14px;" title="Upload Member Image">
-                    📷<input type="file" id="groupMemberImgInput" accept="image/*" style="display:none;">
-                </label>
-            </div>
-            <button class="btn-done" style="padding:8px; font-size:14px; margin-top:8px;" onclick="addMemberToGroup()">Add Member</button>
-            <div id="groupNamesListDisplay">No members added yet.</div>
-        </div>
-        <div class="rev-start-center-box" onclick="startActiveQuiz()">
-            Start The Revision
-        </div>
-    </div>
-
-    <!-- ACTIVE QUIZ PLAY PAGE -->
-    <div id="quiz-play-page">
-        <div class="global-back" onclick="showPage('revision-start-page')">&larr;</div>
-        <div class="quiz-card-box">
-            <h3 id="quizTopicHeader" style="color: #0000FF; margin-top:0; font-size:20px;">Topic</h3>
-            <div id="assignedUserDisplay" style="color: #00ffcc; font-size: 16px; font-weight: bold; margin-bottom: 6px;"></div>
-            <div id="assignedUserImgContainer" style="margin-bottom: 12px;"></div>
-            <div id="quizQuestionBox" style="font-size: 24px; font-weight: bold; margin: 20px 0; line-height: 1.4;">Question here</div>
-            
-            <div class="quiz-input-row">
-                <input type="text" id="userAnswerInput" class="quiz-text-input" placeholder="Type answer here...">
-                <button class="mic-btn" onclick="startVoiceInput()" title="Speak Answer">🎤</button>
+            <div class="auth-field">
+                <label for="signinUsername">Username</label>
+                <input id="signinUsername"
+                       class="auth-input"
+                       type="text"
+                       autocomplete="username">
             </div>
 
-            <button id="submitAnsBtn" class="submit-answer-btn" onclick="submitQuizAnswer()">Submit Answer</button>
-            <button id="nextQBtn" class="next-question-btn" onclick="nextQuizQuestion()">Next Question &rarr;</button>
+            <div class="auth-field">
+                <label for="signinPassword">Password</label>
+                <input id="signinPassword"
+                       class="auth-input"
+                       type="password"
+                       autocomplete="current-password">
+            </div>
 
-            <div id="quizFeedbackDisplay"></div>
+            <button class="auth-submit" onclick="signIn()">
+                Sign In
+            </button>
+
+            <div class="auth-switch">
+                Don't have an account?
+                <button onclick="showScreen('signUpScreen')">Sign Up</button>
+            </div>
+
         </div>
+
     </div>
 
-    <!-- MISTAKE TOPICS PAGE -->
-    <div id="mistake-topics-page">
-        <div class="global-back" onclick="showPage('dashboard-page')">&larr;</div>
-        <div class="mistake-top-heading">Mistake</div>
-        <div id="mistakeTopicsContainer" class="mistake-topic-grid"></div>
+</section>
+
+
+<!-- =========================================================
+     SIGN UP
+========================================================= -->
+
+<section id="signUpScreen" class="screen hidden">
+
+    <div class="auth-page">
+
+        <div class="auth-logo">
+
+            <div class="logo-wrap">
+
+                <svg class="logo-icon" viewBox="0 0 60 60">
+                    <defs>
+                        <linearGradient id="logoGradient3" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#2457D6"/>
+                            <stop offset="55%" stop-color="#5C62E8"/>
+                            <stop offset="100%" stop-color="#A74BEA"/>
+                        </linearGradient>
+                    </defs>
+
+                    <path d="M17 10C13 10 10 13 10 17C10 21 13 24 17 24H24L18 45C17 49 20 52 24 52C27 52 29 50 30 47L35 31L41 38C44 41 49 40 51 37C53 34 52 30 49 27L39 17C36 14 31 15 29 19L27 22L23 15C22 12 20 10 17 10Z" fill="url(#logoGradient3)"/>
+
+                    <circle cx="36" cy="12" r="6" fill="#8A45E8"/>
+                </svg>
+
+                <div class="logo-text">Yourself</div>
+
+            </div>
+
+        </div>
+
+
+        <div class="auth-content">
+
+            <h1 class="auth-title">Sign Up</h1>
+
+            <div class="auth-field">
+                <label for="signupUsername">Username</label>
+                <input id="signupUsername"
+                       class="auth-input"
+                       type="text"
+                       autocomplete="username">
+            </div>
+
+            <div class="auth-field">
+                <label for="signupPassword">Password</label>
+                <input id="signupPassword"
+                       class="auth-input"
+                       type="password"
+                       autocomplete="new-password">
+            </div>
+
+            <button class="auth-submit" onclick="signUp()">
+                Sign Up
+            </button>
+
+            <div class="auth-switch">
+                Already have an account?
+                <button onclick="showScreen('signInScreen')">Sign In</button>
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- MISTAKE DETAIL PAGE -->
-    <div id="mistake-detail-page">
-        <div class="global-back" onclick="openMistakeTopicsPage()">&larr;</div>
-        <div class="mistake-top-heading" id="mistakeDetailTopicTitle">Mistake - Topic</div>
-        <div id="mistakeQuestionsContainer" class="mistake-detail-container"></div>
+</section>
+
+
+<!-- =========================================================
+     PRONUNCIATION
+========================================================= -->
+
+<section id="pronunciationScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn" onclick="goHome()">← Back</button>
+
+        <h1 class="page-title">Pronunciation</h1>
+
+
+        <div class="pronunciation-input-row">
+
+            <input id="pronunciationInput"
+                   class="pronunciation-input"
+                   type="text"
+                   oninput="updatePronunciation()">
+
+            <button class="icon-circle"
+                    onclick="startSpeechRecognition()"
+                    aria-label="Voice input">
+
+                <svg width="25" height="25"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <rect x="9" y="2" width="6" height="12" rx="3"/>
+                    <path d="M5 11a7 7 0 0014 0"/>
+                    <path d="M12 18v4"/>
+                    <path d="M8 22h8"/>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <div class="pronunciation-result">
+
+            <div class="result-row">
+
+                <span id="pronunciationOutput"></span>
+
+                <button class="speaker-btn"
+                        onclick="speakPronunciation()"
+                        aria-label="Speak">
+
+                    <svg width="23" height="23"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+
+                        <path d="M11 5L6 9H2v6h4l5 4z"/>
+                        <path d="M15.5 8.5a5 5 0 010 7"/>
+                        <path d="M18.5 5.5a9 9 0 010 13"/>
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="bottom-actions">
+
+            <button class="square-action"
+                    onclick="savePronunciation()">
+
+                <svg width="25" height="25"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="#2457D6"
+                     stroke-width="2">
+
+                    <path d="M5 3h14v18l-7-4-7 4z"/>
+
+                </svg>
+
+                Save
+
+            </button>
+
+
+            <button class="square-action delete-action"
+                    onclick="deletePronunciation()">
+
+                <svg width="25" height="25"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <path d="M4 7h16"/>
+                    <path d="M10 11v6M14 11v6"/>
+                    <path d="M6 7l1 14h10l1-14"/>
+                    <path d="M9 7V4h6v3"/>
+
+                </svg>
+
+                Delete
+
+            </button>
+
+        </div>
+
     </div>
 
-    <script>
-        let globalUsername = "";
-        let globalEmail = "";
-        let usersDB = JSON.parse(localStorage.getItem('yourself_usersDB')) || {};
-        let topicData = {}; 
-        let selectedTopicName = "";
-        let chosenRevisionTopic = "";
-        let selectedQuestionsForRevision = [];
-        let currentQuizQuestions = [];
-        let currentQuizIndex = 0;
-        let groupMembers = []; // Stores {name, img}
+</section>
 
-        function showPage(pageId) {
-            ['home-page', 'signup-page', 'signin-page', 'dashboard-page', 'account-page', 'topic-page', 'topic-detail-page', 'revision-page', 'revision-start-page', 'quiz-play-page', 'mistake-topics-page', 'mistake-detail-page'].forEach(p => {
-                let el = document.getElementById(p);
-                if(el) el.style.display = 'none';
-            });
-            document.getElementById(pageId).style.display = 'flex';
-            let menu = document.getElementById('menuDropdown');
-            if(menu) menu.style.display = 'none';
-        }
 
-        function handleSignUp(event) {
-            event.preventDefault();
-            let u = document.getElementById('signupUsernameInput').value.trim();
-            let e = document.getElementById('signupEmailInput').value.trim();
-            let p = document.getElementById('signupPasswordInput').value.trim();
-            if(usersDB[u]) { alert("Username already exists!"); return; }
-            usersDB[u] = { email: e, password: p, topicData: {} };
-            localStorage.setItem('yourself_usersDB', JSON.stringify(usersDB));
-            globalUsername = u;
-            globalEmail = e;
-            topicData = usersDB[u].topicData;
-            document.getElementById('profileUsernameInput').value = globalUsername;
-            document.getElementById('profileEmailInput').value = globalEmail;
-            alert("Account created successfully!");
-            showPage('dashboard-page');
-            renderTopicsList();
-        }
+<!-- =========================================================
+     CONCEPT
+========================================================= -->
 
-        function handleSignIn(event) {
-            event.preventDefault();
-            let u = document.getElementById('signinUsernameInput').value.trim();
-            let p = document.getElementById('signinPasswordInput').value.trim();
-            if(!usersDB[u] || usersDB[u].password !== p) {
-                alert("Incorrect username or password!");
-                return;
+<section id="conceptScreen" class="screen hidden">
+
+    <div class="page">
+
+        <div class="concept-header">
+
+            <h1 class="page-title" style="margin-bottom:20px;">
+                Concept
+            </h1>
+
+            <button class="language-select"
+                    onclick="toggleLanguageMenu()">
+
+                <span id="currentLanguage">English</span> ▾
+
+            </button>
+
+            <div id="languageMenu"
+                 class="language-menu hidden">
+
+                <button onclick="setLanguage('English')">
+                    English
+                </button>
+
+                <button onclick="setLanguage('Hindi')">
+                    Hindi
+                </button>
+
+                <button onclick="setLanguage('Hinglish')">
+                    Hinglish
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="concept-input-wrap">
+
+            <textarea id="conceptInput"
+                      class="concept-input"
+                      rows="1"></textarea>
+
+            <button class="camera-inside"
+                    onclick="openCameraMenu()">
+
+                <svg width="25" height="25"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <path d="M4 7h4l2-2h4l2 2h4v12H4z"/>
+                    <circle cx="12" cy="13" r="3"/>
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <div id="conceptCanvas"
+             class="concept-canvas">
+
+            <div id="conceptSolution"
+                 class="concept-solution">
+
+                <p style="color:#8A8F99;">
+                    Your explanation will appear here.
+                </p>
+
+            </div>
+
+
+            <!-- Small educational illustration -->
+            <svg class="decor-art"
+                 viewBox="0 0 160 140">
+
+                <ellipse cx="80" cy="120"
+                         rx="65" ry="12"
+                         fill="#EDF6FF"/>
+
+                <rect x="45" y="88"
+                      width="75" height="14"
+                      rx="4"
+                      fill="#3475DF"/>
+
+                <rect x="55" y="74"
+                      width="65" height="14"
+                      rx="4"
+                      fill="#8258DF"/>
+
+                <rect x="48" y="60"
+                      width="66" height="14"
+                      rx="4"
+                      fill="#3984DD"/>
+
+                <circle cx="82"
+                        cy="37"
+                        r="17"
+                        fill="#FFC83D"/>
+
+                <rect x="74" y="52"
+                      width="16"
+                      height="7"
+                      rx="2"
+                      fill="#F2A52C"/>
+
+                <path d="M82 10v9M58 19l6 6M106 19l-6 6"
+                      stroke="#F4B22F"
+                      stroke-width="3"/>
+
+            </svg>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     VOCABULARY
+========================================================= -->
+
+<section id="vocabularyScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn" onclick="goHome()">← Back</button>
+
+        <h1 class="page-title">Vocabulary</h1>
+
+        <label class="label">Add Word</label>
+
+        <input id="vocabularyWord"
+               class="input"
+               type="text">
+
+        <div style="height:15px;"></div>
+
+        <label class="label">Meaning</label>
+
+        <textarea id="vocabularyMeaning"
+                  class="textarea"></textarea>
+
+        <div style="height:15px;"></div>
+
+        <button class="blue-btn"
+                onclick="saveVocabulary()">
+
+            Save
+
+        </button>
+
+        <h2 class="section-title">Saved Vocabulary</h2>
+
+        <div id="vocabularyList"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRANSLATION
+========================================================= -->
+
+<section id="translationScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn" onclick="goHome()">← Back</button>
+
+        <h1 class="page-title">Translation</h1>
+
+        <label class="label">Text</label>
+
+        <textarea id="translationInput"
+                  class="textarea"></textarea>
+
+        <div style="height:18px;"></div>
+
+        <button class="blue-btn"
+                onclick="translateText()">
+
+            Translate
+
+        </button>
+
+        <div style="height:20px;"></div>
+
+        <label class="label">Translation</label>
+
+        <div id="translationOutput"
+             class="solution-box"
+             style="min-height:100px;">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     QUESTION SET
+========================================================= -->
+
+<section id="questionSetScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn" onclick="goHome()">← Back</button>
+
+        <h1 class="page-title">Question Set</h1>
+
+
+        <label class="label">
+            Name of Set
+        </label>
+
+
+        <div class="set-create">
+
+            <input id="setNameInput"
+                   class="input"
+                   placeholder="Add Set Name">
+
+            <button class="small-blue-btn"
+                    onclick="createQuestionSet()">
+
+                Add
+
+            </button>
+
+        </div>
+
+
+        <h2 class="section-title">
+            Saved Sets
+        </h2>
+
+
+        <div id="questionSetList"
+             class="set-list">
+        </div>
+
+
+        <div style="margin-top:35px;text-align:center;">
+
+            <svg width="210"
+                 height="150"
+                 viewBox="0 0 210 150">
+
+                <ellipse cx="105"
+                         cy="130"
+                         rx="80"
+                         ry="13"
+                         fill="#EEF7FF"/>
+
+                <rect x="67"
+                      y="86"
+                      width="70"
+                      height="14"
+                      rx="4"
+                      fill="#3275DD"/>
+
+                <rect x="76"
+                      y="72"
+                      width="62"
+                      height="14"
+                      rx="4"
+                      fill="#8057DE"/>
+
+                <rect x="69"
+                      y="58"
+                      width="64"
+                      height="14"
+                      rx="4"
+                      fill="#3584DD"/>
+
+                <circle cx="102"
+                        cy="35"
+                        r="17"
+                        fill="#FFD04A"/>
+
+                <path d="M102 8v9M80 17l6 6M124 17l-6 6"
+                      stroke="#F4B12D"
+                      stroke-width="3"/>
+
+            </svg>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TOPIC DETAILS
+========================================================= -->
+
+<section id="topicScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn"
+                onclick="showScreen('questionSetScreen')">
+
+            ← Back
+
+        </button>
+
+        <h1 id="topicTitle"
+            class="page-title">
+            Set
+        </h1>
+
+
+        <div class="topic-form">
+
+            <label class="label">
+                Add the Question
+            </label>
+
+            <textarea id="questionInput"
+                      class="textarea"></textarea>
+
+
+            <div style="height:18px;"></div>
+
+
+            <label class="label">
+                Add the Answer
+            </label>
+
+            <textarea id="answerInput"
+                      class="textarea"></textarea>
+
+
+            <div style="height:18px;"></div>
+
+
+            <button class="blue-btn"
+                    onclick="saveQuestion()">
+
+                Save
+
+            </button>
+
+        </div>
+
+
+        <h2 class="section-title">
+            Add Attachments
+        </h2>
+
+
+        <div class="attachment-row">
+
+            <!-- Gallery -->
+            <button class="attach-btn"
+                    onclick="document.getElementById('galleryInput').click()">
+
+                <svg width="28"
+                     height="28"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <rect x="3" y="4"
+                          width="18"
+                          height="16"
+                          rx="2"/>
+
+                    <circle cx="8.5"
+                            cy="9"
+                            r="1.5"/>
+
+                    <path d="M21 15l-5-5L5 20"/>
+
+                </svg>
+
+                Gallery
+
+            </button>
+
+
+            <!-- Camera -->
+            <button class="attach-btn"
+                    onclick="document.getElementById('cameraInput').click()">
+
+                <svg width="28"
+                     height="28"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <path d="M4 7h4l2-2h4l2 2h4v12H4z"/>
+                    <circle cx="12" cy="13" r="3"/>
+
+                </svg>
+
+                Camera
+
+            </button>
+
+
+            <!-- PDF -->
+            <button class="attach-btn"
+                    onclick="document.getElementById('pdfInput').click()">
+
+                <svg width="28"
+                     height="28"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2">
+
+                    <path d="M6 2h9l5 5v15H6z"/>
+                    <path d="M14 2v6h6"/>
+
+                </svg>
+
+                PDF
+
+            </button>
+
+        </div>
+
+
+        <!-- Hidden file inputs -->
+        <input id="galleryInput"
+               type="file"
+               accept="image/*"
+               class="hidden"
+               onchange="handleImageOCR(this.files[0])">
+
+
+        <input id="cameraInput"
+               type="file"
+               accept="image/*"
+               capture="environment"
+               class="hidden"
+               onchange="handleImageOCR(this.files[0])">
+
+
+        <input id="pdfInput"
+               type="file"
+               accept="application/pdf"
+               class="hidden"
+               onchange="handlePDFOCR(this.files[0])">
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     RECAP SET SELECTION
+========================================================= -->
+
+<section id="recapScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn"
+                onclick="goHome()">
+
+            ← Back
+
+        </button>
+
+
+        <div class="recap-header-box">
+            Recap
+        </div>
+
+
+        <h2 class="section-title">
+            Question Sets
+        </h2>
+
+
+        <div id="recapSetList"
+             class="recap-set-list">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     RECAP MODE SELECTION
+========================================================= -->
+
+<section id="recapModeScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn"
+                onclick="showScreen('recapScreen')">
+
+            ← Back
+
+        </button>
+
+
+        <h1 id="recapModeTitle"
+            class="page-title">
+            Select Mode
+        </h1>
+
+
+        <div class="selection-panel">
+
+            <h3>
+                Choose how you want to recap
+            </h3>
+
+
+            <div class="selection-options">
+
+                <button onclick="openIndividualRecap()">
+                    Individual
+                </button>
+
+                <button onclick="openGroupRecap()">
+                    Group
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     INDIVIDUAL RECAP
+========================================================= -->
+
+<section id="individualRecapScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn"
+                onclick="showScreen('recapModeScreen')">
+
+            ← Back
+
+        </button>
+
+
+        <h1 id="individualRecapTitle"
+            class="recap-title">
+        </h1>
+
+
+        <!-- START + CONDITION -->
+
+        <div class="recap-controls">
+
+            <button class="outline-btn"
+                    onclick="startRecap()">
+
+                START
+
+            </button>
+
+
+            <button class="outline-btn"
+                    onclick="toggleCondition()">
+
+                Condition
+
+            </button>
+
+        </div>
+
+
+        <div id="conditionPanel"
+             class="condition-panel hidden">
+
+            <label class="label">
+                Add Condition
+            </label>
+
+            <input id="conditionInput"
+                   class="input"
+                   placeholder="Write your condition">
+
+            <div style="height:10px;"></div>
+
+            <button class="blue-btn"
+                    onclick="saveCondition()">
+
+                Save Condition
+
+            </button>
+
+        </div>
+
+
+        <!-- RANDOM / SERIES + HIDE -->
+
+        <div style="margin-top:17px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:10px;">
+
+            <div class="control-box">
+
+                <button id="randomBtn"
+                        class="selected"
+                        onclick="setRecapMode('random')">
+
+                    Random
+
+                </button>
+
+                <button id="seriesBtn"
+                        onclick="setRecapMode('series')">
+
+                    Series
+
+                </button>
+
+            </div>
+
+
+            <button id="hideAnswerBtn"
+                    class="hide-btn"
+                    onclick="toggleAnswer()">
+
+                HIDE
+
+            </button>
+
+        </div>
+
+
+        <!-- QUESTION -->
+
+        <div class="question-display">
+
+            <div class="question-label">
+                QUESTION
+            </div>
+
+            <div id="recapQuestion"
+                 class="question-text">
+
+                Press START to begin.
+
+            </div>
+
+
+            <div id="recapAnswer"
+                 class="answer-text hidden">
+
+            </div>
+
+        </div>
+
+
+        <button class="next-question"
+                onclick="nextQuestion()">
+
+            NEXT QUESTION
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     GROUP RECAP
+========================================================= -->
+
+<section id="groupRecapScreen" class="screen hidden">
+
+    <div class="page">
+
+        <button class="back-btn"
+                onclick="showScreen('recapModeScreen')">
+
+            ← Back
+
+        </button>
+
+
+        <h1 id="groupRecapTitle"
+            class="recap-title">
+        </h1>
+
+
+        <div class="selection-panel">
+
+            <h3>Group Recap</h3>
+
+            <p style="color:#666;line-height:1.5;">
+                Group recap is ready for the selected question set.
+            </p>
+
+            <button class="blue-btn"
+                    onclick="startGroupRecap()">
+
+                START
+
+            </button>
+
+        </div>
+
+
+        <div id="groupQuestionArea"
+             class="question-display hidden">
+
+            <div class="question-label">
+                QUESTION
+            </div>
+
+            <div id="groupQuestion"
+                 class="question-text">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CAMERA MODAL
+========================================================= -->
+
+<div id="cameraModal"
+     class="modal-overlay hidden"
+     onclick="closeCameraMenu(event)">
+
+    <div class="modal"
+         onclick="event.stopPropagation()">
+
+        <h3>
+            Add from
+        </h3>
+
+
+        <button class="modal-option"
+                onclick="openConceptCamera()">
+
+            📷 On-the-spot Photo Capture
+
+        </button>
+
+
+        <button class="modal-option"
+                onclick="openConceptGallery()">
+
+            🖼️ Upload Image from Gallery
+
+        </button>
+
+
+        <button class="modal-option"
+                onclick="openConceptPDF()">
+
+            📄 Upload PDF File
+
+        </button>
+
+
+        <button class="modal-option"
+                style="color:#222;"
+                onclick="closeCameraMenu()">
+
+            Cancel
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- Hidden Concept inputs -->
+
+<input id="conceptCameraInput"
+       type="file"
+       accept="image/*"
+       capture="environment"
+       class="hidden"
+       onchange="handleConceptImage(this.files[0])">
+
+
+<input id="conceptGalleryInput"
+       type="file"
+       accept="image/*"
+       class="hidden"
+       onchange="handleConceptImage(this.files[0])">
+
+
+<input id="conceptPDFInput"
+       type="file"
+       accept="application/pdf"
+       class="hidden"
+       onchange="handleConceptPDF(this.files[0])">
+
+
+<!-- Toast -->
+<div id="toast"
+     class="toast">
+</div>
+
+
+<!-- =========================================================
+     BOTTOM NAVIGATION
+========================================================= -->
+
+<nav id="bottomNav"
+     class="bottom-nav">
+
+    <button id="navHome"
+            class="nav-btn active"
+            onclick="goHome()">
+
+        <svg viewBox="0 0 24 24"
+             fill="currentColor">
+
+            <path d="M12 3L3 10v10a1 1 0 001 1h6v-6h4v6h6a1 1 0 001-1V10z"/>
+
+        </svg>
+
+        <span>Home</span>
+
+    </button>
+
+
+    <button id="navQuestion"
+            class="nav-btn"
+            onclick="showScreen('questionSetScreen')">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+
+            <rect x="5" y="3"
+                  width="14"
+                  height="18"
+                  rx="2"/>
+
+            <path d="M8 7h8M8 11h8M8 15h5"/>
+
+        </svg>
+
+        <span>Question Set</span>
+
+    </button>
+
+
+    <button id="navRecap"
+            class="nav-btn"
+            onclick="openRecap()">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+
+            <path d="M20 11a8 8 0 00-14.9-4M4 5v5h5"/>
+            <path d="M4 13a8 8 0 0014.9 4M20 19v-5h-5"/>
+
+        </svg>
+
+        <span>Recap</span>
+
+    </button>
+
+
+    <button id="navImprove"
+            class="nav-btn"
+            onclick="showImproveMessage()">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+
+            <path d="M12 3l1.7 6.3L20 11l-6.3 1.7L12 19l-1.7-6.3L4 11l6.3-1.7z"/>
+            <path d="M19 3v4M21 5h-4"/>
+
+        </svg>
+
+        <span>Improve</span>
+
+    </button>
+
+</nav>
+
+</div>
+
+
+<script>
+/* ============================================================
+   YOURSELF APP
+   Single-file application logic
+============================================================ */
+
+
+/* ------------------------------------------------------------
+   GLOBAL STATE
+------------------------------------------------------------ */
+
+let currentScreen = "homeScreen";
+
+let selectedSetName = "";
+
+let currentRecapMode = "random";
+
+let recapQuestions = [];
+
+let recapIndex = 0;
+
+let answerVisible = false;
+
+let currentLanguage = "English";
+
+
+/* ------------------------------------------------------------
+   DEFAULT QUESTION SETS
+   These are only examples for first use.
+   User-created sets are saved in localStorage.
+------------------------------------------------------------ */
+
+const defaultSets = [
+    {
+        name: "English",
+        questions: [
+            {
+                question: "What is the simple present tense?",
+                answer: "The simple present tense is used for habits, routines, facts and general truths."
+            },
+            {
+                question: "What is a noun?",
+                answer: "A noun is a word used to name a person, place, thing or idea."
             }
-            globalUsername = u;
-            globalEmail = usersDB[u].email || "";
-            topicData = usersDB[u].topicData;
-            document.getElementById('profileUsernameInput').value = globalUsername;
-            document.getElementById('profileEmailInput').value = globalEmail;
-            showPage('dashboard-page');
-            renderTopicsList();
-        }
-
-        function saveDataToDB() {
-            if(globalUsername && usersDB[globalUsername]) {
-                usersDB[globalUsername].topicData = topicData;
-                localStorage.setItem('yourself_usersDB', JSON.stringify(usersDB));
+        ]
+    },
+    {
+        name: "Science",
+        questions: [
+            {
+                question: "What is photosynthesis?",
+                answer: "Photosynthesis is the process by which green plants use sunlight to make food."
             }
-        }
+        ]
+    }
+];
 
-        function toggleMenu() {
-            let menu = document.getElementById('menuDropdown');
-            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-        }
 
-        function addNewTopic() {
-            let inputField = document.getElementById('topicInput');
-            let tText = inputField.value.trim();
-            if (!tText) { alert("Enter topic name!"); return; }
-            if (!topicData[tText]) topicData[tText] = [];
-            saveDataToDB();
-            renderTopicsList();
-            inputField.value = "";
-        }
+/* ------------------------------------------------------------
+   LOCAL STORAGE HELPERS
+------------------------------------------------------------ */
 
-        function renderTopicsList() {
-            let container = document.getElementById('topicsContainer');
-            container.innerHTML = "";
-            for (let topic in topicData) {
-                let card = document.createElement('div');
-                card.className = 'topic-card';
-                card.innerText = topic;
-                card.onclick = () => openTopicDetail(topic);
-                container.appendChild(card);
-            }
-        }
+function getSets() {
 
-        function openTopicDetail(topicName) {
-            selectedTopicName = topicName;
-            document.getElementById('currentTopicTitle').innerText = topicName;
-            showPage('topic-detail-page');
-            renderQuestionsList();
-        }
+    const stored = localStorage.getItem("yourself_question_sets");
 
-        let uploadedFileObject = null;
-        function previewFile(event) {
-            let file = event.target.files[0];
-            if (file) {
-                uploadedFileObject = file;
-                document.getElementById('fileInfoDisplay').innerText = "File Attached: " + file.name;
-            }
-        }
+    if (!stored) {
 
-        function addNewQuestion() {
-            let qType = document.getElementById('questionType').value;
-            let qText = document.getElementById('questionInput').value.trim();
-            let aText = document.getElementById('answerInput').value.trim();
+        localStorage.setItem(
+            "yourself_question_sets",
+            JSON.stringify(defaultSets)
+        );
 
-            if (!qText && !uploadedFileObject) { alert("Please add question text or upload a file!"); return; }
+        return [...defaultSets];
+    }
 
-            let finalQText = qText;
-            let finalAnsText = aText;
+    try {
+        return JSON.parse(stored);
+    } catch {
+        return [...defaultSets];
+    }
+}
 
-            if ((qType === "English Meanings" || qType === "Hindi Meanings") && uploadedFileObject) {
-                if (qType === "English Meanings") {
-                    finalQText = "Photo (English Meaning Question)";
-                    finalAnsText = "Photo (Hindi Meaning Answer)";
-                } else {
-                    finalQText = "Photo (Hindi Meaning Question)";
-                    finalAnsText = "Photo (English Meaning Answer)";
+
+function saveSets(sets) {
+
+    localStorage.setItem(
+        "yourself_question_sets",
+        JSON.stringify(sets)
+    );
+}
+
+
+/* ------------------------------------------------------------
+   SCREEN NAVIGATION
+------------------------------------------------------------ */
+
+function showScreen(id) {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+            screen.classList.add("hidden");
+        });
+
+    const target = document.getElementById(id);
+
+    if (target) {
+        target.classList.remove("hidden");
+        currentScreen = id;
+    }
+
+    updateBottomNavigation(id);
+
+    window.scrollTo({
+        top: 0,
+        behavior: "instant"
+    });
+}
+
+
+function goHome() {
+    showScreen("homeScreen");
+}
+
+
+function updateBottomNavigation(id) {
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    if (
+        id === "homeScreen" ||
+        id === "pronunciationScreen" ||
+        id === "conceptScreen" ||
+        id === "vocabularyScreen" ||
+        id === "translationScreen"
+    ) {
+
+        document
+            .getElementById("navHome")
+            .classList.add("active");
+
+    }
+
+    if (
+        id === "questionSetScreen" ||
+        id === "topicScreen"
+    ) {
+
+        document
+            .getElementById("navQuestion")
+            .classList.add("active");
+
+    }
+
+    if (
+        id === "recapScreen" ||
+        id === "recapModeScreen" ||
+        id === "individualRecapScreen" ||
+        id === "groupRecapScreen"
+    ) {
+
+        document
+            .getElementById("navRecap")
+            .classList.add("active");
+
+    }
+}
+
+
+/* ------------------------------------------------------------
+   PROFILE
+------------------------------------------------------------ */
+
+function openProfile() {
+
+    const username =
+        localStorage.getItem("yourself_username");
+
+    if (username) {
+
+        showToast(
+            "Welcome back, " + username + "!"
+        );
+
+    } else {
+
+        showScreen("signInScreen");
+
+    }
+}
+
+
+/* ------------------------------------------------------------
+   SIGN UP
+------------------------------------------------------------ */
+
+function signUp() {
+
+    const username =
+        document
+            .getElementById("signupUsername")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("signupPassword")
+            .value;
+
+    if (!username || !password) {
+
+        showToast(
+            "Please enter Username and Password."
+        );
+
+        return;
+    }
+
+    localStorage.setItem(
+        "yourself_username",
+        username
+    );
+
+    localStorage.setItem(
+        "yourself_password",
+        password
+    );
+
+    showToast(
+        "Sign Up successful."
+    );
+
+    setTimeout(() => {
+
+        showScreen("homeScreen");
+
+    }, 700);
+}
+
+
+/* ------------------------------------------------------------
+   SIGN IN
+------------------------------------------------------------ */
+
+function signIn() {
+
+    const username =
+        document
+            .getElementById("signinUsername")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("signinPassword")
+            .value;
+
+    const savedUsername =
+        localStorage.getItem("yourself_username");
+
+    const savedPassword =
+        localStorage.getItem("yourself_password");
+
+    if (!username || !password) {
+
+        showToast(
+            "Please enter Username and Password."
+        );
+
+        return;
+    }
+
+    /*
+       Local demo authentication.
+
+       For a real production backend, this function can later
+       call Firebase/Auth/API without changing the UI.
+    */
+
+    if (
+        savedUsername &&
+        savedPassword &&
+        username === savedUsername &&
+        password === savedPassword
+    ) {
+
+        showToast("Sign In successful.");
+
+        setTimeout(() => {
+            showScreen("homeScreen");
+        }, 700);
+
+        return;
+    }
+
+    if (!savedUsername) {
+
+        showToast(
+            "No account found. Please Sign Up first."
+        );
+
+        return;
+    }
+
+    showToast(
+        "Incorrect Username or Password."
+    );
+}
+
+
+/* ------------------------------------------------------------
+   PRONUNCIATION
+------------------------------------------------------------ */
+
+function updatePronunciation() {
+
+    const input =
+        document
+            .getElementById("pronunciationInput")
+            .value;
+
+    document
+        .getElementById("pronunciationOutput")
+        .textContent = input;
+}
+
+
+function startSpeechRecognition() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        showToast(
+            "Speech recognition is not supported in this browser."
+        );
+
+        return;
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    recognition.interimResults = false;
+
+    recognition.maxAlternatives = 1;
+
+
+    recognition.onstart = function() {
+
+        showToast("Listening...");
+
+    };
+
+
+    recognition.onresult = function(event) {
+
+        const text =
+            event.results[0][0].transcript;
+
+        document
+            .getElementById("pronunciationInput")
+            .value = text;
+
+        document
+            .getElementById("pronunciationOutput")
+            .textContent = text;
+
+    };
+
+
+    recognition.onerror = function() {
+
+        showToast(
+            "Could not recognize your voice."
+        );
+
+    };
+
+
+    recognition.start();
+}
+
+
+function speakPronunciation() {
+
+    const text =
+        document
+            .getElementById("pronunciationOutput")
+            .textContent
+            .trim();
+
+    if (!text) {
+
+        showToast(
+            "Enter or speak a word first."
+        );
+
+        return;
+    }
+
+    if (!window.speechSynthesis) {
+
+        showToast(
+            "Text-to-Speech is not supported."
+        );
+
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "en-US";
+
+    utterance.rate = .8;
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+}
+
+
+function savePronunciation() {
+
+    const word =
+        document
+            .getElementById("pronunciationOutput")
+            .textContent
+            .trim();
+
+    if (!word) {
+
+        showToast(
+            "Nothing to save."
+        );
+
+        return;
+    }
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "yourself_pronunciation"
+            ) || "[]"
+        );
+
+    saved.push(word);
+
+    localStorage.setItem(
+        "yourself_pronunciation",
+        JSON.stringify(saved)
+    );
+
+    showToast(
+        "Pronunciation saved."
+    );
+}
+
+
+function deletePronunciation() {
+
+    document
+        .getElementById("pronunciationInput")
+        .value = "";
+
+    document
+        .getElementById("pronunciationOutput")
+        .textContent = "";
+
+    showToast(
+        "Deleted."
+    );
+}
+
+
+/* ------------------------------------------------------------
+   CONCEPT
+------------------------------------------------------------ */
+
+function toggleLanguageMenu() {
+
+    document
+        .getElementById("languageMenu")
+        .classList.toggle("hidden");
+}
+
+
+function setLanguage(language) {
+
+    currentLanguage = language;
+
+    document
+        .getElementById("currentLanguage")
+        .textContent = language;
+
+    document
+        .getElementById("languageMenu")
+        .classList.add("hidden");
+
+    showToast(
+        "Language: " + language
+    );
+}
+
+
+function openCameraMenu() {
+
+    document
+        .getElementById("cameraModal")
+        .classList.remove("hidden");
+}
+
+
+function closeCameraMenu(event) {
+
+    if (
+        !event ||
+        event.target.id === "cameraModal"
+    ) {
+
+        document
+            .getElementById("cameraModal")
+            .classList.add("hidden");
+
+    }
+}
+
+
+function openConceptCamera() {
+
+    closeCameraMenu();
+
+    document
+        .getElementById("conceptCameraInput")
+        .click();
+}
+
+
+function openConceptGallery() {
+
+    closeCameraMenu();
+
+    document
+        .getElementById("conceptGalleryInput")
+        .click();
+}
+
+
+function openConceptPDF() {
+
+    closeCameraMenu();
+
+    document
+        .getElementById("conceptPDFInput")
+        .click();
+}
+
+
+/* ------------------------------------------------------------
+   IMAGE OCR
+------------------------------------------------------------ */
+
+/*
+   Automatic OCR:
+
+   1. User selects/captures image.
+   2. Tesseract.js reads the image.
+   3. Extracted text is automatically placed into Concept input.
+   4. Explanation is generated immediately.
+
+   There is intentionally NO "Read Document" button.
+*/
+
+async function handleConceptImage(file) {
+
+    if (!file) return;
+
+    showToast(
+        "Reading image..."
+    );
+
+    try {
+
+        const result =
+            await Tesseract.recognize(
+                file,
+                "eng",
+                {
+                    logger: message => {
+
+                        if (
+                            message.status ===
+                            "recognizing text"
+                        ) {
+
+                            const progress =
+                                Math.round(
+                                    message.progress * 100
+                                );
+
+                            showToast(
+                                "Reading image " +
+                                progress +
+                                "%"
+                            );
+                        }
+                    }
                 }
-            }
+            );
 
-            let qObj = { 
-                type: qType, 
-                text: finalQText, 
-                answer: finalAnsText || "No answer provided", 
-                mistakeCount: 0,
-                hasFile: uploadedFileObject ? true : false
+        const text =
+            result.data.text.trim();
+
+        document
+            .getElementById("conceptInput")
+            .value = text;
+
+        generateConceptExplanation(text);
+
+        showToast(
+            "Text extracted automatically."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not read the image."
+        );
+    }
+}
+
+
+/* ------------------------------------------------------------
+   PDF OCR / TEXT EXTRACTION
+------------------------------------------------------------ */
+
+/*
+   PDF.js extracts text directly from PDF pages.
+
+   If the PDF contains actual selectable text,
+   PDF.js reads it automatically.
+
+   For scanned image-only PDFs, a production backend can
+   send rendered pages to Tesseract.js/Google Vision.
+*/
+
+async function handleConceptPDF(file) {
+
+    if (!file) return;
+
+    showToast(
+        "Reading PDF..."
+    );
+
+    try {
+
+        const pdfjs =
+            await import(
+                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
+            );
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+        const pdf =
+            await pdfjs.getDocument({
+                data: arrayBuffer
+            }).promise;
+
+        let fullText = "";
+
+
+        for (
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ) {
+
+            const page =
+                await pdf.getPage(pageNumber);
+
+            const content =
+                await page.getTextContent();
+
+            const pageText =
+                content.items
+                    .map(item => item.str)
+                    .join(" ");
+
+            fullText +=
+                pageText + "\n";
+
+            showToast(
+                "Reading PDF page " +
+                pageNumber +
+                " of " +
+                pdf.numPages
+            );
+        }
+
+
+        fullText =
+            fullText.trim();
+
+
+        if (!fullText) {
+
+            showToast(
+                "This PDF appears to be scanned. Image OCR can be used for scanned pages."
+            );
+
+            return;
+        }
+
+
+        document
+            .getElementById("conceptInput")
+            .value = fullText;
+
+        generateConceptExplanation(
+            fullText
+        );
+
+        showToast(
+            "PDF text extracted automatically."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not read this PDF."
+        );
+    }
+}
+
+
+/* ------------------------------------------------------------
+   CONCEPT EXPLANATION
+------------------------------------------------------------ */
+
+function generateConceptExplanation(text) {
+
+    const canvas =
+        document.getElementById(
+            "conceptSolution"
+        );
+
+    if (!text.trim()) {
+
+        canvas.innerHTML = `
+            <p style="color:#8A8F99;">
+                Your explanation will appear here.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    /*
+       Frontend demonstration logic.
+
+       A real AI backend can be connected here.
+
+       The extracted question/text is already available.
+       The backend could classify it as Math, Science,
+       Reasoning, History, etc. and return a detailed
+       explanation.
+    */
+
+    const lower =
+        text.toLowerCase();
+
+
+    let category =
+        "General Concept";
+
+
+    if (
+        lower.includes("solve") ||
+        lower.includes("equation") ||
+        lower.includes("=") ||
+        /\d/.test(text)
+    ) {
+
+        category = "Math";
+
+    } else if (
+        lower.includes("reason") ||
+        lower.includes("logic")
+    ) {
+
+        category = "Reasoning";
+
+    } else if (
+        lower.includes("plant") ||
+        lower.includes("science") ||
+        lower.includes("force") ||
+        lower.includes("energy") ||
+        lower.includes("cell")
+    ) {
+
+        category = "Science";
+
+    } else if (
+        lower.includes("war") ||
+        lower.includes("king") ||
+        lower.includes("history") ||
+        lower.includes("empire")
+    ) {
+
+        category = "History";
+    }
+
+
+    canvas.innerHTML = `
+
+        <div class="solution-box">
+
+            <strong style="color:#173F9F;">
+                ${category}
+            </strong>
+
+            <p style="margin-top:8px;">
+                <strong>Question / Text:</strong><br>
+                ${escapeHTML(text)}
+            </p>
+
+        </div>
+
+
+        <div class="solution-box">
+
+            <strong style="color:#173F9F;">
+                Simple Explanation
+            </strong>
+
+            <p>
+                This section is designed to present the
+                concept in simple language.
+            </p>
+
+            <p>
+                <strong>Step 1:</strong>
+                Identify the important information.
+            </p>
+
+            <p>
+                <strong>Step 2:</strong>
+                Understand what the question is asking.
+            </p>
+
+            <p>
+                <strong>Step 3:</strong>
+                Apply the relevant rule, concept or method.
+            </p>
+
+            <p>
+                <strong>Step 4:</strong>
+                Check the final answer logically.
+            </p>
+
+        </div>
+
+
+        <div class="solution-box">
+
+            <strong style="color:#173F9F;">
+                Real-world example
+            </strong>
+
+            <p>
+                The explanation can include a simple
+                everyday example so the concept becomes
+                easier to understand and remember.
+            </p>
+
+        </div>
+
+
+        <div class="solution-box">
+
+            <strong style="color:#173F9F;">
+                Visual / Diagram
+            </strong>
+
+            <div style="
+                margin-top:10px;
+                min-height:80px;
+                border:1px dashed #7EA8E8;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#6D8CB8;
+            ">
+                Diagram / visual explanation area
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* ------------------------------------------------------------
+   QUESTION SETS
+------------------------------------------------------------ */
+
+function renderQuestionSets() {
+
+    const sets =
+        getSets();
+
+    const list =
+        document.getElementById(
+            "questionSetList"
+        );
+
+    list.innerHTML = "";
+
+
+    if (!sets.length) {
+
+        list.innerHTML =
+            `<p style="color:#888;">
+                No saved sets yet.
+             </p>`;
+
+        return;
+    }
+
+
+    sets.forEach((set, index) => {
+
+        const item =
+            document.createElement("button");
+
+        item.className =
+            "set-item";
+
+        item.innerHTML = `
+            <span>
+                ${escapeHTML(set.name)}
+            </span>
+
+            <span>→</span>
+        `;
+
+        item.onclick = function() {
+
+            openTopic(set.name);
+
+        };
+
+        list.appendChild(item);
+
+    });
+}
+
+
+function createQuestionSet() {
+
+    const input =
+        document.getElementById(
+            "setNameInput"
+        );
+
+    const name =
+        input.value.trim();
+
+
+    if (!name) {
+
+        showToast(
+            "Please enter a set name."
+        );
+
+        return;
+    }
+
+
+    const sets =
+        getSets();
+
+
+    const exists =
+        sets.some(
+            set =>
+                set.name.toLowerCase() ===
+                name.toLowerCase()
+        );
+
+
+    if (exists) {
+
+        showToast(
+            "This set already exists."
+        );
+
+        return;
+    }
+
+
+    sets.push({
+        name: name,
+        questions: []
+    });
+
+
+    saveSets(sets);
+
+    input.value = "";
+
+    renderQuestionSets();
+
+    renderRecapSets();
+
+    showToast(
+        "Question Set created."
+    );
+}
+
+
+/* ------------------------------------------------------------
+   TOPIC PAGE
+------------------------------------------------------------ */
+
+function openTopic(setName) {
+
+    selectedSetName =
+        setName;
+
+    document
+        .getElementById("topicTitle")
+        .textContent =
+        setName;
+
+    document
+        .getElementById("questionInput")
+        .value = "";
+
+    document
+        .getElementById("answerInput")
+        .value = "";
+
+    showScreen(
+        "topicScreen"
+    );
+}
+
+
+function saveQuestion() {
+
+    const question =
+        document
+            .getElementById("questionInput")
+            .value
+            .trim();
+
+    const answer =
+        document
+            .getElementById("answerInput")
+            .value
+            .trim();
+
+
+    if (!question || !answer) {
+
+        showToast(
+            "Please add both Question and Answer."
+        );
+
+        return;
+    }
+
+
+    const sets =
+        getSets();
+
+
+    const set =
+        sets.find(
+            item =>
+                item.name ===
+                selectedSetName
+        );
+
+
+    if (!set) {
+
+        showToast(
+            "Question Set not found."
+        );
+
+        return;
+    }
+
+
+    set.questions.push({
+        question: question,
+        answer: answer
+    });
+
+
+    saveSets(sets);
+
+
+    document
+        .getElementById("questionInput")
+        .value = "";
+
+    document
+        .getElementById("answerInput")
+        .value = "";
+
+
+    showToast(
+        "Question saved."
+    );
+}
+
+
+/* ------------------------------------------------------------
+   IMAGE OCR FOR QUESTION SET
+------------------------------------------------------------ */
+
+/*
+   Gallery/Camera automatically sends extracted text into
+   the Question field.
+
+   The user does not need a separate Read button.
+*/
+
+async function handleImageOCR(file) {
+
+    if (!file) return;
+
+    showToast(
+        "Reading attachment..."
+    );
+
+
+    try {
+
+        const result =
+            await Tesseract.recognize(
+                file,
+                "eng",
+                {
+                    logger: message => {
+
+                        if (
+                            message.status ===
+                            "recognizing text"
+                        ) {
+
+                            const progress =
+                                Math.round(
+                                    message.progress * 100
+                                );
+
+                            showToast(
+                                "OCR " +
+                                progress +
+                                "%"
+                            );
+                        }
+                    }
+                }
+            );
+
+
+        const extracted =
+            result.data.text.trim();
+
+
+        document
+            .getElementById("questionInput")
+            .value = extracted;
+
+
+        showToast(
+            "Question text extracted automatically."
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not extract text."
+        );
+    }
+}
+
+
+/* ------------------------------------------------------------
+   PDF FOR QUESTION SET
+------------------------------------------------------------ */
+
+async function handlePDFOCR(file) {
+
+    if (!file) return;
+
+    showToast(
+        "Reading PDF..."
+    );
+
+
+    try {
+
+        const pdfjs =
+            await import(
+                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
+            );
+
+
+        const buffer =
+            await file.arrayBuffer();
+
+
+        const pdf =
+            await pdfjs.getDocument({
+                data: buffer
+            }).promise;
+
+
+        let text = "";
+
+
+        for (
+            let i = 1;
+            i <= pdf.numPages;
+            i++
+        ) {
+
+            const page =
+                await pdf.getPage(i);
+
+            const content =
+                await page.getTextContent();
+
+            text +=
+                content.items
+                    .map(item => item.str)
+                    .join(" ") +
+                "\n";
+        }
+
+
+        document
+            .getElementById("questionInput")
+            .value =
+            text.trim();
+
+
+        showToast(
+            "PDF text extracted automatically."
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            "Could not read PDF."
+        );
+    }
+}
+
+
+/* ------------------------------------------------------------
+   RECAP
+------------------------------------------------------------ */
+
+function openRecap() {
+
+    renderRecapSets();
+
+    showScreen(
+        "recapScreen"
+    );
+}
+
+
+function renderRecapSets() {
+
+    const sets =
+        getSets();
+
+    const list =
+        document.getElementById(
+            "recapSetList"
+        );
+
+    list.innerHTML = "";
+
+
+    if (!sets.length) {
+
+        list.innerHTML =
+            `<p style="color:#888;">
+                No Question Sets available.
+             </p>`;
+
+        return;
+    }
+
+
+    sets.forEach(set => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "recap-set";
+
+        button.innerHTML = `
+            <span>
+                ${escapeHTML(set.name)}
+            </span>
+            <span>→</span>
+        `;
+
+
+        button.onclick =
+            function() {
+
+                selectedSetName =
+                    set.name;
+
+                document
+                    .getElementById(
+                        "recapModeTitle"
+                    )
+                    .textContent =
+                    set.name;
+
+                showScreen(
+                    "recapModeScreen"
+                );
             };
 
-            topicData[selectedTopicName].push(qObj);
-            saveDataToDB();
-            resetQuestionForm();
-            renderQuestionsList();
+
+        list.appendChild(button);
+
+    });
+}
+
+
+/* ------------------------------------------------------------
+   INDIVIDUAL RECAP
+------------------------------------------------------------ */
+
+function openIndividualRecap() {
+
+    const sets =
+        getSets();
+
+
+    const selected =
+        sets.find(
+            set =>
+                set.name ===
+                selectedSetName
+        );
+
+
+    recapQuestions =
+        selected
+            ? [...selected.questions]
+            : [];
+
+
+    recapIndex = 0;
+
+    answerVisible = false;
+
+
+    document
+        .getElementById(
+            "individualRecapTitle"
+        )
+        .textContent =
+        selectedSetName +
+        " Recap";
+
+
+    document
+        .getElementById(
+            "recapQuestion"
+        )
+        .textContent =
+        "Press START to begin.";
+
+
+    document
+        .getElementById(
+            "recapAnswer"
+        )
+        .classList.add("hidden");
+
+
+    document
+        .getElementById(
+            "hideAnswerBtn"
+        )
+        .textContent =
+        "HIDE";
+
+
+    showScreen(
+        "individualRecapScreen"
+    );
+}
+
+
+function startRecap() {
+
+    if (!recapQuestions.length) {
+
+        showToast(
+            "This set has no questions yet."
+        );
+
+        return;
+    }
+
+
+    if (currentRecapMode === "random") {
+
+        recapIndex =
+            Math.floor(
+                Math.random() *
+                recapQuestions.length
+            );
+
+    } else {
+
+        recapIndex = 0;
+
+    }
+
+
+    showCurrentQuestion();
+
+    showToast(
+        "Recap started."
+    );
+}
+
+
+function showCurrentQuestion() {
+
+    const item =
+        recapQuestions[
+            recapIndex
+        ];
+
+
+    if (!item) return;
+
+
+    document
+        .getElementById(
+            "recapQuestion"
+        )
+        .textContent =
+        item.question;
+
+
+    document
+        .getElementById(
+            "recapAnswer"
+        )
+        .textContent =
+        item.answer;
+
+
+    answerVisible = false;
+
+
+    document
+        .getElementById(
+            "recapAnswer"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "hideAnswerBtn"
+        )
+        .textContent =
+        "HIDE";
+}
+
+
+/* ------------------------------------------------------------
+   RANDOM / SERIES
+------------------------------------------------------------ */
+
+function setRecapMode(mode) {
+
+    currentRecapMode =
+        mode;
+
+
+    document
+        .getElementById(
+            "randomBtn"
+        )
+        .classList.toggle(
+            "selected",
+            mode === "random"
+        );
+
+
+    document
+        .getElementById(
+            "seriesBtn"
+        )
+        .classList.toggle(
+            "selected",
+            mode === "series"
+        );
+
+
+    showToast(
+        mode === "random"
+            ? "Random mode selected."
+            : "Series mode selected."
+    );
+}
+
+
+/* ------------------------------------------------------------
+   HIDE / UNHIDE
+------------------------------------------------------------ */
+
+function toggleAnswer() {
+
+    if (!recapQuestions.length) {
+
+        showToast(
+            "Press START first."
+        );
+
+        return;
+    }
+
+
+    answerVisible =
+        !answerVisible;
+
+
+    document
+        .getElementById(
+            "recapAnswer"
+        )
+        .classList.toggle(
+            "hidden",
+            !answerVisible
+        );
+
+
+    /*
+       Requirement:
+       Initial button = HIDE
+       Click HIDE -> answer becomes visible
+       Button -> UNHIDE
+       Click again -> answer hidden
+       Button -> HIDE
+    */
+
+    document
+        .getElementById(
+            "hideAnswerBtn"
+        )
+        .textContent =
+        answerVisible
+            ? "UNHIDE"
+            : "HIDE";
+}
+
+
+/* ------------------------------------------------------------
+   NEXT QUESTION
+------------------------------------------------------------ */
+
+function nextQuestion() {
+
+    if (!recapQuestions.length) {
+
+        showToast(
+            "Press START first."
+        );
+
+        return;
+    }
+
+
+    if (currentRecapMode === "random") {
+
+        if (recapQuestions.length === 1) {
+
+            recapIndex = 0;
+
+        } else {
+
+            let next;
+
+            do {
+
+                next =
+                    Math.floor(
+                        Math.random() *
+                        recapQuestions.length
+                    );
+
+            } while (
+                next === recapIndex
+            );
+
+            recapIndex =
+                next;
         }
 
-        function deleteQuestion(index) {
-            if(confirm("Are you sure you want to delete this question?")) {
-                topicData[selectedTopicName].splice(index, 1);
-                saveDataToDB();
-                renderQuestionsList();
-            }
+    } else {
+
+        recapIndex++;
+
+        if (
+            recapIndex >=
+            recapQuestions.length
+        ) {
+
+            recapIndex = 0;
+
+            showToast(
+                "Series completed. Starting again."
+            );
         }
+    }
 
-        function resetQuestionForm() {
-            document.getElementById('questionInput').value = "";
-            document.getElementById('answerInput').value = "";
-            document.getElementById('fileInfoDisplay').innerText = "";
-            uploadedFileObject = null;
-        }
 
-        function renderQuestionsList() {
-            let container = document.getElementById('questionsContainer');
-            container.innerHTML = "";
-            let qs = topicData[selectedTopicName] || [];
-            if (qs.length === 0) { container.innerHTML = `<div style="color:white; text-align:center;">No questions added yet.</div>`; return; }
-            qs.forEach((q, i) => {
-                let card = document.createElement('div');
-                card.className = 'question-card';
-                card.innerHTML = `
-                    <button class="delete-btn" onclick="deleteQuestion(${i})">Delete</button>
-                    <div style="color:#0000FF; font-size:13px;">[${q.type}]</div>
-                    <div><strong>Q${i+1}:</strong> ${q.text}</div>
-                    <div style="color:gray; font-size:14px; margin-top:4px;">Ans: ${q.answer}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
+    showCurrentQuestion();
+}
 
-        function openRevisionFirstPage() {
-            showPage('revision-page');
-            document.getElementById('revTopicSelectionList').style.display = 'none';
-            document.getElementById('revQuestionPickerBox').style.display = 'none';
-            document.getElementById('revDoneBtn').style.display = 'none';
-        }
 
-        function toggleRevTopicDropdown() {
-            let list = document.getElementById('revTopicSelectionList');
-            list.style.display = (list.style.display === 'block') ? 'none' : 'block';
-            if (list.style.display === 'block') {
-                list.innerHTML = "";
-                let keys = Object.keys(topicData);
-                if(keys.length === 0) { list.innerHTML = "<div style='color:#aaa;'>No topics available!</div>"; return; }
-                keys.forEach(t => {
-                    let item = document.createElement('div');
-                    item.className = 'rev-topic-option-item';
-                    item.innerText = t;
-                    item.onclick = () => {
-                        chosenRevisionTopic = t;
-                        list.style.display = 'none';
-                        loadQuestionsForRevisionPicker(t);
-                    };
-                    list.appendChild(item);
-                });
-            }
-        }
+/* ------------------------------------------------------------
+   CONDITION
+------------------------------------------------------------ */
 
-        function loadQuestionsForRevisionPicker(topic) {
-            let picker = document.getElementById('revQuestionPickerBox');
-            picker.style.display = 'block';
-            picker.innerHTML = `<div style="font-weight:bold; margin-bottom:8px; color:#00ffcc;">Select Questions:</div>`;
-            let qs = topicData[topic] || [];
-            if(qs.length === 0) { picker.innerHTML += `<div style='color:#aaa;'>No questions in topic!</div>`; return; }
-            qs.forEach((q, idx) => {
-                picker.innerHTML += `<div class="rev-q-checkbox-item"><input type="checkbox" value="${idx}" class="rev-q-chk" checked> <span>Q${idx+1}: ${q.text}</span></div>`;
-            });
-            document.getElementById('revDoneBtn').style.display = 'block';
-        }
+function toggleCondition() {
 
-        function goToRevisionStartPage() {
-            let chks = document.querySelectorAll('.rev-q-chk:checked');
-            if(chks.length === 0) { alert("Select at least one question!"); return; }
-            selectedQuestionsForRevision = [];
-            chks.forEach(chk => {
-                let originalIndex = parseInt(chk.value);
-                let qObj = topicData[chosenRevisionTopic][originalIndex];
-                qObj._originalTopic = chosenRevisionTopic;
-                qObj._originalIndex = originalIndex;
-                selectedQuestionsForRevision.push(qObj);
-            });
-            document.getElementById('displayUsernameLabel').innerText = globalUsername;
-            showPage('revision-start-page');
-        }
+    document
+        .getElementById(
+            "conditionPanel"
+        )
+        .classList.toggle(
+            "hidden"
+        );
+}
 
-        function handleGroupToggle(val) {
-            let modal = document.getElementById('groupNamesModal');
-            if (val === 'Group') {
-                modal.style.display = 'block';
-                if(groupMembers.length === 0) {
-                    groupMembers.push({ name: globalUsername, img: null });
-                    updateGroupNamesDisplay();
-                }
-            } else {
-                modal.style.display = 'none';
-            }
-        }
 
-        function addMemberToGroup() {
-            let inp = document.getElementById('groupMemberInput');
-            let fileInp = document.getElementById('groupMemberImgInput');
-            let name = inp.value.trim();
-            if(name) {
-                let imgFile = fileInp.files[0] ? URL.createObjectURL(fileInp.files[0]) : null;
-                groupMembers.push({ name: name, img: imgFile });
-                inp.value = "";
-                fileInp.value = "";
-                updateGroupNamesDisplay();
-            } else {
-                alert("Please enter a name!");
-            }
-        }
+function saveCondition() {
 
-        function updateGroupNamesDisplay() {
-            let display = document.getElementById('groupNamesListDisplay');
-            display.innerHTML = groupMembers.map(m => `<div style="display:flex; align-items:center; gap:8px; margin-top:4px;">${m.img ? `<img src="${m.img}" width="24" height="24" style="border-radius:50%; object-fit:cover;">` : '👤'} <span>${m.name}</span></div>`).join('');
-        }
+    const condition =
+        document
+            .getElementById(
+                "conditionInput"
+            )
+            .value
+            .trim();
 
-        function startActiveQuiz() {
-            currentQuizQuestions = [...selectedQuestionsForRevision];
-            if (document.getElementById('revModeSelect').value === 'Random') {
-                currentQuizQuestions.sort(() => Math.random() - 0.5);
-            }
-            currentQuizIndex = 0;
-            showPage('quiz-play-page');
-            loadQuizQuestion();
-        }
 
-        function loadQuizQuestion() {
-            if (currentQuizIndex >= currentQuizQuestions.length) {
-                alert("Revision Completed!");
-                showPage('revision-start-page');
-                return;
-            }
+    if (!condition) {
 
-            let q = currentQuizQuestions[currentQuizIndex];
-            document.getElementById('quizTopicHeader').innerText = chosenRevisionTopic + " (" + (currentQuizIndex + 1) + "/" + currentQuizQuestions.length + ")";
-            document.getElementById('quizQuestionBox').innerText = q.text;
-            
-            let groupMode = document.getElementById('revGroupSelect').value;
-            let assignedUserObj = { name: globalUsername, img: null };
-            if (groupMode === 'Group' && groupMembers.length > 0) {
-                assignedUserObj = groupMembers[currentQuizIndex % groupMembers.length];
-                document.getElementById('assignedUserDisplay').innerText = "Question for: " + assignedUserObj.name;
-                if(assignedUserObj.img) {
-                    document.getElementById('assignedUserImgContainer').innerHTML = `<img src="${assignedUserObj.img}" width="50" height="50" style="border-radius:50%; object-fit:cover; border:2px solid #00ffcc;">`;
-                } else {
-                    document.getElementById('assignedUserImgContainer').innerHTML = "";
-                }
-            } else {
-                document.getElementById('assignedUserDisplay').innerText = "";
-                document.getElementById('assignedUserImgContainer').innerHTML = "";
-            }
+        showToast(
+            "Please add a condition."
+        );
 
-            document.getElementById('userAnswerInput').value = "";
-            document.getElementById('quizFeedbackDisplay').innerText = "";
-            document.getElementById('submitAnsBtn').style.display = 'block';
-            document.getElementById('nextQBtn').style.display = 'none';
-        }
+        return;
+    }
 
-        function startVoiceInput() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Speech recognition is not supported in your browser.");
-                return;
-            }
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.onresult = function(event) {
-                document.getElementById('userAnswerInput').value = event.results[0][0].transcript;
-            };
-            recognition.start();
-        }
 
-        function submitQuizAnswer() {
-            let userAns = document.getElementById('userAnswerInput').value.trim().toLowerCase();
-            let currentQ = currentQuizQuestions[currentQuizIndex];
-            let correctAns = currentQ.answer.toLowerCase();
+    localStorage.setItem(
+        "yourself_condition",
+        condition
+    );
 
-            let feedback = document.getElementById('quizFeedbackDisplay');
-            let isMatch = userAns && correctAns.includes(userAns);
 
-            if (isMatch || userAns === correctAns) {
-                feedback.style.color = "#28a745";
-                feedback.innerText = "Correct! 🎉";
-            } else {
-                feedback.style.color = "#ff4d4d";
-                feedback.innerText = "Incorrect! (Answer: " + currentQ.answer + ")";
-                
-                if(currentQ._originalTopic !== undefined && currentQ._originalIndex !== undefined) {
-                    topicData[currentQ._originalTopic][currentQ._originalIndex].mistakeCount++;
-                    saveDataToDB();
-                }
+    showToast(
+        "Condition saved."
+    );
+}
 
-                if (document.getElementById('revMistakeSelect').value === 'On') {
-                    currentQuizQuestions.push(currentQ);
-                }
-            }
 
-            document.getElementById('submitAnsBtn').style.display = 'none';
-            document.getElementById('nextQBtn').style.display = 'block';
-        }
+/* ------------------------------------------------------------
+   GROUP RECAP
+------------------------------------------------------------ */
 
-        function nextQuizQuestion() {
-            currentQuizIndex++;
-            loadQuizQuestion();
-        }
+function openGroupRecap() {
 
-        function openMistakeTopicsPage() {
-            showPage('mistake-topics-page');
-            let container = document.getElementById('mistakeTopicsContainer');
-            container.innerHTML = "";
-            let keys = Object.keys(topicData);
-            if(keys.length === 0) {
-                container.innerHTML = "<div style='color:white; text-align:center; width:100%'>No topics added yet!</div>";
-                return;
-            }
-            keys.forEach(topic => {
-                let card = document.createElement('div');
-                card.className = 'mistake-topic-card';
-                card.innerText = topic;
-                card.onclick = () => openMistakeDetailPage(topic);
-                container.appendChild(card);
-            });
-        }
+    document
+        .getElementById(
+            "groupRecapTitle"
+        )
+        .textContent =
+        selectedSetName +
+        " Recap";
 
-        function openMistakeDetailPage(topicName) {
-            showPage('mistake-detail-page');
-            document.getElementById('mistakeDetailTopicTitle').innerText = "Mistake - " + topicName;
-            let container = document.getElementById('mistakeQuestionsContainer');
-            container.innerHTML = "";
 
-            let qs = topicData[topicName] || [];
-            let mistakeQuestions = qs.filter(q => q.mistakeCount > 0);
+    showScreen(
+        "groupRecapScreen"
+    );
+}
 
-            if(mistakeQuestions.length === 0) {
-                container.innerHTML = `<div style="color:white; text-align:center;">No mistakes recorded for this topic yet!</div>`;
-                return;
-            }
 
-            mistakeQuestions.forEach((q, index) => {
-                let card = document.createElement('div');
-                card.className = 'mistake-question-card';
-                card.innerHTML = `
-                    <div>Q${index + 1}: ${q.text}</div>
-                    <div style="color:gray; font-size:15px; margin-top:8px;">Answer: ${q.answer}</div>
-                    <span class="mistake-count-badge">Mistakes: ${q.mistakeCount}</span>
-                `;
-                container.appendChild(card);
-            });
-        }
-    </script>
+function startGroupRecap() {
+
+    const sets =
+        getSets();
+
+
+    const selected =
+        sets.find(
+            set =>
+                set.name ===
+                selectedSetName
+        );
+
+
+    if (
+        !selected ||
+        !selected.questions.length
+    ) {
+
+        showToast(
+            "This set has no questions yet."
+        );
+
+        return;
+    }
+
+
+    document
+        .getElementById(
+            "groupQuestionArea"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "groupQuestion"
+        )
+        .textContent =
+        selected.questions[0].question;
+}
+
+
+/* ------------------------------------------------------------
+   VOCABULARY
+------------------------------------------------------------ */
+
+function saveVocabulary() {
+
+    const word =
+        document
+            .getElementById(
+                "vocabularyWord"
+            )
+            .value
+            .trim();
+
+    const meaning =
+        document
+            .getElementById(
+                "vocabularyMeaning"
+            )
+            .value
+            .trim();
+
+
+    if (!word || !meaning) {
+
+        showToast(
+            "Please enter word and meaning."
+        );
+
+        return;
+    }
+
+
+    const words =
+        JSON.parse(
+            localStorage.getItem(
+                "yourself_vocabulary"
+            ) || "[]"
+        );
+
+
+    words.push({
+        word,
+        meaning
+    });
+
+
+    localStorage.setItem(
+        "yourself_vocabulary",
+        JSON.stringify(words)
+    );
+
+
+    document
+        .getElementById(
+            "vocabularyWord"
+        )
+        .value = "";
+
+    document
+        .getElementById(
+            "vocabularyMeaning"
+        )
+        .value = "";
+
+
+    renderVocabulary();
+
+    showToast(
+        "Vocabulary saved."
+    );
+}
+
+
+function renderVocabulary() {
+
+    const list =
+        document.getElementById(
+            "vocabularyList"
+        );
+
+    if (!list) return;
+
+
+    const words =
+        JSON.parse(
+            localStorage.getItem(
+                "yourself_vocabulary"
+            ) || "[]"
+        );
+
+
+    list.innerHTML = "";
+
+
+    words
+        .slice()
+        .reverse()
+        .forEach(item => {
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "solution-box";
+
+            div.innerHTML = `
+                <strong style="color:#173F9F;">
+                    ${escapeHTML(item.word)}
+                </strong>
+
+                <p>
+                    ${escapeHTML(item.meaning)}
+                </p>
+            `;
+
+            list.appendChild(div);
+        });
+}
+
+
+/* ------------------------------------------------------------
+   TRANSLATION
+------------------------------------------------------------ */
+
+function translateText() {
+
+    const text =
+        document
+            .getElementById(
+                "translationInput"
+            )
+            .value
+            .trim();
+
+
+    if (!text) {
+
+        showToast(
+            "Please enter text."
+        );
+
+        return;
+    }
+
+
+    /*
+       Offline fallback translation demonstration.
+
+       A real translation API can be connected here.
+    */
+
+    document
+        .getElementById(
+            "translationOutput"
+        )
+        .innerHTML = `
+            <strong>Translation</strong>
+            <p>
+                ${escapeHTML(text)}
+            </p>
+            <small style="color:#777;">
+                Connect your preferred translation API
+                here for automatic language translation.
+            </small>
+        `;
+}
+
+
+/* ------------------------------------------------------------
+   IMPROVE
+------------------------------------------------------------ */
+
+function showImproveMessage() {
+
+    showToast(
+        "Keep learning. Small steps make big progress! 💙"
+    );
+}
+
+
+/* ------------------------------------------------------------
+   TOAST
+------------------------------------------------------------ */
+
+let toastTimer;
+
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        }, 2300);
+}
+
+
+/* ------------------------------------------------------------
+   HTML SAFETY
+------------------------------------------------------------ */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* ------------------------------------------------------------
+   INITIALIZATION
+------------------------------------------------------------ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        /*
+           Make sure initial data exists.
+        */
+
+        getSets();
+
+        renderQuestionSets();
+
+        renderRecapSets();
+
+        renderVocabulary();
+
+
+        /*
+           Start on Home.
+        */
+
+        showScreen(
+            "homeScreen"
+        );
+
+    }
+);
+
+</script>
+
 </body>
 </html>
