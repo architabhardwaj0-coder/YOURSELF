@@ -1,140 +1,1011 @@
-from pathlib import Path
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Yourself — English Learning App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Yourself — Learn, Practice, Improve</title>
+
+<!--
+  YOURSELF — SINGLE FILE GITHUB PAGES APP
+  ---------------------------------------
+  This is intentionally a single index.html file.
+
+  IMPORTANT:
+  1) GitHub Pages is a static host. It cannot securely keep a private AI/API key
+     or provide real server-side authentication.
+  2) This version keeps each account's data separate in the browser using
+     localStorage and hashes passwords with Web Crypto. It is suitable for a
+     personal/static prototype, NOT for production-grade security.
+  3) For real multi-user private accounts, use Firebase/Supabase/your own backend.
+  4) AI is connected through Gemini's browser API when the user adds an API key
+     in Account → AI Settings. A key entered in a static website can be exposed
+     to the browser, so use a restricted key and do not use this pattern for
+     sensitive production data.
+  5) OCR/PDF extraction uses Tesseract.js and PDF.js from CDNs.
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js"></script>
+
 <style>
 :root{
-  --blue:#2563eb;--blue2:#3b82f6;--ink:#111827;--muted:#6b7280;
-  --line:#d9dee8;--soft:#eef6ff;--cream:#fffdf8;--danger:#dc2626;
-  --green:#15803d;--purple:#7c3aed;--shadow:0 8px 28px rgba(30,58,138,.08);
+  --blue:#4f6fe8;
+  --blue2:#6f82ee;
+  --deep:#263f9e;
+  --text:#172033;
+  --muted:#737b8c;
+  --line:#d7dce8;
+  --soft-blue:#eef5ff;
+  --soft-purple:#f4efff;
+  --soft-mint:#edfbf5;
+  --soft-peach:#fff3ea;
+  --cream:#fffdf8;
+  --danger:#b94b55;
+  --success:#24734b;
+  --shadow:0 10px 30px rgba(50,70,120,.08);
 }
 *{box-sizing:border-box}
-body{margin:0;background:#fff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+html,body{margin:0;padding:0;background:#fff;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-#app{min-height:100vh;max-width:900px;margin:auto;background:#fff}
-.screen{min-height:100vh;padding:24px 20px 92px}
 .hidden{display:none!important}
-.center-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:26px;color:#2455c3}
-.logo{width:42px;height:42px}
-.auth-title{font-size:38px;font-weight:800;margin:10px 0 42px;color:#2455c3}
-.auth-form{width:min(100%,420px);text-align:left}
-.label{display:block;font-size:14px;font-weight:700;margin:18px 0 8px}
-.input,.textarea,.select,.outline-btn{
-  width:100%;border:1px solid #111827;background:#fff;border-radius:8px;padding:13px 14px;outline:none
-}
-.input:focus,.textarea:focus,.select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.app{min-height:100vh;background:#fff}
+.screen{min-height:100vh;padding-bottom:88px}
+.narrow{width:min(720px,92%);margin:auto}
+.center{display:flex;align-items:center;justify-content:center}
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;border-bottom:1px solid #f0f1f5;background:#fff;position:sticky;top:0;z-index:30}
+.logo{display:flex;align-items:center;gap:10px;color:var(--blue);font-weight:800;font-size:25px;text-decoration:none}
+.logo-y{width:39px;height:39px;border-radius:13px;background:linear-gradient(135deg,#4777f2,#765ee9);position:relative;display:grid;place-items:center;color:#fff;font-size:25px;font-weight:900}
+.logo-y:after{content:"";position:absolute;width:11px;height:11px;background:#68d6c5;border-radius:50%;top:5px;right:7px}
+.profile-btn{width:46px;height:46px;border:0;border-radius:50%;background:#dff0ff;color:#2470d6;display:grid;place-items:center;font-size:23px}
+.page-title{text-align:center;color:var(--blue);font-size:28px;font-weight:800;margin:24px 0 22px}
+.back{border:0;background:none;color:#526070;font-weight:700;padding:8px 0}
+.card{border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:var(--shadow)}
+.soft-card{border:1px solid #dfe5f2;border-radius:18px;padding:18px;background:var(--soft-blue)}
+.field-label{display:block;font-weight:700;color:#222;margin:0 0 7px}
+.input,.textarea,.select{width:100%;border:1px solid #cfd5e1;border-radius:10px;background:#fff;padding:13px 14px;outline:none;color:#111}
+.input:focus,.textarea:focus,.select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,111,232,.10)}
 .textarea{min-height:120px;resize:vertical}
-.dark-btn{width:100%;border:0;border-radius:8px;padding:14px;background:#111827;color:#fff;font-weight:700;margin-top:24px}
-.link-btn{background:none;border:0;color:#2455c3;font-weight:700;padding:12px}
-.auth-switch{text-align:center;margin-top:20px;color:var(--muted)}
-.error{color:var(--danger);font-size:13px;margin-top:8px}
-.success{color:var(--green);font-size:13px;margin-top:8px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
-.top-title{font-size:27px;font-weight:800;color:#2455c3;text-align:center;flex:1}
-.back{border:0;background:#fff;color:#2455c3;font-weight:700}
-.icon-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center}
-.profile{background:#e8f3ff;color:#1769df;border:0}
-.greeting{display:grid;grid-template-columns:1fr 180px;align-items:center;gap:12px;margin:18px 0 28px}
-.greeting h1{font-size:29px;margin:0 0 8px;color:#173e89}
-.greeting p{margin:3px 0;color:#8b8f9a;font-size:16px}
-.hero-art{height:150px;display:grid;place-items:center}
-.illustration{width:155px;height:125px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.feature{border:1px solid #dfe5ee;border-radius:15px;padding:22px 14px;min-height:174px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:.15s;box-shadow:0 4px 16px rgba(0,0,0,.03)}
-.feature:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-.feature:nth-child(1){background:#eef7ff}.feature:nth-child(2){background:#f7f1ff}.feature:nth-child(3){background:#effbf7}.feature:nth-child(4){background:#fff5ec}
-.feature h3{margin:12px 0 0;color:#123d91;font-size:18px}
-.feature svg{width:70px;height:70px}
-.bottom-art{display:flex;justify-content:space-between;align-items:end;margin:32px 4px 8px}
-.quote{font-family:"Comic Sans MS",cursive;color:#16458f;font-size:23px;line-height:1.15;max-width:180px;transform:rotate(-5deg)}
-.books{width:210px}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(900px,100%);background:#fff;border-top:1px solid #e5e7eb;display:grid;grid-template-columns:repeat(4,1fr);padding:9px 5px calc(9px + env(safe-area-inset-bottom));z-index:20}
-.nav-btn{border:0;background:#fff;color:#8a8f98;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px}.nav-btn.active{color:#1670dc}.nav-btn svg{width:23px;height:23px}
-.panel{border:1px solid #d9dee8;border-radius:12px;padding:18px;background:#fff;box-shadow:var(--shadow)}
-.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}
-.small-btn{border:1px solid #111827;background:#fff;border-radius:7px;padding:11px 13px;color:#2455c3;font-weight:700}
-.blue-btn{border:0;background:var(--blue);color:#fff;border-radius:8px;padding:12px 16px;font-weight:700}
-.sets{display:grid;gap:10px;margin-top:14px}
-.set-item{display:flex;align-items:center;justify-content:space-between;border:1px solid #111827;background:#fff;border-radius:7px;padding:13px 15px;color:#2455c3;font-weight:700}
-.muted{color:var(--muted);font-size:13px}
-.feature-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.feature-head .side-action{width:auto;white-space:nowrap}
-.ai-box{margin-top:16px;border:1px solid #d7e5ff;background:#f8fbff;border-radius:10px;padding:14px}
-.ai-box strong{color:#2455c3}
-.result{white-space:pre-wrap;line-height:1.55}
-.camera-wrap{position:relative}.camera-wrap .camera{position:absolute;right:8px;bottom:8px}
-.file-preview{margin-top:12px;border:1px dashed #aebbd0;border-radius:8px;padding:12px;background:#fbfdff}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:grid;place-items:center;z-index:50;padding:20px}
-.modal-card{width:min(100%,430px);background:#fff;border-radius:14px;padding:20px}
-.modal-card h3{margin-top:0}
-.choice{display:block;width:100%;padding:14px;text-align:left;border:1px solid #111827;border-radius:8px;background:#fff;margin:9px 0;color:#2455c3;font-weight:700}
-.word-list{display:grid;gap:10px;margin-top:14px}.word{border:1px solid var(--line);border-radius:9px;padding:12px}.word b{color:#2455c3}
-.recap-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.toggle{border:1px solid #111827;background:#fff;border-radius:7px;padding:10px 13px;font-weight:700}.selected{background:#eef6ff;border-color:#2455c3;color:#2455c3}
-.question-box{border:1px solid #111827;border-radius:9px;padding:18px;margin-top:18px}
-.answer-input{margin-top:10px}.score{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:12px}
-.score strong{font-size:18px;color:#2455c3}.correct{color:var(--green)}.wrong{color:var(--danger)}
-.profile-card{text-align:center}.avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;border:1px solid #d8e3f3;background:#e8f3ff}
-.info{display:grid;gap:10px;text-align:left;margin-top:18px}.info div{border-bottom:1px solid #e5e7eb;padding:10px 0}.info b{display:block;font-size:12px;color:#6b7280;margin-bottom:3px}
-.improve-item{border:1px solid #111827;border-radius:8px;padding:14px;margin-top:10px}.improve-item .answer{margin-top:8px;background:#fff7f7;padding:9px;border-radius:7px}
-.lang{width:auto;min-width:120px}
-.footer-note{text-align:center;color:#9ca3af;font-size:12px;margin-top:25px}
-@media(max-width:600px){
- .screen{padding:18px 15px 92px}.greeting{grid-template-columns:1fr 125px}.hero-art{height:125px}.grid{gap:12px}.feature{min-height:150px;padding:14px 8px}.feature svg{width:58px;height:58px}.quote{font-size:19px}.books{width:145px}.top-title{font-size:23px}
+.btn{border:0;border-radius:10px;padding:12px 18px;font-weight:800;transition:.18s}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-dark{background:#222b3b;color:#fff}
+.btn-light{background:#f3f6fc;color:#30405f;border:1px solid #dce2ed}
+.btn-danger{background:#fff0f1;color:var(--danger);border:1px solid #e8c8cc}
+.btn-outline{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+.btn-small{padding:8px 12px;font-size:13px}
+.row{display:flex;gap:10px;align-items:center}
+.row-between{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.stack{display:grid;gap:14px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.notice{padding:12px 14px;border-radius:12px;background:#f7f9fd;border:1px solid #e2e6ee;color:#566071;font-size:13px}
+.ai-box{border:1px solid #cdd8ff;background:#f5f7ff;border-radius:16px;padding:14px}
+.ai-title{color:var(--deep);font-weight:800;margin-bottom:8px}
+.output{white-space:pre-wrap;line-height:1.65}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;height:78px;background:#fff;border-top:1px solid #e4e7ee;display:grid;grid-template-columns:repeat(4,1fr);z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{border:0;background:#fff;color:#7c8390;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px}
+.nav-item span:first-child{font-size:21px}
+.nav-item.active{color:var(--blue);font-weight:800}
+
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px 20px;background:#fff}
+.auth{width:min(430px,100%);padding:25px}
+.auth-brand{text-align:center;color:var(--blue);font-size:42px;font-weight:900;letter-spacing:-1.5px;margin-bottom:10px}
+.auth-title{text-align:center;color:#171b25;font-size:27px;margin:12px 0 30px}
+.auth .stack{gap:18px}
+.auth-links{text-align:center;margin-top:20px;color:#6f7581}
+.auth-links button{border:0;background:none;color:var(--blue);font-weight:800}
+.password-wrap{position:relative}
+.password-wrap .input{padding-right:60px}
+.eye{position:absolute;right:8px;top:5px;border:0;background:transparent;padding:9px;color:#657087}
+
+.hero{padding:22px 0 5px;display:grid;grid-template-columns:1fr 170px;align-items:center;gap:8px}
+.hero h1{font-size:30px;color:var(--deep);margin:0 0 7px}
+.hero p{margin:0;color:#737c8d;line-height:1.5}
+.hero-art{height:145px;border-radius:40px;background:#f0f6ff;display:grid;place-items:center;font-size:72px}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.feature{min-height:155px;border-radius:18px;border:1px solid #dfe4ed;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--deep);font-size:17px;font-weight:800;box-shadow:0 8px 25px rgba(50,70,120,.04)}
+.feature-icon{font-size:50px}
+.feature.blue{background:var(--soft-blue)}
+.feature.purple{background:var(--soft-purple)}
+.feature.mint{background:var(--soft-mint)}
+.feature.peach{background:var(--soft-peach)}
+.bottom-promo{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
+.promo-text{color:#3e63c9;font-weight:900;font-size:20px;line-height:1.1;padding:12px}
+.promo-art{font-size:58px;text-align:center;background:#f8fbff;border-radius:24px;padding:18px}
+
+.set-form{display:grid;gap:8px;margin-bottom:25px}
+.set-list{display:grid;gap:11px}
+.set-item{display:flex;align-items:center;justify-content:space-between;padding:16px 17px;border:1px solid var(--blue);border-radius:12px;background:#fff;color:var(--blue);font-weight:800}
+.set-item small{color:#8a91a0;font-weight:500}
+.set-item .arrow{font-size:22px}
+.attach-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.attach{border:1px solid #b9c8ec;background:#fff;border-radius:12px;padding:14px 7px;color:var(--blue);font-weight:800;text-align:center}
+.attach input{display:none}
+.file-box{border:1px solid #d8deea;border-radius:12px;padding:12px;background:#fbfcff}
+.file-preview{max-width:100%;max-height:300px;border-radius:10px;display:block;margin:8px auto}
+.pdf-preview{width:100%;height:380px;border:1px solid #d8deea;border-radius:10px}
+.extracted{background:#f8fafc;border:1px solid #e1e5ec;border-radius:10px;padding:12px;white-space:pre-wrap;line-height:1.55;max-height:300px;overflow:auto}
+
+.tool-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.tool-input-row{display:grid;grid-template-columns:1fr 50px;gap:8px;align-items:end}
+.icon-btn{width:50px;height:50px;border-radius:50%;border:1px solid #bfc8da;background:#fff;color:var(--blue);font-size:22px}
+.result-card{margin-top:14px;padding:17px;background:#eaf5ff;border:1px solid #d2e8ff;border-radius:16px;color:var(--deep)}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:18px}
+.square-action{width:92px;height:70px;border-radius:13px;border:1px solid #cdd4df;background:#f2f7ff;color:var(--blue);font-weight:800}
+.square-action.delete{background:#fff3f3;color:var(--danger)}
+
+.dropdown{position:relative}
+.dropdown-menu{position:absolute;right:0;top:calc(100% + 7px);background:#fff;border:1px solid #d7dce6;border-radius:10px;box-shadow:var(--shadow);min-width:150px;z-index:80;overflow:hidden}
+.dropdown-menu button{display:block;width:100%;padding:11px 13px;border:0;background:#fff;text-align:left;color:#283247}
+.dropdown-menu button:hover{background:#f4f7ff}
+.camera-wrap{position:relative}
+.camera-menu{position:absolute;right:0;top:58px;width:235px;background:#fff;border:1px solid #d7dce6;border-radius:14px;box-shadow:var(--shadow);padding:8px;z-index:40}
+.camera-menu button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:12px;border-radius:9px}
+.camera-menu button:hover{background:#f3f6ff}
+
+.chat-row{display:grid;grid-template-columns:1fr 125px;gap:9px}
+.ai-response{margin-top:14px}
+.language-pill{font-size:12px;color:#657087}
+
+.recap-small{width:210px;max-width:100%;padding:13px 20px;text-align:center;margin:0 auto 22px;border:1px solid #1d2430;border-radius:8px;color:var(--blue);font-weight:900}
+.recap-line{text-align:center;color:#161a22;font-weight:800;font-size:16px;margin:0 0 5px}
+.recap-title{text-align:center;color:var(--blue);font-size:28px;font-weight:900;margin:20px 0}
+.mode-box{display:flex;border:1px solid #252a34;border-radius:9px;overflow:hidden;width:max-content}
+.mode-box button{border:0;background:#fff;padding:10px 18px;color:#27324a;font-weight:800}
+.mode-box button.active{background:#eef3ff;color:var(--blue)}
+.control-row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0}
+.question-card{padding:18px;border:1px solid #d7dce6;border-radius:15px;background:#fff;margin-top:15px}
+.question-text{font-size:19px;font-weight:800;line-height:1.5}
+.answer-area{margin-top:14px}
+.score{font-weight:900;color:var(--deep)}
+.correct{color:var(--success)}
+.wrong{color:var(--danger)}
+.user-chip{color:#606a7a;font-size:13px}
+.improve-item{padding:16px;border:1px solid #d7dce6;border-radius:14px;background:#fff}
+.improve-item h3{margin:0 0 8px;color:var(--deep)}
+.profile-card{padding:20px}
+.avatar-big{width:88px;height:88px;border-radius:50%;background:#e0efff;display:grid;place-items:center;color:#2470d6;font-size:42px;overflow:hidden}
+.avatar-big img{width:100%;height:100%;object-fit:cover}
+.settings-panel{margin-top:16px;padding:15px;border:1px solid #dce2ed;border-radius:14px;background:#fafbfe}
+hr{border:0;border-top:1px solid #edf0f5;margin:20px 0}
+.empty{padding:30px 15px;text-align:center;color:#7a8291;border:1px dashed #cfd5e1;border-radius:14px}
+.toast{position:fixed;left:50%;bottom:95px;transform:translateX(-50%);background:#202938;color:#fff;padding:11px 15px;border-radius:10px;z-index:100;font-size:13px;box-shadow:var(--shadow)}
+.loading{opacity:.65;pointer-events:none}
+
+@media(max-width:520px){
+  .topbar{padding:10px 4%}
+  .hero{grid-template-columns:1fr 125px}
+  .hero-art{height:120px;font-size:55px}
+  .feature{min-height:140px}
+  .feature-icon{font-size:42px}
+  .promo-text{font-size:17px}
+  .auth-brand{font-size:38px}
 }
 </style>
 </head>
+
 <body>
-<div id="app"></div>
+<div id="app" class="app"></div>
+<div id="toast" class="toast hidden"></div>
 
-<input id="galleryInput" type="file" accept="image/*" class="hidden">
-<input id="cameraInput" type="file" accept="image/*" capture="environment" class="hidden">
-<input id="pdfInput" type="file" accept="application/pdf" class="hidden">
-
-<div id="modal" class="modal hidden" onclick="closeModal(event)">
-  <div class="modal-card" onclick="event.stopPropagation()">
-    <h3 id="modalTitle">Choose</h3><div id="modalBody"></div>
-    <button class="small-btn" style="width:100%;margin-top:8px" onclick="hideModal()">Cancel</button>
-  </div>
-</div>
-
-<script>
+<script type="module">
 /* =========================================================
-   YOURSELF — SINGLE index.html
-   ---------------------------------------------------------
-   This file keeps user data separate by account in browser
-   localStorage. For a real production app, authentication
-   MUST be moved to a server/database; localStorage is only
-   suitable for a prototype/local deployment.
-
-   AI:
-   Set CONFIG.AI_ENDPOINT to your own secure backend endpoint.
-   The browser sends {task, prompt, language, context}.
-   Your backend should call your chosen AI provider and return:
-       { "text": "..." }
-   Never put a private provider API key in this HTML file.
+   YOURSELF — SINGLE FILE APPLICATION
    ========================================================= */
-const CONFIG = {
-  AI_ENDPOINT: "", // Example: "https://your-domain.com/api/ai"
-  MAX_FILE_MB: 15
+
+const STORAGE_KEY = "yourself_users_v3";
+const SESSION_KEY = "yourself_session_v3";
+const AI_ENDPOINT = "https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev/api/ai";
+
+let state = {
+  page: "landing",
+  selectedSetId: null,
+  recapMode: null,
+  recapIndex: 0,
+  recapOrder: [],
+  recapAnswerVisible: false,
+  recapLastResult: null,
+  recapCondition: "",
+  conceptLanguage: "English",
+  vocabularyLanguage: "English",
+  translationFrom: "English",
+  translationTo: "Hindi",
+  aiBusy: false
 };
 
-const KEY="yourself_v4";
-let db=JSON.parse(localStorage.getItem(KEY)||'{"users":{},"session":null}');
-let state={page:db.session?"home":"auth",authMode:"signin",setName:null,recapMode:null,currentIndex:0,order:[],answerVisible:false,language:"English",attachment:null,score:0};
-function saveDB(){localStorage.setItem(KEY,JSON.stringify(db))}
-function currentUser(){return db.session?db.users[db.session]:null}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(16).slice(2)}
-function hash(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""))}
-function svg(name){
- const icons={
- home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
- list:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/>',
- refresh:'<path d="M20 11a8 8 0 0 0-14.9-4L3 10"/><path d="M3 5v5h5"/><path d="M4 13a8 8 0 0 0 14.9 4L21 14"/><path d="M21 19v-5h-5"/>',
- spark:'<path d="m12 3 1.6 5.4L19 10l-5.4 1.
+const $ = id => document.getElementById(id);
+const uid = (prefix="id") => prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2,9);
+
+function getUsers(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+  catch(e){ return {}; }
+}
+function saveUsers(users){ localStorage.setItem(STORAGE_KEY, JSON.stringify(users)); }
+function currentUsername(){ return localStorage.getItem(SESSION_KEY) || ""; }
+function currentUser(){
+  const users=getUsers(), u=currentUsername();
+  return users[u] || null;
+}
+function saveCurrentUser(user){
+  const users=getUsers();
+  users[user.username]=user;
+  saveUsers(users);
+}
+function logout(){
+  localStorage.removeItem(SESSION_KEY);
+  state={...state,page:"landing"};
+  render();
+}
+async function hashPassword(value){
+  const data=new TextEncoder().encode(value);
+  const digest=await crypto.subtle.digest("SHA-256",data);
+  return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function esc(v){
+  return String(v ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.remove("hidden");
+  clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.classList.add("hidden"),2600);
+}
+function go(page, extra={}){
+  state.page=page;
+  Object.assign(state,extra);
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function requireUser(){
+  if(!currentUser()){go("signin");return false}
+  return true;
+}
+
+/* ---------------- AUTH ---------------- */
+async function signup(){
+  const username=$("suUser").value.trim();
+  const email=$("suEmail").value.trim().toLowerCase();
+  const password=$("suPass").value;
+  const confirm=$("suConfirm").value;
+
+  if(!username||!email||!password||!confirm){toast("Please complete all fields.");return}
+  if(password!==confirm){toast("Passwords do not match.");return}
+  if(password.length<6){toast("Password must be at least 6 characters.");return}
+
+  const users=getUsers();
+  if(users[username]){toast("That username is already registered. Please sign in.");return}
+  if(Object.values(users).some(u=>u.email===email)){toast("That email is already registered.");return}
+
+  const passwordHash=await hashPassword(password);
+  users[username]={
+    username,email,passwordHash,
+    avatar:"",
+    sets:[],
+    pronunciation:[],
+    vocabulary:[],
+    translation:[],
+    recapHistory:[],
+    aiKey:"",
+    createdAt:new Date().toISOString()
+  };
+  saveUsers(users);
+  localStorage.setItem(SESSION_KEY,username);
+  toast("Account created.");
+  go("home");
+}
+async function signin(){
+  const username=$("siUser").value.trim();
+  const password=$("siPass").value;
+  const users=getUsers();
+  const user=users[username];
+  if(!user){toast("Username or password is incorrect.");return}
+  const hash=await hashPassword(password);
+  if(hash!==user.passwordHash){toast("Username or password is incorrect.");return}
+  localStorage.setItem(SESSION_KEY,username);
+  toast("Signed in successfully.");
+  go("home");
+}
+
+/* ---------------- AI ----------------
+   The AI helper is used by Concept, Vocabulary, Translation,
+   Recap conditions and answer checking.
+*/
+async function askAI(prompt){
+  if(!AI_ENDPOINT || AI_ENDPOINT.includes("YOUR-WORKER-NAME")){
+    throw new Error("AI_BACKEND_MISSING");
+  }
+  const res=await fetch(AI_ENDPOINT,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({prompt})
+  });
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data?.error || `AI request failed (${res.status})`);
+  return data?.text || "No AI response.";
+}
+function aiMissingMessage(){
+  return `<div class="notice">AI backend is not connected yet. Deploy the included Cloudflare Worker, put your Gemini API key in the Worker secret, then paste the Worker URL into <b>AI_ENDPOINT</b> in this index.html.</div>`;
+}
+function aiBackendMessage(){
+  return `<div class="notice">AI backend is not connected. In index.html, replace <b>YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev</b> with your deployed Worker URL.</div>`;
+}
+
+/* ---------------- RENDER ---------------- */
+function render(){
+  const app=$("app");
+  const user=currentUser();
+
+  if(state.page==="landing") app.innerHTML=landingHTML();
+  else if(state.page==="signup") app.innerHTML=signupHTML();
+  else if(state.page==="signin") app.innerHTML=signinHTML();
+  else if(!user){ state.page="signin"; app.innerHTML=signinHTML(); }
+  else {
+    const pages={
+      home:homeHTML, account:accountHTML, sets:setsHTML, setDetail:setDetailHTML,
+      pronunciation:pronunciationHTML, concept:conceptHTML, vocabulary:vocabularyHTML,
+      translation:translationHTML, recapSets:recapSetsHTML, recapMode:recapModeHTML,
+      recap:recapHTML, improve:improveHTML
+    };
+    app.innerHTML=(pages[state.page]||homeHTML)();
+    if(["home","sets","setDetail","pronunciation","concept","vocabulary","translation","recapSets","recapMode","recap","improve","account"].includes(state.page)){
+      attachBottomNav();
+    }
+  }
+  bindCommon();
+}
+
+function landingHTML(){
+  return `<div class="auth-wrap">
+    <div class="auth">
+      <div class="auth-brand">YOURSELF</div>
+      <p style="text-align:center;color:#737b8c;line-height:1.55">Test yourself without needing anyone to ask you questions.</p>
+      <div class="row" style="justify-content:center;margin-top:35px;gap:40px">
+        <button class="btn btn-outline" onclick="go('signup')">Sign Up</button>
+        <button class="btn btn-outline" onclick="go('signin')">Sign In</button>
+      </div>
+    </div>
+  </div>`;
+}
+function signupHTML(){
+  return `<div class="auth-wrap"><div class="auth">
+    <div class="auth-brand">Yourself</div>
+    <h1 class="auth-title">Sign Up</h1>
+    <div class="stack">
+      <div><label class="field-label">Username</label><input id="suUser" class="input" autocomplete="username"></div>
+      <div><label class="field-label">Email</label><input id="suEmail" class="input" type="email" autocomplete="email"></div>
+      <div><label class="field-label">Password</label><div class="password-wrap"><input id="suPass" class="input" type="password" autocomplete="new-password"><button class="eye" onclick="togglePassword('suPass',this)">◉</button></div></div>
+      <div><label class="field-label">Confirm Password</label><div class="password-wrap"><input id="suConfirm" class="input" type="password" autocomplete="new-password"><button class="eye" onclick="togglePassword('suConfirm',this)">◉</button></div></div>
+      <button class="btn btn-dark" onclick="signup()">Sign Up</button>
+    </div>
+    <div class="auth-links">Already have an account? <button onclick="go('signin')">Sign In</button></div>
+  </div></div>`;
+}
+function signinHTML(){
+  return `<div class="auth-wrap"><div class="auth">
+    <div class="auth-brand">Yourself</div>
+    <h1 class="auth-title">Sign In</h1>
+    <div class="stack">
+      <div><label class="field-label">Username</label><input id="siUser" class="input" autocomplete="username"></div>
+      <div><label class="field-label">Password</label><div class="password-wrap"><input id="siPass" class="input" type="password" autocomplete="current-password"><button class="eye" onclick="togglePassword('siPass',this)">◉</button></div></div>
+      <button class="btn btn-dark" onclick="signin()">Sign In</button>
+    </div>
+    <div class="auth-links">New here? <button onclick="go('signup')">Sign Up</button></div>
+  </div></div>`;
+}
+function togglePassword(id,btn){
+  const el=$(id); el.type=el.type==="password"?"text":"password"; btn.textContent=el.type==="password"?"◉":"◉";
+}
+
+function topbar(){
+  const u=currentUser();
+  return `<header class="topbar">
+    <button class="logo" style="border:0;background:none" onclick="go('home')"><span class="logo-y">Y</span><span>Yourself</span></button>
+    <button class="profile-btn" onclick="go('account')" aria-label="Account">${u?.avatar?`<img src="${esc(u.avatar)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:"👤"}</button>
+  </header>`;
+}
+function navItem(page,icon,label){
+  return `<button class="nav-item ${state.page===page||(["recapSets","recapMode","recap"].includes(state.page)&&page==="recap")?"active":""}" onclick="go('${page}')"><span>${icon}</span><span>${label}</span></button>`;
+}
+function bottomNav(){
+  return `<nav class="bottom-nav">
+    ${navItem("home","⌂","Home")}
+    ${navItem("sets","▣","Question Set")}
+    ${navItem("recapSets","⟳","Recap")}
+    ${navItem("improve","✧","Improve")}
+  </nav>`;
+}
+function shell(content){return `<div class="screen">${topbar()}<main class="narrow">${content}</main>${bottomNav()}</div>`}
+function attachBottomNav(){}
+
+/* ---------------- HOME ---------------- */
+function homeHTML(){
+ return shell(`
+  <section class="hero">
+    <div><h1>Hey there! 👋</h1><p>Small steps make big progress<br>Keep going! 💙</p></div>
+    <div class="hero-art">💡📚</div>
+  </section>
+  <section class="feature-grid">
+    <button class="feature blue" onclick="go('pronunciation')"><span class="feature-icon">📣</span><span>Pronunciation</span></button>
+    <button class="feature purple" onclick="go('concept')"><span class="feature-icon">💡</span><span>Concept</span></button>
+    <button class="feature mint" onclick="go('vocabulary')"><span class="feature-icon">📖</span><span>Vocabulary</span></button>
+    <button class="feature peach" onclick="go('translation')"><span class="feature-icon">🔤</span><span>Translation</span></button>
+  </section>
+  <section class="bottom-promo">
+    <div class="promo-text">Better<br>Learning<br>Brighter Future ✦</div>
+    <div class="promo-art">✏️📚🛩️</div>
+  </section>
+ `)
+}
+
+/* ---------------- ACCOUNT ---------------- */
+function accountHTML(){
+ const u=currentUser();
+ return shell(`
+  <div class="page-title">Account</div>
+  <div class="profile-card card">
+    <div class="row">
+      <div class="avatar-big" id="avatarPreview">${u.avatar?`<img src="${esc(u.avatar)}">`:"👤"}</div>
+      <div><h2 style="margin:0">${esc(u.username)}</h2><div class="muted small">Profile</div></div>
+    </div>
+    <hr>
+    <label class="field-label">Profile Photo</label>
+    <input id="avatarInput" class="input" type="file" accept="image/*" onchange="updateAvatar(this)">
+    <div class="stack" style="margin-top:16px">
+      <div><label class="field-label">Username</label><input class="input" value="${esc(u.username)}" readonly></div>
+      <div><label class="field-label">Email</label><input class="input" value="${esc(u.email)}" readonly></div>
+      <div><label class="field-label">Password</label><input class="input" value="••••••••" readonly></div>
+    </div>
+    <div class="settings-panel">
+      <div class="row-between"><b>AI Settings</b><span class="language-pill">Secure backend</span></div>
+      <p class="small muted">AI is connected through a secure backend. Users do <b>not</b> need to enter a Gemini API key. The Gemini key stays on the backend, not inside GitHub Pages.</p>
+      <div class="notice">Concept, Vocabulary, Translation, Recap Condition and Submit Answer use the same AI backend.</div>
+    </div>
+    <button class="btn btn-danger" style="width:100%;margin-top:18px" onclick="logout()">Log Out</button>
+  </div>
+ `)
+}
+function updateAvatar(input){
+ const file=input.files?.[0]; if(!file)return;
+ if(!file.type.startsWith("image/")){toast("Please select an image.");return}
+ const reader=new FileReader();
+ reader.onload=()=>{const u=currentUser();u.avatar=reader.result;saveCurrentUser(u);render();toast("Profile photo updated.")};
+ reader.readAsDataURL(file);
+}
+/* ---------------- QUESTION SETS ---------------- */
+function setsHTML(){
+ const u=currentUser();
+ return shell(`
+  <div class="page-title">Question Set</div>
+  <div class="set-form">
+    <label class="field-label">Name of Set</label>
+    <div class="row"><input id="newSetName" class="input" placeholder="Add Set Name"><button class="btn btn-primary" onclick="addSet()">Add</button></div>
+  </div>
+  <div class="row-between"><h2 style="margin:0 0 12px">Saved Sets</h2><span class="small muted">${u.sets.length} set(s)</span></div>
+  <div class="set-list">
+    ${u.sets.length?u.sets.map(s=>`<button class="set-item" onclick="go('setDetail',{selectedSetId:'${s.id}'})"><span>${esc(s.name)}<br><small>${s.questions.length} question(s)</small></span><span class="arrow">›</span></button>`).join(""):`<div class="empty">No question sets yet. Add your first set above.</div>`}
+  </div>
+ `)
+}
+function addSet(){
+ const name=$("newSetName").value.trim(); if(!name){toast("Enter a set name.");return}
+ const u=currentUser();
+ if(u.sets.some(s=>s.name.toLowerCase()===name.toLowerCase())){toast("A set with that name already exists.");return}
+ u.sets.push({id:uid("set"),name,questions:[]});
+ saveCurrentUser(u); go("sets"); toast("Question set created.");
+}
+function selectedSet(){
+ const u=currentUser(); return u.sets.find(s=>s.id===state.selectedSetId);
+}
+function setDetailHTML(){
+ const s=selectedSet();
+ if(!s)return shell(`<div class="empty">Set not found.</div>`);
+ return shell(`
+  <button class="back" onclick="go('sets')">← Back</button>
+  <div class="page-title">${esc(s.name)}</div>
+  <div class="card" style="padding:17px">
+    <div class="stack">
+      <div><label class="field-label">Add the Question</label><textarea id="qInput" class="textarea"></textarea></div>
+      <div><label class="field-label">Add the Answer</label><textarea id="aInput" class="textarea"></textarea></div>
+      <button class="btn btn-primary" onclick="saveQuestion()">Save Question</button>
+    </div>
+    <hr>
+    <b>Add Attachments</b>
+    <div class="attach-row" style="margin-top:10px">
+      <label class="attach">🖼️<br>Gallery<input type="file" accept="image/*" onchange="processAttachment(this,'image')"></label>
+      <label class="attach">📷<br>Camera<input type="file" accept="image/*" capture="environment" onchange="processAttachment(this,'image')"></label>
+      <label class="attach">📄<br>PDF<input type="file" accept="application/pdf" onchange="processAttachment(this,'pdf')"></label>
+    </div>
+    <div id="attachmentArea" style="margin-top:12px"></div>
+  </div>
+  <div style="margin-top:18px" class="stack">
+    <div class="row-between"><h3 style="margin:0">Questions</h3><span class="small muted">${s.questions.length}</span></div>
+    ${s.questions.length?s.questions.map((q,i)=>questionItemHTML(q,i,s.id)).join(""):`<div class="empty">No questions saved yet.</div>`}
+  </div>
+ `)
+}
+function questionItemHTML(q,i,setId){
+ return `<div class="file-box">
+   <div class="row-between"><b>Question ${i+1}</b><button class="btn btn-danger btn-small" onclick="deleteQuestion('${setId}','${q.id}')">Delete</button></div>
+   <p><b>Q:</b> ${esc(q.question)}</p>
+   <p><b>A:</b> ${esc(q.answer)}</p>
+   ${q.sourceText?`<details><summary>Extracted text</summary><div class="extracted">${esc(q.sourceText)}</div></details>`:""}
+ </div>`;
+}
+function saveQuestion(){
+ const q=$("qInput")?.value.trim(), a=$("aInput")?.value.trim();
+ if(!q||!a){toast("Add both question and answer.");return}
+ const u=currentUser();
+ const s=u?.sets?.find(x=>x.id===state.selectedSetId);
+ if(!s){toast("Question Set not found. Please open the set again.");return}
+ const attachment=window.__lastAttachment||null;
+ s.questions.push({id:uid("q"),question:q,answer:a,sourceText:attachment?.text||"",attachment:attachment?{name:attachment.name,type:attachment.type}:null,createdAt:new Date().toISOString()});
+ try{saveCurrentUser(u);}catch(e){toast("Could not save. Browser storage may be full.");return}
+ window.__lastAttachment=null;
+ toast("Question saved successfully.");
+ render();
+}
+function deleteQuestion(setId,qid){
+ const u=currentUser(),s=u.sets.find(x=>x.id===setId); if(!s)return;
+ s.questions=s.questions.filter(q=>q.id!==qid); saveCurrentUser(u); render(); toast("Question deleted.");
+}
+
+/* -------- OCR / PDF -------- */
+async function processAttachment(input,type){
+ const file=input.files?.[0];if(!file)return;
+ const area=$("attachmentArea");
+ if(file.size>20*1024*1024){toast("Please choose a file smaller than 20 MB.");input.value="";return}
+ area.innerHTML=`<div class="notice">Reading <b>${esc(file.name)}</b> automatically. Please wait…</div>`;
+ try{
+   if(type==="image"){
+     const dataUrl=await fileToDataURL(file);
+     area.innerHTML=`<div class="file-box"><b>${esc(file.name)}</b><img class="file-preview" src="${dataUrl}"><div class="notice">Running OCR…</div></div>`;
+     const result=await Tesseract.recognize(dataUrl,"eng",{logger:m=>{if(m.status&&m.progress)area.querySelector('.notice').textContent=`OCR: ${m.status} ${Math.round(m.progress*100)}%`;}});
+     const text=(result.data.text||"").trim();
+     window.__lastAttachment={name:file.name,type:"image",dataUrl,text};
+     area.innerHTML=`<div class="file-box"><b>${esc(file.name)}</b><img class="file-preview" src="${dataUrl}"><div class="extracted">${esc(text||"No readable text detected.")}</div><button class="btn btn-primary btn-small" style="margin-top:10px" onclick="putExtractedTextIntoFields()">Use extracted text</button></div>`;
+   }else{
+     const pdf=await waitForPdfJs();
+     const dataUrl=await fileToDataURL(file);
+     const bytes=await fetch(dataUrl).then(r=>r.arrayBuffer());
+     const doc=await pdf.getDocument({data:bytes}).promise;
+     let text="";
+     for(let i=1;i<=doc.numPages;i++){
+       const page=await doc.getPage(i);
+       const content=await page.getTextContent();
+       text += content.items.map(x=>x.str).join(" ")+"\n";
+     }
+     text=text.trim();
+     window.__lastAttachment={name:file.name,type:"pdf",dataUrl,text};
+     area.innerHTML=`<div class="file-box"><div class="row-between"><b>${esc(file.name)}</b><button class="btn btn-light btn-small" onclick="togglePdfPreview()">Open PDF</button></div><div id="pdfPreviewBox" class="hidden" style="margin-top:9px"><iframe class="pdf-preview" src="${dataUrl}"></iframe></div><div class="extracted" style="margin-top:10px">${esc(text||"No embedded text found. You can still open the PDF or type the question manually.")}</div><button class="btn btn-primary btn-small" style="margin-top:10px" onclick="putExtractedTextIntoFields()">Use extracted text</button></div>`;
+     if(!text)toast("PDF uploaded. This PDF has no text layer; type the question manually or use a text-based PDF.");
+   }
+   toast("File uploaded and read successfully.");
+ }catch(err){
+   console.error(err);
+   area.innerHTML=`<div class="notice">The file was selected but its text could not be extracted automatically. You can still type the question and answer manually.</div>`;
+   toast("File reading failed. Please try another file.");
+ }
+}
+function togglePdfPreview(){ $("pdfPreviewBox")?.classList.toggle("hidden"); }
+function putExtractedTextIntoFields(){
+ const t=window.__lastExtracted||"";
+ if($("qInput")) $("qInput").value=t;
+ toast("Extracted text placed in Question field.");
+}
+function fileToDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
+
+/* PDF.js global build is loaded in the <head>. */
+function waitForPdfJs(timeout=8000){
+  return new Promise((resolve,reject)=>{
+    const start=Date.now();
+    const timer=setInterval(()=>{
+      if(window.pdfjsLib){clearInterval(timer);resolve(window.pdfjsLib);}
+      else if(Date.now()-start>timeout){clearInterval(timer);reject(new Error("PDF library did not load"));}
+    },100);
+  });
+}
+
+/* ---------------- PRONUNCIATION ---------------- */
+function pronunciationHTML(){
+ return shell(`
+  <div class="page-title">Pronunciation</div>
+  <div class="tool-input-row">
+    <input id="pronInput" class="input" value="">
+    <button class="icon-btn" onclick="startSpeech()">🎙️</button>
+  </div>
+  <div class="result-card">
+    <div id="pronResult">Your typed or spoken word will appear here.</div>
+    <button class="icon-btn" style="margin-top:10px" onclick="speakPronunciation()">🔊</button>
+  </div>
+  <div class="action-row">
+    <button class="square-action" onclick="savePronunciation()">🔖<br>Save</button>
+    <button class="square-action delete" onclick="deletePronunciation()">🗑️<br>Delete</button>
+  </div>
+ `)
+}
+async function startSpeech(){
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){
+   toast("Speech recognition is not supported in this browser. Try Chrome or Edge over HTTPS.");
+   return;
+ }
+ try{
+   if(!navigator.mediaDevices?.getUserMedia) throw new Error("MIC_UNAVAILABLE");
+   const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+   stream.getTracks().forEach(t=>t.stop());
+ }catch(e){
+   toast("Microphone permission is blocked. Click the lock icon near the address bar → Microphone → Allow, then try again.");
+   return;
+ }
+ const rec=new SpeechRecognition();
+ rec.lang="en-IN";rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=3;
+ rec.onstart=()=>toast("Listening… speak now");
+ rec.onresult=e=>{
+   let text="";
+   for(let i=e.resultIndex;i<e.results.length;i++) text+=e.results[i][0].transcript;
+   if($("pronInput")) $("pronInput").value=text.trim();
+   if($("pronResult")) $("pronResult").textContent=text.trim()||"Listening…";
+ };
+ rec.onerror=e=>{
+   const msg=e.error==="not-allowed"?"Microphone permission was denied. Allow microphone access and try again.":e.error==="no-speech"?"No speech detected. Tap the mic and speak clearly.":"Microphone recognition failed. Try Chrome/Edge over HTTPS.";
+   toast(msg);
+ };
+ rec.onend=()=>{};
+ try{rec.start();}catch(e){toast("Could not start the microphone. Please try again.");}
+}
+function speakPronunciation(){
+ const text=$("pronInput")?.value.trim()||$("pronResult")?.textContent.trim();
+ if(!text){toast("Enter a word first.");return}
+ speechSynthesis.cancel();
+ speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+}
+function savePronunciation(){
+ const t=$("pronInput").value.trim();if(!t){toast("Enter a word first.");return}
+ const u=currentUser();u.pronunciation.push({id:uid("p"),text:t});saveCurrentUser(u);toast("Pronunciation saved.");
+}
+function deletePronunciation(){
+ $("pronInput").value="";$("pronResult").textContent="Your typed or spoken word will appear here.";toast("Cleared.");
+}
+
+/* ---------------- CONCEPT ---------------- */
+function conceptHTML(){
+ return shell(`
+  <div class="tool-header"><div class="page-title" style="margin:20px 0">Concept</div>
+    <div class="dropdown"><button class="btn btn-light btn-small" onclick="toggleMenu('conceptLangMenu')">${esc(state.conceptLanguage)} ▾</button>
+      <div id="conceptLangMenu" class="dropdown-menu hidden">
+        <button onclick="setConceptLang('English')">English</button><button onclick="setConceptLang('Hindi')">Hindi</button><button onclick="setConceptLang('Hinglish')">Hinglish</button>
+      </div>
+    </div>
+  </div>
+  <div class="camera-wrap">
+    <textarea id="conceptInput" class="textarea" style="padding-right:55px;min-height:105px"></textarea>
+    <button class="icon-btn" style="position:absolute;right:8px;top:8px" onclick="toggleMenu('conceptCameraMenu')">📷</button>
+    <div id="conceptCameraMenu" class="camera-menu hidden">
+      <button onclick="triggerHiddenFile('conceptCameraInput')">📷 On-the-spot Photo Capture</button>
+      <button onclick="triggerHiddenFile('conceptGalleryInput')">🖼️ Upload Image from Gallery</button>
+      <button onclick="triggerHiddenFile('conceptPdfInput')">📄 Upload PDF File</button>
+    </div>
+  </div>
+  <input id="conceptCameraInput" class="hidden" type="file" accept="image/*" capture="environment" onchange="conceptAttachment(this,'image')">
+  <input id="conceptGalleryInput" class="hidden" type="file" accept="image/*" onchange="conceptAttachment(this,'image')">
+  <input id="conceptPdfInput" class="hidden" type="file" accept="application/pdf" onchange="conceptAttachment(this,'pdf')">
+  <div id="conceptFileArea" style="margin-top:10px"></div>
+  <div class="action-row"><button class="btn btn-primary" onclick="askConcept()">DONE — EXPLAIN</button></div>
+  <div id="conceptOutput" class="ai-box ai-response"><div class="ai-title">Explanation</div><div class="muted">Your answer will appear here after you click DONE — EXPLAIN.</div></div>
+ `)
+}
+function toggleMenu(id){$(id)?.classList.toggle("hidden")}
+function setConceptLang(lang){state.conceptLanguage=lang;render()}
+function triggerHiddenFile(id){$(id)?.click()}
+async function conceptAttachment(input,type){
+ const file=input.files?.[0];if(!file)return;
+ if(file.size>20*1024*1024){toast("Please choose a file smaller than 20 MB.");input.value="";return}
+ const area=$("conceptFileArea");area.innerHTML=`<div class="notice">Reading <b>${esc(file.name)}</b>…</div>`;
+ try{
+   let text="";
+   if(type==="image"){
+     const data=await fileToDataURL(file);
+     area.innerHTML=`<div class="file-box"><img class="file-preview" src="${data}"><div class="notice">Running OCR…</div></div>`;
+     const result=await Tesseract.recognize(data,"eng",{logger:m=>{const n=area.querySelector('.notice');if(n&&m.status&&m.progress)n.textContent=`OCR: ${m.status} ${Math.round(m.progress*100)}%`;}});
+     text=(result.data.text||"").trim();
+     area.innerHTML=`<div class="file-box"><b>${esc(file.name)}</b><img class="file-preview" src="${data}"><div class="extracted">${esc(text||"No readable text detected.")}</div></div>`;
+   }else{
+     const pdf=await waitForPdfJs();
+     const data=await fileToDataURL(file),bytes=await fetch(data).then(r=>r.arrayBuffer()),doc=await pdf.getDocument({data:bytes}).promise;
+     for(let i=1;i<=doc.numPages;i++){const p=await doc.getPage(i);const c=await p.getTextContent();text+=c.items.map(x=>x.str).join(" ")+"\n"}
+     text=text.trim();
+     area.innerHTML=`<div class="file-box"><div class="row-between"><b>${esc(file.name)}</b><button class="btn btn-light btn-small" onclick="toggleMenu('conceptPdfPreview')">Open PDF</button></div><div id="conceptPdfPreview" class="hidden" style="margin-top:9px"><iframe class="pdf-preview" src="${data}"></iframe></div><div class="extracted" style="margin-top:9px">${esc(text||"No embedded text found in this PDF.")}</div></div>`;
+   }
+   $("conceptInput").value=text;
+   toast("File uploaded and text extracted.");
+ }catch(e){console.error(e);area.innerHTML=`<div class="notice">The file was selected but automatic text extraction failed. Try a clear image or a text-based PDF.</div>`;toast("Could not read this file automatically.")}
+}
+async function askConcept(){
+ const text=$("conceptInput").value.trim();if(!text){toast("Enter or upload a concept/question.");return}
+ const out=$("conceptOutput");out.innerHTML=`<div class="ai-title">Explanation</div><div class="muted">AI is thinking…</div>`;
+ try{
+   const prompt=`You are the AI tutor inside an educational app called Yourself. Explain the following user input in ${state.conceptLanguage}. It may be mathematics, reasoning, science, history, English, a paragraph, diagram description, or any other study question. Do not refuse merely because the topic changes. Give a clear answer, then step-by-step explanation, simple example(s), and important points. If it is a question, solve it. If the input is ambiguous, state the assumption briefly. User input:\\n${text}`;
+   const ans=await askAI(prompt);
+   out.innerHTML=`<div class="ai-title">Explanation · ${esc(state.conceptLanguage)}</div><div class="output">${esc(ans)}</div>`;
+ }catch(e){
+   out.innerHTML=e.message==="AI_BACKEND_MISSING"?aiBackendMessage():`<div class="notice">${esc(e.message)}</div>`;
+ }
+}
+
+/* ---------------- VOCABULARY ---------------- */
+function vocabularyHTML(){
+ return shell(`
+  <div class="tool-header"><div class="page-title" style="margin:20px 0">Vocabulary</div>
+    <button class="btn btn-outline btn-small" onclick="toggleMenu('vocabAddMenu')">＋ Add</button>
+    <div id="vocabAddMenu" class="dropdown-menu hidden" style="right:0">
+      <button onclick="openVocabAdd()">Add Word & Meaning</button>
+      <button onclick="openVocabRequest()">Ask AI for Words</button>
+    </div>
+  </div>
+  <div id="vocabWorkspace" class="stack">
+    <div class="ai-box">
+      <div class="ai-title">Ask for vocabulary</div>
+      <p class="small muted">Example: “Give me 30 advanced GRE words” or “Give me 20 daily food and cooking words.”</p>
+      <div class="chat-row"><input id="vocabRequest" class="input"><button class="btn btn-primary" onclick="generateVocabulary()">Get Words</button></div>
+    </div>
+    <div class="notice">AI stays focused on English vocabulary: meanings, synonyms, antonyms, usage, pronunciation, roots and examples.</div>
+  </div>
+ `)
+}
+function openVocabAdd(){
+ $("vocabWorkspace").innerHTML=`
+  <div class="card" style="padding:17px">
+   <div class="stack">
+    <div><label class="field-label">Word</label><input id="vWord" class="input"></div>
+    <div><label class="field-label">Meaning</label><textarea id="vMeaning" class="textarea"></textarea></div>
+    <div><label class="field-label">Example</label><textarea id="vExample" class="textarea"></textarea></div>
+    <div class="row"><button class="btn btn-primary" onclick="saveVocabulary('save')">Save</button><button class="btn btn-outline" onclick="saveVocabulary('saveas')">Save As</button></div>
+   </div>
+  </div>`;
+}
+function openVocabRequest(){
+ $("vocabWorkspace").scrollIntoView({behavior:"smooth"});
+}
+async function generateVocabulary(){
+ const request=$("vocabRequest").value.trim();if(!request){toast("Tell AI what vocabulary you want.");return}
+ $("vocabWorkspace").insertAdjacentHTML("beforeend",`<div id="vocabAI" class="ai-box"><div class="muted">Generating vocabulary…</div></div>`);
+ try{
+   const ans=await askAI(`You are an English vocabulary tutor. User asks: ${request}. Give only English-vocabulary learning material. If they request 20 or 30 words, provide exactly that number. For each word include word, pronunciation, simple English meaning, Hinglish meaning, 2 synonyms, 1 antonym where natural, one example sentence, and a short root/prefix/suffix note when useful. Keep it practical and study-friendly.`);
+   $("vocabAI").innerHTML=`<div class="ai-title">AI Vocabulary</div><div class="output">${esc(ans)}</div>`;
+ }catch(e){$("vocabAI").innerHTML=e.message==="AI_BACKEND_MISSING"?aiBackendMessage():`<div class="notice">${esc(e.message)}</div>`}
+}
+function saveVocabulary(type){
+ const w=$("vWord").value.trim(),m=$("vMeaning").value.trim(),ex=$("vExample").value.trim();
+ if(!w||!m){toast("Add the word and meaning.");return}
+ const u=currentUser();const item={id:uid("v"),word:w,meaning:m,example:ex};
+ u.vocabulary.push(item);
+ saveCurrentUser(u);
+ if(type==="saveas"){
+   showSaveAsModal("Vocabulary",item);
+ }else toast("Vocabulary saved.");
+}
+function showSaveAsModal(type,item){
+ const u=currentUser();
+ const html=`<div class="card" style="padding:16px;margin-top:12px"><b>Save As Question Set</b><div class="stack" style="margin-top:10px">${u.sets.length?u.sets.map(s=>`<button class="set-item" onclick="saveVocabToSet('${s.id}','${item.id}')">${esc(s.name)} <span>›</span></button>`).join(""):`<div class="empty">Create a Question Set first.</div>`}</div></div>`;
+ $("vocabWorkspace").insertAdjacentHTML("beforeend",html);
+}
+function saveVocabToSet(setId,itemId){
+ const u=currentUser(),s=u.sets.find(x=>x.id===setId),v=u.vocabulary.find(x=>x.id===itemId);if(!s||!v)return;
+ s.questions.push({id:uid("q"),question:v.word,answer:v.meaning,sourceText:"",attachment:null});
+ saveCurrentUser(u);toast("Saved to Question Set.");go("sets");
+}
+
+/* ---------------- TRANSLATION ---------------- */
+function translationHTML(){
+ return shell(`
+  <div class="page-title">Translation</div>
+  <div class="row" style="margin-bottom:12px">
+    <select id="transFrom" class="select" onchange="state.translationFrom=this.value"><option>English</option><option>Hindi</option><option>Hinglish</option></select>
+    <span>→</span>
+    <select id="transTo" class="select" onchange="state.translationTo=this.value"><option>Hindi</option><option>English</option><option>Hinglish</option></select>
+  </div>
+  <textarea id="transInput" class="textarea"></textarea>
+  <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="translateText()">TRANSLATE</button>
+  <div id="transOutput" class="result-card" style="margin-top:14px"><div class="muted">Translation will appear here.</div></div>
+ `)
+}
+async function translateText(){
+ const text=$("transInput").value.trim();if(!text){toast("Enter text to translate.");return}
+ const out=$("transOutput");out.innerHTML="<div class='muted'>Translating…</div>";
+ try{
+  const ans=await askAI(`Translate the following text from ${state.translationFrom} to ${state.translationTo}. Preserve the meaning and tone. If target is Hinglish, write natural Roman Hindi mixed with English. Return the translation first, then a very short note only if needed. Text:\\n${text}`);
+  out.innerHTML=`<div class="output">${esc(ans)}</div>`;
+ }catch(e){out.innerHTML=e.message==="AI_BACKEND_MISSING"?aiBackendMessage():`<div class="notice">${esc(e.message)}</div>`}
+}
+
+/* ---------------- RECAP ---------------- */
+function recapSetsHTML(){
+ const u=currentUser();
+ return shell(`
+  <button class="back" onclick="go('home')">← Back</button>
+  <div class="recap-line">Let's recap with Yourself</div>
+  <div class="recap-small">Recap</div>
+  <div class="set-list">
+   ${u.sets.length?u.sets.map(s=>`<button class="set-item" onclick="go('recapMode',{selectedSetId:'${s.id}'})"><span>${esc(s.name)}</span><span class="arrow">›</span></button>`).join(""):`<div class="empty">Your saved Question Sets will appear here.</div>`}
+  </div>
+ `)
+}
+function recapModeHTML(){
+ const s=selectedSet();
+ return shell(`
+  <button class="back" onclick="go('recapSets')">← Back</button>
+  <div class="page-title">${esc(s?.name||"Recap")}</div>
+  <div class="card" style="padding:16px">
+   <div class="row" style="justify-content:center">
+    <button class="btn btn-primary" onclick="startRecap('individual')">Individual</button>
+    <button class="btn btn-light" onclick="startRecap('group')">Group</button>
+   </div>
+  </div>
+ `)
+}
+function startRecap(mode){
+ const s=selectedSet();
+ if(!s||!s.questions.length){toast("Add questions to this set first.");return}
+ state.recapMode=mode;
+ state.recapOrder=s.questions.map((_,i)=>i);
+ if(mode==="group") state.recapOrder.sort(()=>Math.random()-.5);
+ state.recapIndex=0;state.recapAnswerVisible=false;state.recapLastResult=null;
+ go("recap");
+}
+function currentRecapQuestion(){
+ const s=selectedSet(); if(!s||!state.recapOrder.length)return null;
+ return s.questions[state.recapOrder[state.recapIndex]];
+}
+function recapHTML(){
+ const s=selectedSet(),q=currentRecapQuestion();
+ if(!s||!q)return shell(`<div class="empty">No recap question available.</div>`);
+ const result=state.recapLastResult;
+ return shell(`
+  <button class="back" onclick="go('recapMode')">← Back</button>
+  <div class="recap-title">${esc(s.name)} Recap</div>
+  <div class="control-row">
+    <div class="row">
+      <button class="btn btn-primary btn-small" onclick="startRecap('${state.recapMode||"individual"}')">START</button>
+      <div class="dropdown"><button class="btn btn-light btn-small" onclick="toggleMenu('conditionMenu')">Condition</button>
+       <div id="conditionMenu" class="dropdown-menu hidden" style="right:auto;left:0;width:300px;padding:10px">
+        <textarea id="conditionInput" class="textarea" style="min-height:80px" placeholder="Describe how questions should be selected or asked"></textarea>
+        <button class="btn btn-primary btn-small" style="margin-top:7px" onclick="saveCondition()">Add Condition</button>
+        <button class="btn btn-danger btn-small" style="margin-top:7px" onclick="removeCondition()">Remove Condition</button>
+       </div>
+      </div>
+    </div>
+    <span class="small muted">${state.recapCondition?`Condition: ${esc(state.recapCondition)}`:"No condition"}</span>
+  </div>
+  <div class="control-row">
+    <div class="mode-box">
+      <button class="${state.recapMode==='group'?'active':''}" onclick="setRecapMode('group')">Random</button>
+      <button class="${state.recapMode==='individual'?'active':''}" onclick="setRecapMode('individual')">Series</button>
+    </div>
+    <button class="btn btn-outline" onclick="toggleRecapAnswer()">${state.recapAnswerVisible?"UNHIDE":"HIDE"}</button>
+  </div>
+  <div class="question-card">
+    <div class="row-between"><span class="user-chip">User: ${esc(currentUser().username)}</span><span class="small muted">Question ${state.recapIndex+1}/${state.recapOrder.length}</span></div>
+    <p class="question-text">${esc(q.question)}</p>
+    <div class="answer-area">
+      <label class="field-label">Your Answer</label>
+      <textarea id="recapUserAnswer" class="textarea" placeholder="Write your answer here"></textarea>
+      <button class="btn btn-primary" style="margin-top:9px" onclick="submitRecapAnswer()">DONE — SUBMIT ANSWER</button>
+    </div>
+    ${state.recapAnswerVisible?`<div class="notice" style="margin-top:12px"><b>Correct Answer:</b><br>${esc(q.answer)}</div>`:""}
+    ${result?`<div class="notice" style="margin-top:12px"><span class="${result.correct?'correct':'wrong'}"><b>${result.correct?'Correct':'Incorrect'}</b></span> · <span class="score">Score: ${result.score}</span><br>${esc(result.feedback||"")}</div>`:""}
+  </div>
+  <div class="row" style="justify-content:center;margin-top:14px">
+    <button class="btn btn-light" onclick="nextRecapQuestion()">NEXT QUESTION</button>
+  </div>
+  <div id="recapAI" class="ai-box" style="margin-top:14px">
+    <div class="ai-title">AI Condition Helper</div>
+    <div class="chat-row"><input id="conditionAIInput" class="input" placeholder="Ask AI to create/refine a condition"><button class="btn btn-outline" onclick="askRecapConditionAI()">Ask AI</button></div>
+    <div id="conditionAIOutput" class="small muted" style="margin-top:9px"></div>
+  </div>
+ `)
+}
+function saveCondition(){
+ const value=$("conditionInput")?.value.trim();
+ if(!value){toast("Write a condition first.");return}
+ state.recapCondition=value;toast("Condition added.");render();
+}
+function removeCondition(){state.recapCondition="";toast("Condition removed.");render()}
+function setRecapMode(mode){
+ state.recapMode=mode;
+ const s=selectedSet();state.recapOrder=s.questions.map((_,i)=>i);
+ if(mode==="group")state.recapOrder.sort(()=>Math.random()-.5);
+ state.recapIndex=0;state.recapLastResult=null;state.recapAnswerVisible=false;render();
+}
+function toggleRecapAnswer(){state.recapAnswerVisible=!state.recapAnswerVisible;render()}
+async function submitRecapAnswer(){
+ const answer=$("recapUserAnswer")?.value.trim(),q=currentRecapQuestion();
+ if(!answer){toast("Write your answer before submitting.");return}
+ try{
+   const out=await askAI(`Act as a strict but helpful quiz evaluator. Compare the user's answer with the correct answer. Return JSON only in this exact shape: {"correct":true/false,"score":5 or -5,"feedback":"short explanation"}. Give 5 for substantively correct and -5 for substantively incorrect. Equivalent meaning counts. Question: ${q.question}\nCorrect answer: ${q.answer}\nUser answer: ${answer}`);
+   let result;
+   try{result=JSON.parse(out.match(/\{[\s\S]*\}/)?.[0]||out)}catch(e){result={correct:/true/i.test(out),score:/true/i.test(out)?5:-5,feedback:out}}
+   state.recapLastResult=result;state.recapAnswerVisible=true;
+   const u=currentUser();
+   u.recapHistory.push({id:uid("rh"),setId:selectedSet().id,questionId:q.id,question:q.question,correctAnswer:q.answer,userAnswer:answer,correct:!!result.correct,score:Number(result.score)||0,feedback:result.feedback||"",time:new Date().toISOString()});
+   saveCurrentUser(u);render();
+ }catch(e){
+   toast(e.message==="AI_BACKEND_MISSING"?"AI backend is not connected yet.":e.message);
+ }
+}
+function nextRecapQuestion(){
+ const s=selectedSet();if(state.recapIndex<state.recapOrder.length-1){state.recapIndex++;state.recapLastResult=null;state.recapAnswerVisible=false;render()}else{toast("This recap is complete.");}
+}
+async function askRecapConditionAI(){
+ const text=$("conditionAIInput").value.trim();if(!text){toast("Tell AI what you want.");return}
+ const out=$("conditionAIOutput");out.textContent="Thinking…";
+ try{
+  const ans=await askAI(`Create a concise quiz-selection condition for a study recap. User request: ${text}. Return only the condition sentence, suitable for applying to questions from a saved question set.`);
+  out.innerHTML=`${esc(ans)} <button class="btn btn-light btn-small" style="margin-left:6px" onclick="useAICondition()">Use</button>`;
+  window.__aiCondition=ans;
+ }catch(e){out.innerHTML=e.message==="AI_BACKEND_MISSING"?aiBackendMessage():esc(e.message)}
+}
+function useAICondition(){state.recapCondition=window.__aiCondition||"";toast("AI condition added.");render()}
+
+/* ---------------- IMPROVE ---------------- */
+function improveHTML(){
+ const u=currentUser();
+ const wrong=u.recapHistory.filter(x=>!x.correct);
+ const grouped={};
+ wrong.forEach(x=>{grouped[x.setId]??=[];grouped[x.setId].push(x)});
+ return shell(`
+  <div class="page-title">Improve</div>
+  <p class="muted" style="text-align:center">Review the answers you got wrong in Recap and practice them again.</p>
+  <div class="set-list" style="margin-top:18px">
+   ${u.sets.map(s=>`<button class="set-item" onclick="showImproveSet('${s.id}')"><span>${esc(s.name)}<br><small>${(grouped[s.id]||[]).length} incorrect</small></span><span>›</span></button>`).join("")||`<div class="empty">Your saved Question Sets will appear here.</div>`}
+  </div>
+  <div id="improveDetail" style="margin-top:16px"></div>
+ `)
+}
+function showImproveSet(setId){
+ const u=currentUser(),s=u.sets.find(x=>x.id===setId),wrong=u.recapHistory.filter(x=>x.setId===setId&&!x.correct);
+ const box=$("improveDetail");
+ if(!box)return;
+ box.innerHTML=wrong.length?wrong.map((x,i)=>`<div class="improve-item" style="margin-bottom:10px">
+   <h3>Question ${i+1}</h3>
+   <p><b>Question:</b> ${esc(x.question)}</p>
+   <p class="wrong"><b>Your answer:</b> ${esc(x.userAnswer)}</p>
+   <p class="correct"><b>Correct answer:</b> ${esc(x.correctAnswer)}</p>
+   <p><b>Score:</b> ${x.score}</p>
+   <p class="muted">${esc(x.feedback)}</p>
+   <button class="btn btn-outline btn-small" onclick="askImproveAIByHistoryId('${x.id}')">Explain My Mistake with AI</button>
+ </div>`).join(""):`<div class="empty">No incorrect recap answers for this set yet.</div>`;
+}
+async function askImproveAI(q,a){
+ try{
+  const ans=await askAI(`Explain this study mistake simply. Question: ${q}. Correct answer: ${a}. Give the likely misconception, the correct reasoning, and one short practice tip.`);
+  const detail=$("improveDetail");detail.insertAdjacentHTML("afterbegin",`<div class="ai-box" style="margin-bottom:10px"><div class="ai-title">AI Explanation</div><div class="output">${esc(ans)}</div></div>`);
+ }catch(e){toast(e.message==="AI_BACKEND_MISSING"?"Connect the secure AI backend in index.html first.":e.message)}
+}
+
+/* ---------------- COMMON ---------------- */
+function bindCommon(){
+ document.querySelectorAll(".dropdown-menu").forEach(menu=>{
+   // Prevent clicks inside menus from bubbling to any future page-level handler.
+   menu.addEventListener("click",e=>e.stopPropagation());
+ });
+}
+window.go=go;window.togglePassword=togglePassword;window.signup=signup;window.signin=signin;
+window.logout=logout;window.updateAvatar=updateAvatar;
+window.addSet=addSet;window.saveQuestion=saveQuestion;window.deleteQuestion=deleteQuestion;
+window.processAttachment=processAttachment;window.togglePdfPreview=togglePdfPreview;window.putExtractedTextIntoFields=putExtractedTextIntoFields;
+window.startSpeech=startSpeech;window.speakPronunciation=speakPronunciation;window.savePronunciation=savePronunciation;window.deletePronunciation=deletePronunciation;
+window.toggleMenu=toggleMenu;window.setConceptLang=setConceptLang;window.triggerHiddenFile=triggerHiddenFile;window.conceptAttachment=conceptAttachment;window.askConcept=askConcept;
+window.openVocabAdd=openVocabAdd;window.openVocabRequest=openVocabRequest;window.generateVocabulary=generateVocabulary;window.saveVocabulary=saveVocabulary;window.saveVocabToSet=saveVocabToSet;
+window.translateText=translateText;
+window.startRecap=startRecap;window.saveCondition=saveCondition;window.removeCondition=removeCondition;window.setRecapMode=setRecapMode;window.toggleRecapAnswer=toggleRecapAnswer;window.submitRecapAnswer=submitRecapAnswer;window.nextRecapQuestion=nextRecapQuestion;window.askRecapConditionAI=askRecapConditionAI;window.useAICondition=useAICondition;
+function askImproveAIByHistoryId(historyId){
+ const h=currentUser()?.recapHistory?.find(x=>x.id===historyId);
+ if(!h){toast("Mistake record not found.");return}
+ askImproveAI(h.question,h.correctAnswer);
+}
+window.showImproveSet=showImproveSet;window.askImproveAI=askImproveAI;window.askImproveAIByHistoryId=askImproveAIByHistoryId;
+
+render();
+</script>
+</body>
+</html>
