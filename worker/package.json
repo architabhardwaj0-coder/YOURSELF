@@ -1,0 +1,9 @@
+{
+  "name": "yourself-ai-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx wrangler@3 dev",
+    "deploy": "npx wrangler@3 deploy"
+  }
+}

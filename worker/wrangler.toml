@@ -1,0 +1,9 @@
+name = "yourself-ai"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Comma-separated list of sites allowed to call this Worker (no trailing slash).
+ALLOWED_ORIGINS = "https://YOUR-USERNAME.github.io"
+GEMINI_MODEL = "gemini-2.5-flash"
+# The secret key is NOT stored here. Run: npx wrangler secret put GEMINI_API_KEY
